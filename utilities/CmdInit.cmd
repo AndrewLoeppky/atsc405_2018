@@ -9,7 +9,7 @@ set PATH=c:\msys64\usr\bin;%PATH%
 rem
 rem if mini36 isn't in your path ready, uncomment this lines
 rem
-rem set PATH=%userprofile%\mini36\scripts;%userprofile%\mini36;%userprofile%\mini36\Library\bin;%PATH%
+set PATH=%userprofile%\mini36;%userprofile%\Library\mingw-w64\bin;%userprofile%\mini36\scripts;%userprofile%\mini36\Library\bin;%userprofile%\mini36\Library\usr\bin;%PATH%
 set PWD=%~dp0
 set h=%USERPROFILE%
 @echo running %~dp0CmdInit.cmd
