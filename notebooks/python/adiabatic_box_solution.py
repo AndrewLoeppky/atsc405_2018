@@ -163,7 +163,7 @@ print(f"at press=300 kPa, the temperature in B is {Tfinal:8.3f} K")
 # 
 # * So for compartment B:  $\int du = - \int w_t dt = - \int_{initial}^{final} c_v \frac{dT}{dt} dt = - c_v (Tfinal  - Tinitial)$
 # 
-# * The work done by B is a negative number  because it is undergoing compression, so $d v < 0$.  But since the pressure is always equal across the compartments  we know that work_done_by_B = - work_done_on_B
+# * The work done by B is a negative number  because it is undergoing compression, so $d v < 0$.  But since the pressure is always equal across the compartments  we know that work_done_by_A = - work_done_on_B
 # 
 
 # ** Now put in the numbers **
