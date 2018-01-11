@@ -14,7 +14,7 @@
       conda install psutil
 
 """
-import psutil
+import psutil~
 from a405.helper_funs import make_tuple
 
 import argparse

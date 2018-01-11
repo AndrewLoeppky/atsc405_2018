@@ -51,12 +51,15 @@ ax.plot(xvals,yvals,'ro',markersize=20)
 
 print(optimize.zeros.__file__)
 
-## Problem for Friday:  9am
 
-Write a function:
-    
-    def temp_from_theta(theta,press)
-    
-that uses brentq to find the temperature for a $\theta$ of 280 K and pressures of press=[1.e5, 7.e4, 4.e4] Pa
-
-Share the google drive url to your notebook.
+# ## Problem for Friday:  9am
+# 
+# Write a function:
+#     
+#     def temp_from_theta(theta,press):
+#     
+# that uses brentq to find the temperature given $\theta$ and pressure.
+#     
+# Test it by calculating the temperature at a $\theta$ of 280 K and pressures of press=[1.e5, 7.e4, 4.e4] Pa and comparing those answers to the analytic result.
+# 
+# Share the google drive url to your notebook.
