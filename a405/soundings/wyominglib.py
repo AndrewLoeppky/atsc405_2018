@@ -215,7 +215,7 @@ def test_wyoming():
     """
     function to test downloading a sounding
     from http://weather.uwyo.edu/cgi-bin/sounding and
-    creating an hdf file with soundings and attributes
+    creating an folder soundings and metadata
 
     see the notebook newsoundings.ipynb for use
     """

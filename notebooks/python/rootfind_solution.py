@@ -36,7 +36,7 @@ ax.plot(xvals,yvals,'ro',markersize=20)
 print(optimize.zeros.__file__)
 
 
-# ## Problem for Wednesday:  9am
+# ## Problem for Friday:  9am
 # 
 # Write a function:
 #     
@@ -84,22 +84,22 @@ for press in [1.e5,7.e4,4.e4]:
 # 
 # I've written a couple of convenience functions called rootfinder.find_interval and
 # rootfinder.fzero to make rootfinding a little easier.   The new module is 
-# [rootfinder.py](https://github.com/phaustin/A405/blob/master/a405thermo/rootfinder.py)
+# [rootfinder.py](https://github.com/phaustin/atsc405_2018/blob/master/a405/thermo/rootfinder.py)
 # 
 
-# In[6]:
+# In[4]:
 
 
 from a405.thermo import rootfinder as rf
 
 
-# In[12]:
+# In[5]:
 
 
 help(rf.find_interval)
 
 
-# In[13]:
+# In[6]:
 
 
 help(rf.fzero)
@@ -107,7 +107,7 @@ help(rf.fzero)
 
 # ### example -- find a bracket for sin(x)=0 near x=12 radians ~ 700 degrees
 
-# In[8]:
+# In[7]:
 
 
 brackets=rf.find_interval(np.sin,12)
@@ -116,7 +116,7 @@ brackets
 
 # ## now use the fzero wrapper to find the root of sin(x)=0  (720 degrees)
 
-# In[9]:
+# In[8]:
 
 
 print(rf.fzero(np.sin,brackets)*180/np.pi)
@@ -124,7 +124,7 @@ print(rf.fzero(np.sin,brackets)*180/np.pi)
 
 # ## Redo theta example with find_interval
 
-# In[10]:
+# In[9]:
 
 
 import a405.thermo.rootfinder as rf
@@ -141,7 +141,7 @@ def theta_zero(Tguess,theta,press):
     return theta - theta_guess
 
 
-# In[11]:
+# In[10]:
 
 
 def temp_from_theta(theta,press):
