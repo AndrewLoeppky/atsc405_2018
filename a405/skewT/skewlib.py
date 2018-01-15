@@ -1,13 +1,9 @@
 """
    construct a skewT - ln P diagram with dry adiabats
 """
-from importlib import reload
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
-
-import a405.thermo.thermlib
-
 
 from a405.thermo.thermlib import convertTempToSkew, convertSkewToTemp, find_theta
 from a405.thermo.constants import constants as c

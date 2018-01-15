@@ -13,8 +13,11 @@ from a405.thermo.thermlib import find_esat
 from a405.thermo.constants import constants as con
 import numpy as np
 import sys
-import h5py
-
+from pathlib import Path
+import shutil
+import json
+import pdb
+import time
 
 # We need to parse a set of lines that look like this:
 
@@ -113,13 +116,13 @@ def parse_data(data_text):
 
     unit_name : list
                 list of strings with name of units of each column
-    
+    """
     """
 
-    """
-      read lines with 11 numbers and convert to dataframe
+    Comments
+    --------
 
-      data_text looks like:
+    here is an example of the data_text::
 
         -----------------------------------------------------------------------------
            PRES   HGHT   TEMP   DWPT   RELH   MIXR   DRCT   SKNT   THTA   THTE   THTV
@@ -211,13 +214,28 @@ def make_frames(html_doc):
     
     return attr_dict,sounding_dict
     
-def test_wyoming():
+def write_soundings(input_dict,outputdir):
     """
     function to test downloading a sounding
     from http://weather.uwyo.edu/cgi-bin/sounding and
     creating an folder soundings and metadata
 
-    see the notebook newsoundings.ipynb for use
+    Parameters
+    ----------
+
+    input_dict: dict
+       dictionary with fields needed to specify the sounding
+       i.e.
+       dict(region='naconf',year='2017',month='7',start='0100',stop='1800',station='72451')
+
+    outputdir: string
+       path to directory that will hold the csv sounding files
+       will be overwritten if it exists
+
+    Returns
+    -------
+     
+    None: soundings and metadata.json file will be written as a side effect
     """
 
     url_template=("http://weather.uwyo.edu/cgi-bin/sounding?"
@@ -229,14 +247,7 @@ def test_wyoming():
               "&TO={stop:s}"
               "&STNM={station:s}")
 
-    values=dict(region='samer',year='2013',month='2',start='0100',stop='2800',station='82965')
-    #values=dict(region='nz',year='2013',month='2',start='0100',stop='2800',station='93417')
-    #values=dict(region='naconf',year='2013',month='2',start='0100',stop='2800',station='71802')
-    #values=dict(region='ant',year='2013',month='07',start='0100',stop='2800',station='89009')
-    values=dict(region='naconf',year='2015',month='7',start='1600',stop='1800',station='72451')
-    
-#naconf, samer, pac, nz, ant, np, europe,africa, seasia, mideast
-    url=url_template.format_map(values)
+    url=url_template.format_map(input_dict)
 
     do_web = True
     backup_file='backup.txt'
@@ -255,29 +266,85 @@ def test_wyoming():
     attr_dict,sounding_dict = make_frames(html_doc)
     attr_dict['history']="written by test_requests.py"
     key_list=['header', 'site_id','longitude','latitude', 'elevation', 'units','history']
+    #pdb.set_trace()
+    folder = Path(outputdir)
+    if folder.exists():
+        shutil.rmtree(folder)
 
-    name = 'out.h5'    
-    with pd.HDFStore(name,'w') as store:
-        for key,value in sounding_dict.items():
-            thetime=key.strftime("Y%Y_%b_%d_%HZ")
-            store.put(thetime,value,format='table')
+    folder.mkdir()
+    
+    filelist=[]
+    for key,value in sounding_dict.items():
+        thetime=key.strftime("Y%Y_%b_%d_%HZ")
+        filename = f'{thetime}.csv'
+        filepath= str(folder / Path(filename))
+        time_tuple=key.utctimetuple()
+        filelist.append((filename,time_tuple))
+        value.to_csv(filepath)
 
-    with h5py.File(name,'a') as f:
-        for key in key_list:
-            print('writing key, value: ',key,attr_dict[key])
-            f.attrs[key]=attr_dict[key]
-        f.close()
+    metafile = folder / Path('metadata.json')
+    metadict=dict(filelist=filelist,attributes=attr_dict,input_args=input_dict)
+    with open(metafile,'w') as outmeta:
+        json.dump(metadict,outmeta,indent=4)
+        
+    print(f'files written to {str(folder)}')
+    return None
 
-    print('hdf file {} written'.format(name))
-    print('reading attributes: ')
-    with h5py.File(name,'r') as f:
-        keys=f.attrs.keys()
-        for key in keys:
-            try:
-                print(key,f.attrs[key])
-            except OSError:
-                pass
+def read_soundings(soundingdir):
+    """
+    read the soundings created by write_soundings
 
+    Parameters
+    ----------
 
+    soundingdir: string
+       path to directory containing sounding csv files and metadata.json
+
+    Returns
+    -------
+
+    meta_dict: dict
+       dictionary with keys dict_keys(['filelist', 'attributes', 'input_args', 'file_dict', 'sounding_dict'])
+    """
+    input_dir=Path(soundingdir)
+    json_file = input_dir / Path('metadata.json')
+    with open(json_file,'r') as infile:
+        meta_dict = json.load(infile)
+    file_dict={}
+    #
+    # turn the time.struct_time time tuples into 
+    #
+    for filename,timetup in meta_dict['filelist']:
+        time_struct=time.struct_time(timetup)
+        the_time=datetime.datetime.fromtimestamp(time.mktime(time_struct))
+        file_dict[the_time]=filename
+
+    sounding_dict={}
+    for the_time,filename in file_dict.items():
+        full_path=input_dir / Path(filename)
+        sounding_dict[the_time]=pd.read_csv(str(full_path))
+    
+    meta_dict['file_dict']=file_dict
+    meta_dict['sounding_dict']=sounding_dict
+    pdb.set_trace()
+    
+    return meta_dict
+    
 if __name__ == "__main__":
-    test_wyoming()
+    #
+    # some sample input dictionaries
+    #
+    values=dict(region='samer',year='2013',month='2',start='0100',stop='2800',station='82965')
+    #values=dict(region='nz',year='2013',month='2',start='0100',stop='2800',station='93417')
+    #values=dict(region='naconf',year='2013',month='2',start='0100',stop='2800',station='71802')
+    #values=dict(region='ant',year='2013',month='07',start='0100',stop='2800',station='89009')
+    values=dict(region='naconf',year='2017',month='7',start='0100',stop='1800',station='72451')
+    
+    #naconf, samer, pac, nz, ant, np, europe,africa, seasia, mideast
+
+    write_soundings(values, 'soundingdir')
+    soundingdir = 'soundingdir'
+    out=read_soundings(soundingdir)
+    print(list(out.keys()))
+    
+    

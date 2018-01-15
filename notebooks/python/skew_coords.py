@@ -1,6 +1,9 @@
 
 # coding: utf-8
 
+# <h1>Table of Contents<span class="tocSkip"></span></h1>
+# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Skew-T---ln-P-plot" data-toc-modified-id="Skew-T---ln-P-plot-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Skew-T - ln P plot</a></span><ul class="toc-item"><li><ul class="toc-item"><li><span><a href="#setting-labels-and-ticks" data-toc-modified-id="setting-labels-and-ticks-1.0.1"><span class="toc-item-num">1.0.1&nbsp;&nbsp;</span>setting labels and ticks</a></span></li><li><span><a href="#Skewed-temperature-coordinates" data-toc-modified-id="Skewed-temperature-coordinates-1.0.2"><span class="toc-item-num">1.0.2&nbsp;&nbsp;</span>Skewed temperature coordinates</a></span></li><li><span><a href="#Determining-the-skew" data-toc-modified-id="Determining-the-skew-1.0.3"><span class="toc-item-num">1.0.3&nbsp;&nbsp;</span>Determining the skew</a></span></li></ul></li></ul></li><li><span><a href="#Add-a-point-to-the-skewT-diagram" data-toc-modified-id="Add-a-point-to-the-skewT-diagram-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Add a point to the skewT diagram</a></span></li></ul></div>
+
 # # Skew-T - ln P plot
 # 
 # Demonstrate how to construct dry adiabats and isotherms for
@@ -180,5 +183,17 @@ ax,skew = makeSkewDry(ax)
 
 
 ax.set(title='new title')
+display(fig)
+
+
+# # Add a point to the skewT diagram
+
+# In[12]:
+
+
+temp=-10
+press=600
+skewtemp=convertTempToSkew(temp,press,skew)
+ax.plot(skewtemp,press,'ro',markersize=30)
 display(fig)
 
