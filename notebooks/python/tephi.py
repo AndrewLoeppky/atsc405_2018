@@ -1,6 +1,9 @@
 
 # coding: utf-8
 
+# <h1>Table of Contents<span class="tocSkip"></span></h1>
+# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Print-three-isobars-on-a-(temp,theta)-grid" data-toc-modified-id="Print-three-isobars-on-a-(temp,theta)-grid-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Print three isobars on a (temp,theta) grid</a></span><ul class="toc-item"><li><span><a href="#Now-repeat-using-the-matplotlib-contour-function" data-toc-modified-id="Now-repeat-using-the-matplotlib-contour-function-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>Now repeat using the matplotlib contour function</a></span></li></ul></li></ul></div>
+
 # In[1]:
 
 

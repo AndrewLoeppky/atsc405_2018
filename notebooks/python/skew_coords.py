@@ -2,13 +2,13 @@
 # coding: utf-8
 
 # <h1>Table of Contents<span class="tocSkip"></span></h1>
-# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Skew-T---ln-P-plot" data-toc-modified-id="Skew-T---ln-P-plot-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Skew-T - ln P plot</a></span><ul class="toc-item"><li><ul class="toc-item"><li><span><a href="#setting-labels-and-ticks" data-toc-modified-id="setting-labels-and-ticks-1.0.1"><span class="toc-item-num">1.0.1&nbsp;&nbsp;</span>setting labels and ticks</a></span></li><li><span><a href="#Skewed-temperature-coordinates" data-toc-modified-id="Skewed-temperature-coordinates-1.0.2"><span class="toc-item-num">1.0.2&nbsp;&nbsp;</span>Skewed temperature coordinates</a></span></li><li><span><a href="#Determining-the-skew" data-toc-modified-id="Determining-the-skew-1.0.3"><span class="toc-item-num">1.0.3&nbsp;&nbsp;</span>Determining the skew</a></span></li></ul></li></ul></li><li><span><a href="#Add-a-point-to-the-skewT-diagram" data-toc-modified-id="Add-a-point-to-the-skewT-diagram-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Add a point to the skewT diagram</a></span></li></ul></div>
+# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Skew-T---ln-P-plot" data-toc-modified-id="Skew-T---ln-P-plot-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Skew-T - ln P plot</a></span><ul class="toc-item"><li><span><a href="#setting-labels-and-ticks" data-toc-modified-id="setting-labels-and-ticks-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>setting labels and ticks</a></span></li><li><span><a href="#Skewed-temperature-coordinates" data-toc-modified-id="Skewed-temperature-coordinates-1.2"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>Skewed temperature coordinates</a></span></li><li><span><a href="#Determining-the-skew" data-toc-modified-id="Determining-the-skew-1.3"><span class="toc-item-num">1.3&nbsp;&nbsp;</span>Determining the skew</a></span></li></ul></li><li><span><a href="#Add-a-datapoint-to-the-skewT-diagram" data-toc-modified-id="Add-a-datapoint-to-the-skewT-diagram-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Add a datapoint to the skewT diagram</a></span></li></ul></div>
 
 # # Skew-T - ln P plot
 # 
 # Demonstrate how to construct dry adiabats and isotherms for
 # a thermodynamic diagram using the functions in
-# [makeSkew.py](https://github.com/phaustin/atsc405_2018/blob/master/a405/skewT/makeSkew.py)
+# [skewlib.py](https://github.com/phaustin/atsc405_2018/blob/master/a405/skewT/skewlib.py)
 
 # In[1]:
 
@@ -17,7 +17,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-# ### setting labels and ticks
+# ## setting labels and ticks
 # 
 # The next box shows how to set up a plot of a 5 degree isotherm in
 # unskewed coordinates.   Not that I invert the yaxis so pressure increases
@@ -52,7 +52,7 @@ ax.yaxis.grid(True)
 #out=fig.clf();
 
 
-# ### Skewed temperature coordinates
+# ## Skewed temperature coordinates
 # 
 # If you try plotting your soundings on the conventional plot above, you'll see
 # that the height-temperature dependence makes it difficult to see the temperature
@@ -60,9 +60,10 @@ ax.yaxis.grid(True)
 # line by a constant slope (note that this is different from rotating the line,
 # because the y axis doesn't change)
 
-# In[3]:
+# In[9]:
 
 
+#listing for a405.skewT.skewlib.convertSkewToTemp
 def convertSkewToTemp(xcoord, press, skew):
     """
     convertSkewToTemp(xcoord, press, skew)
@@ -93,6 +94,7 @@ def convertSkewToTemp(xcoord, press, skew):
     Temp = xcoord  + skew * np.log(press);
     return Temp
 
+#listing for a405.skewT.skewlib.convertTempToSkew
 def convertTempToSkew(Temp, press, skew):
     """
     convertTempToSkew(Temp, press, skew)
@@ -124,7 +126,7 @@ def convertTempToSkew(Temp, press, skew):
     return tempOut
 
 
-# ### Determining the skew
+# ## Determining the skew
 # 
 # Getting a isotherm with a 45 degree slope in these coordinates is tricky, because it depends on
 # the shape of the plot and the exact range values chosen for the temperature and pressure axis.
@@ -168,8 +170,7 @@ for ax,skew in zip(axes,skew_vals):
 # In[5]:
 
 
-from a405.skewT.makeSkew import makeSkewDry
-import a405.skewT.makeSkew
+from a405.skewT.skewlib import makeSkewDry
 
 
 # In[6]:
@@ -186,9 +187,9 @@ ax.set(title='new title')
 display(fig)
 
 
-# # Add a point to the skewT diagram
+# # Add a datapoint to the skewT diagram
 
-# In[12]:
+# In[8]:
 
 
 temp=-10
