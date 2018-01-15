@@ -326,7 +326,7 @@ def read_soundings(soundingdir):
     
     meta_dict['file_dict']=file_dict
     meta_dict['sounding_dict']=sounding_dict
-    pdb.set_trace()
+    #pdb.set_trace()
     
     return meta_dict
     
