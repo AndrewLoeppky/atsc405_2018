@@ -4,6 +4,7 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.ticker as ticks
 
 from a405.thermo.thermlib import convertTempToSkew, convertSkewToTemp, find_theta
 from a405.thermo.constants import constants as c
@@ -34,6 +35,8 @@ def makeSkewDry(ax, skew=30):
              skew coefficient (K)
 
       """
+    # majorFormatter = ticks.FormatStrFormatter('%d')
+    # ax.yaxis.set_major_formatter(majorFormatter)
     yplot = range(1000, 190, -10)
     xplot = range(-300, -139)
     pvals = np.size(yplot)
@@ -68,38 +71,30 @@ def makeSkewDry(ax, skew=30):
             # First, make sure that all plotted lines are solid.
     mpl.rcParams['contour.negative_linestyle'] = 'solid'
     tempLabels = range(-40, 50, 10)
+    ax.set_yscale('log')
+    majorFormatter = ticks.FormatStrFormatter('%d')
+    ax.yaxis.set_major_formatter(majorFormatter)
+    ax.yaxis.set_minor_formatter(majorFormatter)
+    plt.setp(ax.get_xticklabels(), weight='bold')
+    plt.setp(ax.get_yticklabels(), weight='bold')
+    plt.setp(ax.get_yticklabels(minor=True), weight='bold')
     tempLevs = ax.contour(xplot, yplot, temp, tempLabels, \
                           colors='k')
-
     #
     # Customize the plot
     #
-    ax.set_yscale('log')
-    locs = np.array(range(100, 1100, 100))
-    labels = locs
-    # ax.set_yticks(locs)
-    # ax.set_yticklabels(labels)  # Conventionally labels semilog graph.
-    ax.set_ybound((200, 1000))
-    # plt.setp(ax.get_xticklabels(), weight='bold')
-    # plt.setp(ax.get_yticklabels(), weight='bold')
-    ax.yaxis.grid(True)
-
     thetaLabels = list(range(200, 390, 10))
     thetaLevs = ax.contour(xplot, yplot, theTheta, thetaLabels, \
                       colors='b')
-
     # Transform the temperature,dewpoint from data coords to
     # plotting coords.
     ax.set_title('skew T - lnp chart')
     ax.set_ylabel('pressure (hPa)')
     ax.set_xlabel('temperature (deg C)')
-
     #
     # Crop image to a more usable size
     #
-
     TempTickLabels = range(-15, 40, 5)
-
     TempTickCoords = TempTickLabels
     skewTickCoords = convertTempToSkew(TempTickCoords, 1.e3, skew)
     ax.set_xticks(skewTickCoords)
@@ -125,11 +120,10 @@ def makeSkewDry(ax, skew=30):
                      fmt='%5d',
                      fontsize=fntsz,
                      use_clabeltext=True)
-
     ax.invert_yaxis()
+    ax.yaxis.grid(True,which='minor')
     ax.figure.canvas.draw()
     return ax, skew
-
 
 def plot_test():
     """

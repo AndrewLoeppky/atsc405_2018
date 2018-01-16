@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # <h1>Table of Contents<span class="tocSkip"></span></h1>
-# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Skew-T---ln-P-plot" data-toc-modified-id="Skew-T---ln-P-plot-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Skew-T - ln P plot</a></span><ul class="toc-item"><li><span><a href="#setting-labels-and-ticks" data-toc-modified-id="setting-labels-and-ticks-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>setting labels and ticks</a></span></li><li><span><a href="#Skewed-temperature-coordinates" data-toc-modified-id="Skewed-temperature-coordinates-1.2"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>Skewed temperature coordinates</a></span></li><li><span><a href="#Determining-the-skew" data-toc-modified-id="Determining-the-skew-1.3"><span class="toc-item-num">1.3&nbsp;&nbsp;</span>Determining the skew</a></span></li></ul></li><li><span><a href="#Add-a-datapoint-to-the-skewT-diagram" data-toc-modified-id="Add-a-datapoint-to-the-skewT-diagram-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Add a datapoint to the skewT diagram</a></span></li></ul></div>
+# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Skew-T---ln-P-plot" data-toc-modified-id="Skew-T---ln-P-plot-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Skew-T - ln P plot</a></span><ul class="toc-item"><li><span><a href="#setting-labels-and-ticks" data-toc-modified-id="setting-labels-and-ticks-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>setting labels and ticks</a></span></li><li><span><a href="#Skewed-temperature-coordinates" data-toc-modified-id="Skewed-temperature-coordinates-1.2"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>Skewed temperature coordinates</a></span></li><li><span><a href="#Determining-the-skew" data-toc-modified-id="Determining-the-skew-1.3"><span class="toc-item-num">1.3&nbsp;&nbsp;</span>Determining the skew</a></span></li></ul></li><li><span><a href="#Add-a-datapoint-to-the-skewT-diagram" data-toc-modified-id="Add-a-datapoint-to-the-skewT-diagram-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Add a datapoint to the skewT diagram</a></span></li><li><span><a href="#change-the-axes" data-toc-modified-id="change-the-axes-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>change the axes</a></span></li></ul></div>
 
 # # Skew-T - ln P plot
 # 
@@ -60,7 +60,7 @@ ax.yaxis.grid(True)
 # line by a constant slope (note that this is different from rotating the line,
 # because the y axis doesn't change)
 
-# In[9]:
+# In[3]:
 
 
 #listing for a405.skewT.skewlib.convertSkewToTemp
@@ -196,5 +196,18 @@ temp=-10
 press=600
 skewtemp=convertTempToSkew(temp,press,skew)
 ax.plot(skewtemp,press,'ro',markersize=30)
+display(fig)
+
+
+# # change the axes
+# 
+# Here's how to change the xaxis so that the left corner at 1000 hPa goes down to -35 deg C
+# and the upper boundary stops at 600 hPa
+
+# In[17]:
+
+
+skewLimits = convertTempToSkew([-35, 35], 1.e3, skew)
+out=ax.set(xlim=skewLimits,ylim=(1000.,600.))
 display(fig)
 

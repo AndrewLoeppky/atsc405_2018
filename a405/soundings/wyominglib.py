@@ -18,6 +18,7 @@ import shutil
 import json
 import pdb
 import time
+import pytz
 
 # We need to parse a set of lines that look like this:
 
@@ -315,9 +316,9 @@ def read_soundings(soundingdir):
     # turn the time.struct_time time tuples into 
     #
     for filename,timetup in meta_dict['filelist']:
-        time_struct=time.struct_time(timetup)
-        the_time=datetime.datetime.fromtimestamp(time.mktime(time_struct))
-        file_dict[the_time]=filename
+        tutc=datetime.datetime(*timetup[:6],tzinfo=pytz.utc)
+        key=(tutc.year,tutc.month,tutc.day,tutc.hour)
+        file_dict[key]=filename
 
     sounding_dict={}
     for the_time,filename in file_dict.items():
