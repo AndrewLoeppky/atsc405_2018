@@ -204,7 +204,7 @@ display(fig)
 # Here's how to change the xaxis so that the left corner at 1000 hPa goes down to -35 deg C
 # and the upper boundary stops at 600 hPa
 
-# In[17]:
+# In[9]:
 
 
 skewLimits = convertTempToSkew([-35, 35], 1.e3, skew)
