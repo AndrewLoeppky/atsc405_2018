@@ -2,7 +2,29 @@
 # coding: utf-8
 
 # <h1>Table of Contents<span class="tocSkip"></span></h1>
-# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Skew-T---ln-P-plot" data-toc-modified-id="Skew-T---ln-P-plot-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Skew-T - ln P plot</a></span></li><li><span><a href="#plot-a-sounding" data-toc-modified-id="plot-a-sounding-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>plot a sounding</a></span></li></ul></div>
+# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#plot-a-sounding" data-toc-modified-id="plot-a-sounding-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>plot a sounding</a></span></li></ul></div>
+
+# In[7]:
+
+
+def tryme(a,b,c,d):
+    print(f'tryme got values {a}, {b}, {c}, {d}')
+    
+def tryme2(a=1,b=2):
+    print(f'tryme2 got values {a}, {b}')
+    
+tryme(1,2,3,4)    
+onestep=[1,2,3,4]
+tryme(*onestep)
+
+onedict=dict(a=5,b=6)
+tryme2()
+tryme2(b=7)
+tryme2(**onedict)
+
+begin, *middle, end = (0, 1, 2, 3, 4, 5)
+print(f'begin={begin}, middle={middle}, end={end}')
+
 
 # In[1]:
 

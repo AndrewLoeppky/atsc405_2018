@@ -313,7 +313,9 @@ def read_soundings(soundingdir):
         meta_dict = json.load(infile)
     file_dict={}
     #
-    # turn the time.struct_time time tuples into 
+    # turn the time.struct_time time tuples into a plain tuple
+    # with (year, month, day, hour) and use that for
+    # the flie_dict key
     #
     for filename,timetup in meta_dict['filelist']:
         tutc=datetime.datetime(*timetup[:6],tzinfo=pytz.utc)
