@@ -17,7 +17,7 @@ from matplotlib import pyplot as plt
 
 # ## set sounding_folder to the name of your downloaded sounding folder
 
-# In[1]:
+# In[2]:
 
 
 from a405.soundings.wyominglib import read_soundings

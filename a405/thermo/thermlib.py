@@ -11,7 +11,7 @@ from a405.thermo.constants import constants as c
 from a405.thermo import rootfinder as rf
 import numpy.testing as ntest
 from a405.thermo.rootfinder import BracketError
-
+from .constants import constants as c
 
 def find_lv(temp):
     """
