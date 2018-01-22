@@ -21,5 +21,4 @@ out=download(the_file,root=the_root)
 
 # 3. Install vapor per [these instructions](https://www.vapor.ucar.edu/docs/usage/getting-started-vapor)
 
-# Start vapor, go to "Data -> Load dataset into current session" and see if you get a
-# 3-d visualization of TABS
+# Start vapor, go to "Data -> Load dataset into current session" and point it at tropical_clouds/outname.vdf  See if you can get a 3-d visualization of 3-d visualization of TABS
