@@ -13,7 +13,8 @@ class constants:
    Emanuel appendix 2
    
    """
-
+    Tp = 273.16
+    #triple point in kelvin
     Tc = 273.15
     #0 deg C in Kelvin
     eps = 0.622
