@@ -11,8 +11,14 @@
 # In[1]:
 
 
+get_ipython().system('mv  tropical_clouds.zip test.zip')
+
+
+# In[5]:
+
+
 from a405.utils.data_read import download
-the_root = "http://clouds.eos.ubc.ca/~phil/docs/atsc500"
+the_root = "http://clouds.eos.ubc.ca/~phil/courses/atsc500/docs"
 the_file =  "tropical_clouds.zip"
 out=download(the_file,root=the_root)
 

@@ -18,8 +18,12 @@ class constants:
     Tc = 273.15
     #0 deg C in Kelvin
     eps = 0.622
-    p0 = 1.e5
-    lv0 = 2.501e6
+    # Rd/Rv
+    phi0 = 9155.80612
+    #lv0/Tp  (J/kg/K
+    es0 = 6.112 #hPa
+    p0 = 1.e5  #Pa
+    lv0 = 2.501e6  #J/kg
     # J/kg
     Rv = 461.50
     # J/kg/K
