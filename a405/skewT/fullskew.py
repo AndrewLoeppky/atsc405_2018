@@ -63,10 +63,14 @@ def makeSkewWet(ax, corners=[-30, 25], skew=30):
            the modified figure axis
 
       """
+    #
+    # turn off tick labels until the las plot
+    #
     ax.yaxis.set_major_formatter(ticks.NullFormatter())
     ax.xaxis.set_major_formatter(ticks.NullFormatter())
     ax.yaxis.set_minor_formatter(ticks.NullFormatter())
     yplot = range(1000, 190, -6)  #
+    corners= corners[0],corners[1]+30.
     xcorners = find_corners(corners, skew=skew)
     xplot = list(np.linspace(xcorners[0], xcorners[1], 45))
     pvals = np.size(yplot)
@@ -162,30 +166,33 @@ def makeSkewWet(ax, corners=[-30, 25], skew=30):
                       fontsize=fntsz,
                       use_clabeltext=True)
 
-    #ax.invert_yaxis()
+    ax.set_yscale('log')
+    ax.yaxis.set_major_formatter(ticks.NullFormatter())
+    ax.xaxis.set_major_formatter(ticks.NullFormatter())
+    ax.yaxis.set_minor_formatter(ticks.NullFormatter())
+    #ax.figure.canvas.draw()
     # #ax.figure.canvas.draw()
     # xcorners = find_corners(corners, skew=skew)
     # ax.set(ylim=(1000, 300), xlim=xcorners)
-    # # majorFormatter = ticks.FormatStrFormatter('%d')
-    # # ax.yaxis.set_major_formatter(majorFormatter)
-    # # ax.yaxis.set_minor_formatter(majorFormatter)
-    # ax.set_yscale('log')
+    majorFormatter = ticks.FormatStrFormatter('%d')
+    ax.yaxis.set_major_formatter(majorFormatter)
+    ax.yaxis.set_minor_formatter(majorFormatter)
     # locs = np.array(range(100, 1100, 100))
     # labels = locs
     # ax.set_yticks(locs)
     # ax.set_yticklabels(labels)  # Conventionally labels semilog graph.
     # ax.set_ybound((200, 1000))
-    # TempTickLabels = range(30, 40, 5)
+    TempTickLabels = range(-5, 40, 5)
 
-    # TempTickCoords = TempTickLabels
-    # skewTickCoords = convertTempToSkew(TempTickCoords, 1.e3, skew)
+    TempTickCoords = TempTickLabels
+    skewTickCoords = convertTempToSkew(TempTickCoords, 1.e3, skew)
 
     # skewLimits = convertTempToSkew([-15, 35], 1.e3, skew)
-
     # ax.axis([skewLimits[0], skewLimits[1], 300, 1.e3])
-    # ax.set_xticks(skewTickCoords)
-    # ax.set_xticklabels(TempTickLabels)
-    # ax.yaxis.grid(True)
+    ax.set_xticks(skewTickCoords)
+    ax.set_xticklabels(TempTickLabels)
+    ax.invert_yaxis()
+    ax.yaxis.grid(True)
 
     # ax.set_title('skew T - lnp chart')
     # ax.set_ylabel('pressure (hPa)')
@@ -196,7 +203,7 @@ def makeSkewWet(ax, corners=[-30, 25], skew=30):
 def plot_test():
     """
       create test plot when module is run
-      """
+    """
     fig, ax = plt.subplots(1, 1)
     corners = [-25, 30]
     ax, skew = makeSkewWet(ax, corners=corners, skew=25)
