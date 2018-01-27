@@ -38,7 +38,7 @@ def find_corners(temps, press=1.e3, skew=30.):
     return list(corners)
 
 
-def makeSkewWet(ax, corners=[-30, 25], skew=30):
+def makeSkewWet(ax, corners=None, skew=30):
     """       
       draw a skew-T lnP diagram on an axis
 
@@ -66,11 +66,12 @@ def makeSkewWet(ax, corners=[-30, 25], skew=30):
     #
     # turn off tick labels until the las plot
     #
+    if corners is None:
+        corners= [-25,25]
     ax.yaxis.set_major_formatter(ticks.NullFormatter())
     ax.xaxis.set_major_formatter(ticks.NullFormatter())
     ax.yaxis.set_minor_formatter(ticks.NullFormatter())
     yplot = range(1000, 190, -6)  #
-    corners= corners[0],corners[1]+30.
     xcorners = find_corners(corners, skew=skew)
     xplot = list(np.linspace(xcorners[0], xcorners[1], 45))
     pvals = np.size(yplot)
@@ -131,6 +132,7 @@ def makeSkewWet(ax, corners=[-30, 25], skew=30):
     thetaeLabels = np.arange(250, 410, 10)
     thetaeLevs = ax.contour(xplot, yplot, theThetae, thetaeLabels, \
                       colors='r')
+    thetaeLabels=thetaeLevs.levels
     #
     # Customize the plot
     #
@@ -162,10 +164,10 @@ def makeSkewWet(ax, corners=[-30, 25], skew=30):
     thetaeLevs.clabel(thetaeLabels,
                       inline_spacing=0,
                       inline=ovrlp,
-                      fmt='%5g',
+                      fmt='%3d',
                       fontsize=fntsz,
                       use_clabeltext=True)
-
+    ax.invert_yaxis()
     ax.set_yscale('log')
     ax.yaxis.set_major_formatter(ticks.NullFormatter())
     ax.xaxis.set_major_formatter(ticks.NullFormatter())
@@ -173,7 +175,6 @@ def makeSkewWet(ax, corners=[-30, 25], skew=30):
     #ax.figure.canvas.draw()
     # #ax.figure.canvas.draw()
     # xcorners = find_corners(corners, skew=skew)
-    # ax.set(ylim=(1000, 300), xlim=xcorners)
     majorFormatter = ticks.FormatStrFormatter('%d')
     ax.yaxis.set_major_formatter(majorFormatter)
     ax.yaxis.set_minor_formatter(majorFormatter)
@@ -189,14 +190,17 @@ def makeSkewWet(ax, corners=[-30, 25], skew=30):
 
     # skewLimits = convertTempToSkew([-15, 35], 1.e3, skew)
     # ax.axis([skewLimits[0], skewLimits[1], 300, 1.e3])
+    ax.set(ylim=(1000, 300), xlim=xcorners)
     ax.set_xticks(skewTickCoords)
     ax.set_xticklabels(TempTickLabels)
-    ax.invert_yaxis()
-    ax.yaxis.grid(True)
+    ax.yaxis.grid(True,which='both')
 
     # ax.set_title('skew T - lnp chart')
     # ax.set_ylabel('pressure (hPa)')
     # ax.set_xlabel('temperature (deg C)')
+    
+    ax.set_title('debug title')
+    ax.figure.canvas.draw()
     return ax, skew
 
 
