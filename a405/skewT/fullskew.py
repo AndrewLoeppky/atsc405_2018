@@ -10,6 +10,34 @@ from a405.thermo.thermlib import convertTempToSkew, convertSkewToTemp, find_thet
 from a405.thermo.constants import constants as c
 from a405.thermo.thermlib import find_rsat
 
+def make_default_labels():
+    """
+    set up the contour labels for temperature, rs, theta and theate::
+
+       rsLabels = [0.1, 0.25, 0.5, 1, 2, 3] + list(range(4, 28, 2))
+       thetaLabels = list(range(200, 390, 10))
+       thetaeLabels = np.arange(250, 410, 10)
+       tempLabels = range(-40, 50, 10)
+
+    override this function and pass to makeSkewWet to change the countour intervals
+
+    Parameters
+    ----------
+
+    None
+
+    Returns
+    -------
+
+    tempLabels,rsLabels, thetaLabels, thetaeLabels: tuple
+      tuple of lists with contour labels
+
+    """
+    rsLabels = [0.1, 0.25, 0.5, 1, 2, 3] + list(range(4, 28, 2)) #+ [26,  28]
+    thetaLabels = list(range(200, 390, 10))
+    thetaeLabels = np.arange(250, 410, 10)
+    tempLabels = range(-40, 50, 10)
+    return tempLabels,rsLabels, thetaLabels, thetaeLabels
 
 def find_corners(temps, press=1.e3, skew=30.):
     """
@@ -38,7 +66,7 @@ def find_corners(temps, press=1.e3, skew=30.):
     return list(corners)
 
 
-def makeSkewWet(ax, corners=None, skew=30):
+def makeSkewWet(ax, corners=None, skew=30,label_fun=None):
     """       
       draw a skew-T lnP diagram on an axis
 
@@ -56,6 +84,9 @@ def makeSkewWet(ax, corners=None, skew=30):
              adjustable coefficient to make isotherms slope
              compared to adiabats
 
+      label_fun: function
+         optional function to generate contour intervals, see make_default_labels
+
       Returns
       -------
       
@@ -68,6 +99,10 @@ def makeSkewWet(ax, corners=None, skew=30):
     #
     if corners is None:
         corners= [-25,25]
+    if label_fun is None:
+        label_fun = make_default_labels
+        
+    tempLabels,rsLabels, thetaLabels, thetaeLabels = label_fun()    
     ax.yaxis.set_major_formatter(ticks.NullFormatter())
     ax.xaxis.set_major_formatter(ticks.NullFormatter())
     ax.yaxis.set_minor_formatter(ticks.NullFormatter())
@@ -109,27 +144,29 @@ def makeSkewWet(ax, corners=None, skew=30):
 
     # First, make sure that all plotted lines are solid.
     mpl.rcParams['contour.negative_linestyle'] = 'solid'
-    tempLabels = range(-40, 50, 10)
-    ax.contour(xplot, yplot, temp, tempLabels, \
+    
+    tempLabels=ax.contour(xplot, yplot, temp, tempLabels, \
                           colors='k')
+    tempLabels=tempLabels.levels
     #
     # contour theta
     #
-    thetaLabels = list(range(200, 390, 10))
+    #thetaLabels = list(range(200, 390, 10))
     thetaLevs = ax.contour(xplot, yplot, theTheta, thetaLabels, \
                       colors='b')
+    thetaLabels=thetaLevs.levels
     #
     # contour rsat
     #
-    rsLabels = [0.1, 0.25, 0.5, 1, 2, 3] + list(range(4, 28, 2)) #+ [26,  28]
+    #rsLabels = [0.1, 0.25, 0.5, 1, 2, 3] + list(range(4, 28, 2)) #+ [26,  28]
     rsLevs = ax.contour(xplot,
                         yplot,
                         the_rsat * 1.e3,
                         levels=rsLabels,
                         colors='g',
                         linewidths=.5)
-
-    thetaeLabels = np.arange(250, 410, 10)
+    rsLabels=rsLevs.levels
+    #thetaeLabels = np.arange(250, 410, 10)
     thetaeLevs = ax.contour(xplot, yplot, theThetae, thetaeLabels, \
                       colors='r')
     thetaeLabels=thetaeLevs.levels

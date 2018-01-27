@@ -31,26 +31,28 @@ print(soundings['sounding_dict'].keys())
 # In[3]:
 
 
-from a405.skewT.fullskew import makeSkewWet
-fig,ax =plt.subplots(1,1,figsize=(8,8))
-corners = [-25, 20]
-ax, skew = makeSkewWet(ax, corners=corners, skew=25)
+from a405.skewT.fullskew import makeSkewWet,find_corners,make_default_labels
 
-# the_date=(2017,7,1,0)
-# the_sounding=soundings['sounding_dict'][the_date]
-# attributes=soundings['attributes']
-# #print(attributes)
-# temp=the_sounding['temp']
-# press = the_sounding['pres']
-# tdew = the_sounding['dwpt']
-# temp_skew = convertTempToSkew(temp,press,skew)
-# tdew_skew = convertTempToSkew(tdew,press,skew)
-# ax.plot(temp_skew,press,'k-',linewidth=4)
-# ax.plot(tdew_skew,press,'b-',linewidth=4)
-# the_date=datetime.datetime(*the_date,tzinfo=pytz.utc)
-# central=pytz.timezone('US/Central')
-# the_date_central=the_date.astimezone(central)
-# title=f'Dodge City KS sounding: {str(the_date_central)}'
-# ax.set_title(title);
-#help(convertTempToSkew)
+def label_fun():
+    """
+    override the default rs labels with a tighter mesh
+    """
+    from numpy import arange
+    #
+    # get the default labels
+    #
+    tempLabels,rsLabels, thetaLabels, thetaeLabels = make_default_labels()
+    #
+    # change the temperature and rs grids
+    #
+    tempLabels = range(-40, 50, 5)
+    rsLabels = [0.1, 0.25, 0.5, 1, 2, 3] + list(np.arange(4, 28, 0.5)) 
+    return tempLabels,rsLabels, thetaLabels, thetaeLabels
+
+fig,ax =plt.subplots(1,1,figsize=(12,8))
+corners = [-5, 25]
+ax, skew = makeSkewWet(ax, corners=corners, skew=35,label_fun=label_fun)
+ax.set_title('override')
+xcorners=find_corners(corners,skew=skew)
+ax.set(xlim=xcorners,ylim=[1000,800]);
 

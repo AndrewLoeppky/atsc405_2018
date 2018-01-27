@@ -10,7 +10,7 @@
 # 
 # There are five different average profiles for the tropics, subtropical summer, subtropical winder, midlatitude summer, midlatitude winter.  These are called the US Standard Atmospheres.  This notebook shows how to read and plot the soundings, and calculate the pressure and density scale heights.
 
-# In[13]:
+# In[1]:
 
 
 from matplotlib import pyplot as plt
@@ -59,6 +59,12 @@ for the_path in filepaths:
     sound_dict[key] = df
 
 
+# In[13]:
+
+
+attribute_dict
+
+
 # ## Data layout
 # 
 # There are five soundings.
@@ -77,12 +83,13 @@ list(sound_dict.keys())
 
 # We use these keys to get a dataframe with 6 columns, and 33 levels.  Here's an example for the midsummer sounding
 
-# In[4]:
+# In[15]:
 
 
 midsummer=sound_dict['midsummer']
 list(midsummer.columns)
 midsummer.head()
+len(midsummer)
 
 
 # ## Plot  temp and vapor mixing ratio rmix ($\rho_{H2O}/\rho_{air}$)
@@ -104,6 +111,13 @@ for a_name,df in sound_dict.items():
        xlabel='vapor mixing ratio (g/kg)')
 ax1.legend()
 ax2.legend();
+
+
+# In[19]:
+
+
+midsummer.columns
+type(midsummer['temp'].values)
 
 
 # # Calculating scale heights for temperature and air density
@@ -235,7 +249,7 @@ print(f"density scale height for the {sounding} is {Hrho*1.e-3:5.2f} km")
 
 # ## How well do these average values represent the pressure and density profiles?
 
-# In[14]:
+# In[10]:
 
 
 theFig,theAx=plt.subplots(1,1)
