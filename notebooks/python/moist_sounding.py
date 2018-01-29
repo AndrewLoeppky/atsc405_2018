@@ -28,7 +28,13 @@ print(soundings.keys())
 print(soundings['sounding_dict'].keys())
 
 
-# In[4]:
+# In[16]:
+
+
+the_sounding=soundings['sounding_dict'][(2017,7,14,0)]
+
+
+# In[20]:
 
 
 from a405.skewT.fullskew import makeSkewWet,find_corners,make_default_labels
@@ -46,13 +52,22 @@ def label_fun():
     # change the temperature and rs grids
     #
     tempLabels = range(-40, 50, 2)
-    rsLabels = [0.1, 0.25, 0.5, 1, 2, 3] + list(np.arange(4, 28, 0.5)) 
+    rsLabels = [0.1, 0.25, 0.5, 1, 2, 3] + list(np.arange(4, 28, 2)) 
     return tempLabels,rsLabels, thetaLabels, thetaeLabels
 
-fig,ax =plt.subplots(1,1,figsize=(12,8))
-corners = [-5, 25]
-ax, skew = makeSkewWet(ax, corners=corners, skew=35,label_fun=label_fun)
-ax.set_title('override')
+skew=35.
+temp=the_sounding['temp']
+press = the_sounding['pres']
+tdew = the_sounding['dwpt']
+temp_skew = convertTempToSkew(temp,press,skew)
+tdew_skew = convertTempToSkew(tdew,press,skew)
+
+fig,ax =plt.subplots(1,1,figsize=(10,8))
+corners = [10, 35]
+ax, skew = makeSkewWet(ax, corners=corners, skew=skew,label_fun=label_fun)
+ax.set_title('Dodge City Kansas sounding')
 xcorners=find_corners(corners,skew=skew)
-ax.set(xlim=xcorners,ylim=[1000,800]);
+ax.set(xlim=xcorners,ylim=[1000,400])
+ax.plot(temp_skew,press,linewidth=5)
+ax.plot(tdew_skew,press,linewidth=5);
 
