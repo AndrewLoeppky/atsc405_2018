@@ -6,7 +6,7 @@
 
 # # Demonstrate the sounding retrieval code
 
-# In[18]:
+# In[1]:
 
 
 from a405.soundings.wyominglib import write_soundings, read_soundings
@@ -16,23 +16,23 @@ from matplotlib import pyplot as plt
 # Ask for north american soundings between July 1, 2017 00Z and July 18, 2017 00Z for
 # Dodge City, Kansas  from http://weather.uwyo.edu/upperair/sounding.html
 
-# In[2]:
+# In[4]:
 
 
-values=dict(region='naconf',year='2017',month='7',start='0100',stop='1800',station='72451')
+values=dict(region='naconf',year='2012',month='3',start='0100',stop='1800',station='72340')
 
 
 # Write the soundings into a folder called soundingdir
 
-# In[3]:
+# In[10]:
 
 
-write_soundings(values, 'soundingdir')
+write_soundings(values, 'littlerock')
 
 
 # # Read the soundings back into python
 
-# In[10]:
+# In[6]:
 
 
 soundings= read_soundings('soundingdir')
@@ -40,7 +40,7 @@ soundings= read_soundings('soundingdir')
 
 # # Examine the nested dictionaries inside soundings
 
-# In[14]:
+# In[7]:
 
 
 print((f'soundings keys: {list(soundings.keys())}\n'),
@@ -50,7 +50,7 @@ print((f'soundings keys: {list(soundings.keys())}\n'),
 
 # # Get the first sounding
 
-# In[17]:
+# In[8]:
 
 
 target_date=list(soundings['sounding_dict'].keys())[0]
@@ -60,7 +60,7 @@ print(the_sounding.columns)
 
 # # Plot it
 
-# In[20]:
+# In[9]:
 
 
 get_ipython().run_line_magic('matplotlib', 'inline')
