@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # <h1>Table of Contents<span class="tocSkip"></span></h1>
-# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Supress-autoscrolling" data-toc-modified-id="Supress-autoscrolling-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Supress autoscrolling</a></span></li><li><span><a href="#Draw-a-moist-adiabat-through-the-LFC" data-toc-modified-id="Draw-a-moist-adiabat-through-the-LFC-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Draw a moist adiabat through the LFC</a></span><ul class="toc-item"><li><span><a href="#Grab-a-Little-Rock-soundings" data-toc-modified-id="Grab-a-Little-Rock-soundings-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Grab a Little Rock soundings</a></span></li><li><span><a href="#Select-one-sounding" data-toc-modified-id="Select-one-sounding-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Select one sounding</a></span></li><li><span><a href="#Save-the-metadata-for-plotting" data-toc-modified-id="Save-the-metadata-for-plotting-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Save the metadata for plotting</a></span></li><li><span><a href="#Convert-temperature-and-dewpoint-to-skew-coords" data-toc-modified-id="Convert-temperature-and-dewpoint-to-skew-coords-2.4"><span class="toc-item-num">2.4&nbsp;&nbsp;</span>Convert temperature and dewpoint to skew coords</a></span></li><li><span><a href="#Plot-the-sounding,-making-the-sounding-lines-thicker" data-toc-modified-id="Plot-the-sounding,-making-the-sounding-lines-thicker-2.5"><span class="toc-item-num">2.5&nbsp;&nbsp;</span>Plot the sounding, making the sounding lines thicker</a></span></li><li><span><a href="#turn-off-log(0)-warning" data-toc-modified-id="turn-off-log(0)-warning-2.6"><span class="toc-item-num">2.6&nbsp;&nbsp;</span>turn off log(0) warning</a></span></li><li><span><a href="#find-the-$\theta_{es}$-of-the-surface-air,-draw-the-adiabat-through-point" data-toc-modified-id="find-the-$\theta_{es}$-of-the-surface-air,-draw-the-adiabat-through-point-2.7"><span class="toc-item-num">2.7&nbsp;&nbsp;</span>find the $\theta_{es}$ of the surface air, draw the adiabat through point</a></span></li></ul></li></ul></div>
+# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Supress-autoscrolling" data-toc-modified-id="Supress-autoscrolling-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Supress autoscrolling</a></span></li><li><span><a href="#Draw-a-moist-adiabat-through-the-LFC" data-toc-modified-id="Draw-a-moist-adiabat-through-the-LFC-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Draw a moist adiabat through the LFC</a></span><ul class="toc-item"><li><span><a href="#Grab-a-Little-Rock-sounding" data-toc-modified-id="Grab-a-Little-Rock-sounding-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Grab a Little Rock sounding</a></span></li><li><span><a href="#Select-one-sounding" data-toc-modified-id="Select-one-sounding-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Select one sounding</a></span></li><li><span><a href="#Save-the-metadata-for-plotting" data-toc-modified-id="Save-the-metadata-for-plotting-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Save the metadata for plotting</a></span></li><li><span><a href="#Convert-temperature-and-dewpoint-to-skew-coords" data-toc-modified-id="Convert-temperature-and-dewpoint-to-skew-coords-2.4"><span class="toc-item-num">2.4&nbsp;&nbsp;</span>Convert temperature and dewpoint to skew coords</a></span></li><li><span><a href="#Plot-the-sounding,-making-the-sounding-lines-thicker" data-toc-modified-id="Plot-the-sounding,-making-the-sounding-lines-thicker-2.5"><span class="toc-item-num">2.5&nbsp;&nbsp;</span>Plot the sounding, making the sounding lines thicker</a></span></li><li><span><a href="#turn-off-log(0)-warning" data-toc-modified-id="turn-off-log(0)-warning-2.6"><span class="toc-item-num">2.6&nbsp;&nbsp;</span>turn off log(0) warning</a></span></li><li><span><a href="#find-the-$\theta_{es}$-of-the-surface-air,-draw-the-adiabat-through-point" data-toc-modified-id="find-the-$\theta_{es}$-of-the-surface-air,-draw-the-adiabat-through-point-2.7"><span class="toc-item-num">2.7&nbsp;&nbsp;</span>find the $\theta_{es}$ of the surface air, draw the adiabat through point</a></span></li></ul></li></ul></div>
 
 # # Supress autoscrolling
 
@@ -33,7 +33,7 @@ from a405.soundings.wyominglib import write_soundings, read_soundings
 from matplotlib import pyplot as plt
 
 
-# ## Grab a Little Rock soundings
+# ## Grab a Little Rock sounding
 
 # In[4]:
 
@@ -84,7 +84,7 @@ print(f'units: {pformat(units_dict)}')
 # In[8]:
 
 
-skew=30.
+skew=35.
 triplets=zip(sounding['temp'],sounding['dwpt'],sounding['pres'])
 xcoord_T=[]
 xcoord_Td=[]
@@ -98,25 +98,53 @@ for a_temp,a_dew,a_pres in triplets:
 # In[9]:
 
 
-skew=30
+def label_fun():
+    """
+    override the default rs labels with a tighter mesh
+    """
+    from numpy import arange
+    #
+    # get the default labels
+    #
+    tempLabels,rsLabels, thetaLabels, thetaeLabels = make_default_labels()
+    #
+    # change the temperature and rs grids
+    #
+    tempLabels = range(-40, 50, 2)
+    rsLabels = [0.1, 0.25, 0.5, 1, 2, 3] + list(np.arange(4, 28, 2)) 
+    return tempLabels,rsLabels, thetaLabels, thetaeLabels
+
+
+# In[10]:
+
+
 fig,ax =plt.subplots(1,1,figsize=(8,8))
-corners=[-35,35]
-ax,skew = makeSkewWet(ax,corners=corners,skew=skew)
+corners = [10, 35]
+ax, skew = makeSkewWet(ax, corners=corners, skew=skew,label_fun=label_fun)
+#ax,skew = makeSkewWet(ax,corners=corners,skew=skew)
+out=ax.set(title=title_string)
+xcorners=find_corners(corners,skew=skew)
+ax.set(xlim=xcorners,ylim=[1000,400]);
 l1,=ax.plot(xcoord_T,sounding['pres'],color='k',label='temp')
 l2,=ax.plot(xcoord_Td,sounding['pres'],color='g',label='dew')
-[line.set(linewidth=3) for line in [l1,l2]]
-out=ax.set(title=title_string)
+[line.set(linewidth=3) for line in [l1,l2]];
 
 
 # ## turn off log(0) warning
 
-# In[12]:
+# In[11]:
 
 
 np.seterr(all='ignore');
 
 
 # ## find the $\theta_{es}$ of the surface air, draw the adiabat through point
+
+# In[12]:
+
+
+print(skew)
+
 
 # In[13]:
 
@@ -156,10 +184,12 @@ env_Tv = find_Tv(env_temps,env_rvaps)
 adia_Tv = find_Tv(adia_temps,adia_rvaps,adia_rls)
 xcoord_thetae=[]
 press_hPa = press*1.e-2
+#
+# convert the adiabatic thetae sounding to skewT coords
+#
 for a_temp,a_press in zip(adia_temps - c.Tc,press_hPa):
     out=convertTempToSkew(a_temp,a_press,skew)
     xcoord_thetae.append(out)
-ax.plot(xcoord_thetae,press_hPa,color='r',label='rsat',linewidth=3.)
-ax.set(ylim=[1000.,200.])
+ax.plot(xcoord_thetae,press_hPa,color='r',label='thetae',linewidth=3.)
 display(fig)
 
