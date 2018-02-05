@@ -140,7 +140,7 @@ np.seterr(all='ignore');
 
 # ## find the $\theta_{es}$ of the  LCL
 
-# In[12]:
+# In[13]:
 
 
 from a405.thermo.thermlib import find_Tmoist,find_thetaep,find_rsat,find_Tv,find_lcl,find_thetaes,find_thetaet
@@ -154,19 +154,19 @@ sfc_press,sfc_temp,sfc_td = sfc_press*100.,sfc_temp+c.Tc,sfc_td+c.Tc
 
 # ### What is the LCL of this air?
 
-# In[13]:
+# In[ ]:
 
 
 Tlcl, plcl=find_lcl(sfc_td, sfc_temp,sfc_press)
 
 
-# In[14]:
+# In[ ]:
 
 
 print(f'found Tlcl={Tlcl} K, plcl={plcl} Pa')
 
 
-# In[15]:
+# In[ ]:
 
 
 #  convert to mks and find surface rv and thetae
@@ -211,7 +211,7 @@ ax.plot(xlcl,plcl*0.01,'bo',markersize=8)
 display(fig)
 
 
-# In[17]:
+# In[ ]:
 
 
 def find_buoy(adia_Tv,env_Tv):
@@ -233,7 +233,7 @@ ax.grid(which='both')
 
 # ## get the limits of integration
 
-# In[19]:
+# In[ ]:
 
 
 #np.searchsorted finds the first crossing
@@ -244,7 +244,7 @@ print(zerotop, toplim)
 print('pressure levels for crossing: {} hPa {} hPa'      .format(press[zerobot]*0.01,press[zerotop]*0.01))
 
 
-# In[20]:
+# In[ ]:
 
 
 clipped_buoy = buoy[zerobot:zerotop]
@@ -253,4 +253,20 @@ clipped_height = height[zerobot:zerotop]
 layer_buoy = (clipped_buoy[:-1] + clipped_buoy[1:])/2.
 cape = np.sum(layer_buoy*np.diff(clipped_height))
 print('cape is {:6.2f} J/kg'.format(cape))
+
+
+# In[ ]:
+
+
+clipped_buoy = buoy[zerobot:]
+clipped_height = height[zerobot:]
+new_press= clipped_press[zerobot:]
+#average the levels to get layer buoyancy
+layer_buoy = (clipped_buoy[:-1] + clipped_buoy[1:])/2.
+layer_height = (clipped_height[:-1] + clipped_height[:-1])/2.
+layer_press = (new_press[:-1] + new_press[1:])/2.
+cape = np.cumsum(layer_buoy*np.diff(clipped_height))
+fig,ax=plt.subplots(1,1)
+ax.plot(cape,layer_press*1.e-2)
+ax.invert_yaxis()
 
