@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # <h1>Table of Contents<span class="tocSkip"></span></h1>
-# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Modeling-an-entraining-cloud-updraft" data-toc-modified-id="Modeling-an-entraining-cloud-updraft-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Modeling an entraining cloud updraft</a></span><ul class="toc-item"><li><span><a href="#Find-the-derivatives-wrt-time-of-each-of-the-4-variables" data-toc-modified-id="Find-the-derivatives-wrt-time-of-each-of-the-4-variables-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>Find the derivatives wrt time of each of the 4 variables</a></span></li><li><span><a href="#Find-the-buoyancy-from-the-cloud-and-environment-$\theta_e$-and-$r_T$" data-toc-modified-id="Find-the-buoyancy-from-the-cloud-and-environment-$\theta_e$-and-$r_T$-1.2"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>Find the buoyancy from the cloud and environment $\theta_e$ and $r_T$</a></span></li><li><span><a href="#Integrator" data-toc-modified-id="Integrator-1.3"><span class="toc-item-num">1.3&nbsp;&nbsp;</span>Integrator</a></span></li><li><span><a href="#Read-in-a-sounding-to-set-the-environment" data-toc-modified-id="Read-in-a-sounding-to-set-the-environment-1.4"><span class="toc-item-num">1.4&nbsp;&nbsp;</span>Read in a sounding to set the environment</a></span></li><li><span><a href="#Do-the-integration" data-toc-modified-id="Do-the-integration-1.5"><span class="toc-item-num">1.5&nbsp;&nbsp;</span>Do the integration</a></span></li></ul></li></ul></div>
+# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Modeling-an-entraining-cloud-updraft" data-toc-modified-id="Modeling-an-entraining-cloud-updraft-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Modeling an entraining cloud updraft</a></span><ul class="toc-item"><li><span><a href="#Find-the-derivatives-wrt-time-of-each-of-the-4-variables" data-toc-modified-id="Find-the-derivatives-wrt-time-of-each-of-the-4-variables-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>Find the derivatives wrt time of each of the 4 variables</a></span></li><li><span><a href="#Find-the-buoyancy-from-the-cloud-and-environment-$\theta_e$-and-$r_T$" data-toc-modified-id="Find-the-buoyancy-from-the-cloud-and-environment-$\theta_e$-and-$r_T$-1.2"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>Find the buoyancy from the cloud and environment $\theta_e$ and $r_T$</a></span></li><li><span><a href="#Integrator" data-toc-modified-id="Integrator-1.3"><span class="toc-item-num">1.3&nbsp;&nbsp;</span>Integrator</a></span></li><li><span><a href="#Read-in-a-sounding-to-set-the-environment" data-toc-modified-id="Read-in-a-sounding-to-set-the-environment-1.4"><span class="toc-item-num">1.4&nbsp;&nbsp;</span>Read in a sounding to set the environment</a></span></li><li><span><a href="#Do-the-integration-for-diffrerent-entrainment-rates" data-toc-modified-id="Do-the-integration-for-diffrerent-entrainment-rates-1.5"><span class="toc-item-num">1.5&nbsp;&nbsp;</span>Do the integration for diffrerent entrainment rates</a></span></li><li><span><a href="#now-loop-over-4-entrainmnt-rates-and-add-the-results-as-new-columns" data-toc-modified-id="now-loop-over-4-entrainmnt-rates-and-add-the-results-as-new-columns-1.6"><span class="toc-item-num">1.6&nbsp;&nbsp;</span>now loop over 4 entrainmnt rates and add the results as new columns</a></span></li><li><span><a href="#plot-the-thetae-for-all-runs-to-check----generate-the-column-name-from-the-entrainment-rate" data-toc-modified-id="plot-the-thetae-for-all-runs-to-check----generate-the-column-name-from-the-entrainment-rate-1.7"><span class="toc-item-num">1.7&nbsp;&nbsp;</span>plot the thetae for all runs to check -- generate the column name from the entrainment rate</a></span></li><li><span><a href="#Put-all-runs-on-the-same-skewT-plot" data-toc-modified-id="Put-all-runs-on-the-same-skewT-plot-1.8"><span class="toc-item-num">1.8&nbsp;&nbsp;</span>Put all runs on the same skewT plot</a></span></li></ul></li></ul></div>
 
 # # Modeling an entraining cloud updraft
 # 
@@ -26,6 +26,7 @@ from a405.thermo.thermlib import find_Tmoist,find_thetaep,find_rsat,tinvert_thet
 from scipy.interpolate import interp1d
 from a405.soundings.wyominglib import write_soundings, read_soundings
 import json
+from matplotlib import pyplot as plt
 
 
 from scipy.integrate import ode
@@ -296,29 +297,164 @@ def get_sounding(get_data=True,soundingdir='littlerock',soundingfile='littlerock
 
 
 
-# ## Do the integration
+# ## Do the integration for diffrerent entrainment rates
+# 
+# To demonstrate how pandas dataframes work -- calculate the thetae, rT profiles for
+# different entrainment rates and add them as columns to a dataframe
 
-# In[6]:
+# In[26]:
 
 
 df_sounding,attributes = get_sounding(get_data=False)
+import copy
+hPa2pa=1.e2
 
 
-# In[7]:
-
-
-entrain_rate = 2.e-4
-df_result, interpPress=integ_entrain(df_sounding,entrain_rate)
-
+# ## create a new dataframe from the integrator output
+# 
+# keep only the height, thetae and rt columns of the 0 entrainment run
 
 # In[8]:
 
 
-df_result
+np.warnings.filterwarnings('ignore')
+rate = 0.
+df_zero_rate, interpPress=integ_entrain(df_sounding,rate)
+#
+# save the result in a new dataframe
+#
+df_output=copy.copy(df_zero_rate[['cloud_height','thetae_cloud','rT_cloud']])
+cloud_press = interpPress(df_output['cloud_height'].values)
+df_output['p0']=cloud_press
+df_output.rename(columns={'thetae_cloud':'th_e0','rT_cloud':'rT_e0'},inplace=True)
+df_output.head()
 
 
-# In[10]:
+# ## now loop over 4 entrainmnt rates and add the results as new columns
+
+# In[9]:
 
 
-df_result.plot('thetae_cloud','cloud_height')
+entrain_rate = [2.e-4,5.e-4,8.e-4,1.e-3]
+colnames_press=['p2','p5','p8','p10']
+colnames_temp =['th_e2','th_e5','th_e8','th_e10']
+colnames_rT = ['rT_e2','rT_e5','rT_e8','rT_e10']
+quads = zip(entrain_rate,colnames_press,colnames_temp,colnames_rT)
+for rate, pname, tname, rTname in quads:
+  df_result, interpPress=integ_entrain(df_sounding,rate)
+  press=interpPress(df_output['cloud_height'])
+  df_output[pname] = press
+  df_output[tname]=df_result['thetae_cloud']
+  df_output[rTname] = df_result['rT_cloud']
+df_output.tail()
+
+
+# ## plot the thetae for all runs to check -- generate the column name from the entrainment rate
+
+# In[11]:
+
+
+ax=df_output.plot('th_e0','cloud_height',label='the_e0',legend=False);
+for rate in [2, 5, 8, 10]:
+    tname = f'th_e{rate}'
+    ax.plot(tname,'cloud_height',data=df_output,label=tname)
+ax.legend()
+ax.grid(True);
+
+
+# ## Put all runs on the same skewT plot
+# 
+# First generate the plot
+
+# In[14]:
+
+
+from a405.thermo.thermlib import convertSkewToTemp, convertTempToSkew
+from a405.skewT.fullskew import makeSkewWet,find_corners,make_default_labels
+def label_fun():
+    """
+    override the default rs labels with a tighter mesh
+    """
+    from numpy import arange
+    #
+    # get the default labels
+    #
+    tempLabels,rsLabels, thetaLabels, thetaeLabels = make_default_labels()
+    #
+    # change the temperature and rs grids
+    #
+    tempLabels = range(-40, 50, 2)
+    rsLabels = [0.1, 0.25, 0.5, 1, 2, 3] + list(np.arange(4, 28, 2)) 
+    return tempLabels,rsLabels, thetaLabels, thetaeLabels
+
+
+# In[15]:
+
+
+skew=35.
+triplets=zip(df_sounding['temp'],df_sounding['dwpt'],df_sounding['pres'])
+xcoord_T=[]
+xcoord_Td=[]
+for a_temp,a_dew,a_pres in triplets:
+    xcoord_T.append(convertTempToSkew(a_temp,a_pres,skew))
+    xcoord_Td.append(convertTempToSkew(a_dew,a_pres,skew))
+
+
+# In[16]:
+
+
+fig,ax =plt.subplots(1,1,figsize=(8,8))
+corners = [10, 35]
+skew=35
+ax, skew = makeSkewWet(ax, corners=corners, skew=skew,label_fun=label_fun)
+xcorners=find_corners(corners,skew=skew)
+ax.set(xlim=xcorners,ylim=[1000,400]);
+l1,=ax.plot(xcoord_T,df_sounding['pres'],color='k',label='temp')
+l2,=ax.plot(xcoord_Td,df_sounding['pres'],color='g',label='dew')
+[line.set(linewidth=3) for line in [l1,l2]];
+
+
+# ## define a function that calculates the skewT, press coords for a rate
+
+# In[49]:
+
+
+from a405.thermo.rootfinder import BracketError
+def calc_xcoord_thetae(dataframe,rate,skew):
+    """
+    given a dataframe with columnes like: the_e8, rT_e8, p8
+    calculate the temperature, pressure sounding for those columns
+    by using tinvert_thetae on each row
+    """
+    thetae_col,rT_col,press_col= f'th_e{rate}',f'rT_e{rate}',f'p{rate}'
+    thetae_sound=dataframe[thetae_col].values
+    rT_sound=dataframe[rT_col].values
+    press_sound=dataframe[press_col].values
+    triplet = zip(thetae_sound,rT_sound,press_sound)
+    xcoord_T = []
+    press_coord = []
+    for the_thetae,the_rT,the_press in triplet:
+        try:
+            temp,rv,rl = tinvert_thetae(the_thetae,the_rT,the_press*hPa2pa)
+            xcoord_T.append(convertTempToSkew(temp - c.Tc,the_press,skew))
+        except BracketError:
+            xcoord_T.append(np.nan)
+        press_coord.append(the_press)
+    return xcoord_T,press_coord
+
+
+# ## Now add each of these lines to the plot with skew=35
+
+# In[50]:
+
+
+for rate in [2,5,8,10]:
+    xcoord_T,the_press=calc_xcoord_thetae(df_output,rate,skew)
+    l1,=ax.plot(xcoord_T,the_press,label=rate)
+
+
+# In[46]:
+
+
+display(fig)
 
