@@ -645,7 +645,7 @@ def find_rvrl(Temp, rT, press):
     return rv, rl
 
 
-def find_Tmoist(thetaE0, press):
+def find_Tmoist(thetaE0, press, use_theta=False):
     """
     Calculates the temperatures along a moist adiabat.
     
@@ -670,9 +670,13 @@ def find_Tmoist(thetaE0, press):
     283.7226584032411
     """
     Tstart = c.Tc
+    if use_theta and press < 150.e2:
+        diff_fun = theta_diff
+    else:
+        diff_fun = thetaes_diff
     try:
-        brackets = rf.find_interval(thetaes_diff, Tstart, thetaE0, press)
-        Temp = rf.fzero(thetaes_diff, brackets, thetaE0, press)
+        brackets = rf.find_interval(diff_fun, Tstart, thetaE0, press)
+        Temp = rf.fzero(diff_fun, brackets, thetaE0, press)
     except BracketError as e:
         print("couldn't find bracket: debug info: ", e.extra_info)
         Temp = np.nan
@@ -704,6 +708,32 @@ def thetaes_diff(Tguess, thetaE0, press):
 
     #when this result is small enough we're done
     the_diff = thetaes_guess - thetaE0
+    return the_diff
+
+
+def theta_diff(Tguess, theta0, press):
+    """
+    use  theta for rootfinder
+
+    Parameters
+    ----------
+    Tguess : float
+        Trial temperature value (K).
+    press : float
+        Pressure (Pa).
+
+    Returns
+    -------
+    theDiff : float
+        The difference between the values of 'thetaEguess' and
+        'thetaE0'. This difference is then compared to the tolerance
+        allowed by brenth.
+        
+    """
+    theta_guess = find_theta(Tguess, press)
+
+    #when this result is small enough we're done
+    the_diff = theta_guess - theta0
     return the_diff
 
 

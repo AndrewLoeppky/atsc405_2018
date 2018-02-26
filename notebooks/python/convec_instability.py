@@ -4,7 +4,7 @@
 # <h1>Table of Contents<span class="tocSkip"></span></h1>
 # <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Reproduce-the-convective-instability-plot-of-Thompkins-p.-64" data-toc-modified-id="Reproduce-the-convective-instability-plot-of-Thompkins-p.-64-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Reproduce the convective instability plot of Thompkins p. 64</a></span></li></ul></div>
 
-# In[33]:
+# In[1]:
 
 
 #calculate thermodynamic variables
@@ -25,14 +25,14 @@ np.seterr(all='ignore');
 
 # # Reproduce the convective instability plot of Thompkins p. 64
 
-# In[1]:
+# In[2]:
 
 
 from IPython.display import Image
 Image('images/convective_instability.jpg')
 
 
-# In[34]:
+# In[3]:
 
 
 def makePlot(ax,Temp=None,Tdew=None,Tpseudo=None,press=None,
@@ -64,7 +64,7 @@ def makePlot(ax,Temp=None,Tdew=None,Tpseudo=None,press=None,
   return ax
 
 
-# In[46]:
+# In[4]:
 
 
 def lift_sounding(rTotal,theThetae,press):
@@ -81,7 +81,7 @@ def lift_sounding(rTotal,theThetae,press):
   return Tdew,Temp,Tpseudo
 
 
-# In[36]:
+# In[5]:
 
 
 #
@@ -106,7 +106,7 @@ Tdew_soundK = Tdew_sound + c.Tc
 Temp_soundK = Temp_sound + c.Tc
 
 
-# In[37]:
+# In[6]:
 
 
 def apply(*args,the_fun=None):
@@ -135,7 +135,7 @@ def apply(*args,the_fun=None):
     return out
 
 
-# In[38]:
+# In[7]:
 
 
 #
@@ -161,7 +161,7 @@ cs=convertTempToSkew
 ax.plot(cs(Temp_sound[:-1],press0[:-1],skew),press0[:-1],'bo',markersize=15);
 
 
-# In[42]:
+# In[8]:
 
 
 #
@@ -195,7 +195,7 @@ ax = makePlot(ax,**fig_dict);
 #fig.savefig('base900_thetae.pdf')
 
 
-# In[47]:
+# In[9]:
 
 
 # #figure 3: lift cloud base by 50 hPa to 850 hPa
@@ -210,7 +210,7 @@ ax.set(xlim=xcorners,ylim=[1000, 600])
 fig.savefig('base850_thetae.png')
 
 
-# In[49]:
+# In[10]:
 
 
 #
@@ -228,7 +228,7 @@ fig.savefig('base835_thetae.png')
 fig.savefig('base835_thetae.pdf')
 
 
-# In[50]:
+# In[11]:
 
 
 #
@@ -247,7 +247,7 @@ fig.savefig('base825_thetae.png')
 fig.savefig('base825_thetae.pdf')
 
 
-# In[51]:
+# In[12]:
 
 
 #
@@ -267,7 +267,7 @@ fig.savefig('base800_thetae.png')
 fig.savefig('base800_thetae.pdf')
 
 
-# In[52]:
+# In[13]:
 
 
 #

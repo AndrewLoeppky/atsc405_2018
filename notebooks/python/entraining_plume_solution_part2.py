@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # <h1>Table of Contents<span class="tocSkip"></span></h1>
-# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Modeling-an-entraining-cloud-updraft" data-toc-modified-id="Modeling-an-entraining-cloud-updraft-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Modeling an entraining cloud updraft</a></span><ul class="toc-item"><li><span><a href="#Find-the-derivatives-wrt-time-of-each-of-the-4-variables" data-toc-modified-id="Find-the-derivatives-wrt-time-of-each-of-the-4-variables-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>Find the derivatives wrt time of each of the 4 variables</a></span></li><li><span><a href="#Find-the-buoyancy-from-the-cloud-and-environment-$\theta_e$-and-$r_T$" data-toc-modified-id="Find-the-buoyancy-from-the-cloud-and-environment-$\theta_e$-and-$r_T$-1.2"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>Find the buoyancy from the cloud and environment $\theta_e$ and $r_T$</a></span></li><li><span><a href="#Integrator" data-toc-modified-id="Integrator-1.3"><span class="toc-item-num">1.3&nbsp;&nbsp;</span>Integrator</a></span></li><li><span><a href="#Read-in-a-sounding-to-set-the-environment" data-toc-modified-id="Read-in-a-sounding-to-set-the-environment-1.4"><span class="toc-item-num">1.4&nbsp;&nbsp;</span>Read in a sounding to set the environment</a></span></li><li><span><a href="#Do-the-integration-for-diffrerent-entrainment-rates" data-toc-modified-id="Do-the-integration-for-diffrerent-entrainment-rates-1.5"><span class="toc-item-num">1.5&nbsp;&nbsp;</span>Do the integration for diffrerent entrainment rates</a></span></li><li><span><a href="#now-loop-over-4-entrainmnt-rates-and-add-the-results-as-new-columns" data-toc-modified-id="now-loop-over-4-entrainmnt-rates-and-add-the-results-as-new-columns-1.6"><span class="toc-item-num">1.6&nbsp;&nbsp;</span>now loop over 4 entrainmnt rates and add the results as new columns</a></span></li><li><span><a href="#plot-the-thetae-for-all-runs-to-check----generate-the-column-name-from-the-entrainment-rate" data-toc-modified-id="plot-the-thetae-for-all-runs-to-check----generate-the-column-name-from-the-entrainment-rate-1.7"><span class="toc-item-num">1.7&nbsp;&nbsp;</span>plot the thetae for all runs to check -- generate the column name from the entrainment rate</a></span></li><li><span><a href="#Put-all-runs-on-the-same-skewT-plot" data-toc-modified-id="Put-all-runs-on-the-same-skewT-plot-1.8"><span class="toc-item-num">1.8&nbsp;&nbsp;</span>Put all runs on the same skewT plot</a></span></li></ul></li></ul></div>
+# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Modeling-an-entraining-cloud-updraft" data-toc-modified-id="Modeling-an-entraining-cloud-updraft-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Modeling an entraining cloud updraft</a></span><ul class="toc-item"><li><span><a href="#Find-the-derivatives-wrt-time-of-each-of-the-4-variables" data-toc-modified-id="Find-the-derivatives-wrt-time-of-each-of-the-4-variables-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>Find the derivatives wrt time of each of the 4 variables</a></span></li><li><span><a href="#Find-the-buoyancy-from-the-cloud-and-environment-$\theta_e$-and-$r_T$" data-toc-modified-id="Find-the-buoyancy-from-the-cloud-and-environment-$\theta_e$-and-$r_T$-1.2"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>Find the buoyancy from the cloud and environment $\theta_e$ and $r_T$</a></span></li><li><span><a href="#Integrator" data-toc-modified-id="Integrator-1.3"><span class="toc-item-num">1.3&nbsp;&nbsp;</span>Integrator</a></span></li><li><span><a href="#Read-in-a-sounding-to-set-the-environment" data-toc-modified-id="Read-in-a-sounding-to-set-the-environment-1.4"><span class="toc-item-num">1.4&nbsp;&nbsp;</span>Read in a sounding to set the environment</a></span></li><li><span><a href="#Do-the-integration-for-diffrerent-entrainment-rates" data-toc-modified-id="Do-the-integration-for-diffrerent-entrainment-rates-1.5"><span class="toc-item-num">1.5&nbsp;&nbsp;</span>Do the integration for diffrerent entrainment rates</a></span></li><li><span><a href="#create-a-new-dataframe-from-the-integrator-output" data-toc-modified-id="create-a-new-dataframe-from-the-integrator-output-1.6"><span class="toc-item-num">1.6&nbsp;&nbsp;</span>create a new dataframe from the integrator output</a></span></li><li><span><a href="#now-loop-over-4-entrainmnt-rates-and-add-the-results-as-new-columns" data-toc-modified-id="now-loop-over-4-entrainmnt-rates-and-add-the-results-as-new-columns-1.7"><span class="toc-item-num">1.7&nbsp;&nbsp;</span>now loop over 4 entrainmnt rates and add the results as new columns</a></span></li><li><span><a href="#plot-the-thetae-for-all-runs-to-check----generate-the-column-name-from-the-entrainment-rate" data-toc-modified-id="plot-the-thetae-for-all-runs-to-check----generate-the-column-name-from-the-entrainment-rate-1.8"><span class="toc-item-num">1.8&nbsp;&nbsp;</span>plot the thetae for all runs to check -- generate the column name from the entrainment rate</a></span></li><li><span><a href="#Put-all-runs-on-the-same-skewT-plot" data-toc-modified-id="Put-all-runs-on-the-same-skewT-plot-1.9"><span class="toc-item-num">1.9&nbsp;&nbsp;</span>Put all runs on the same skewT plot</a></span></li><li><span><a href="#define-a-function-that-calculates-the-skewT,-press-coords-for-a-rate" data-toc-modified-id="define-a-function-that-calculates-the-skewT,-press-coords-for-a-rate-1.10"><span class="toc-item-num">1.10&nbsp;&nbsp;</span>define a function that calculates the skewT, press coords for a rate</a></span></li><li><span><a href="#Now-add-each-of-these-lines-to-the-plot-with-skew=35" data-toc-modified-id="Now-add-each-of-these-lines-to-the-plot-with-skew=35-1.11"><span class="toc-item-num">1.11&nbsp;&nbsp;</span>Now add each of these lines to the plot with skew=35</a></span></li></ul></li></ul></div>
 
 # # Modeling an entraining cloud updraft
 # 
@@ -302,7 +302,7 @@ def get_sounding(get_data=True,soundingdir='littlerock',soundingfile='littlerock
 # To demonstrate how pandas dataframes work -- calculate the thetae, rT profiles for
 # different entrainment rates and add them as columns to a dataframe
 
-# In[26]:
+# In[6]:
 
 
 df_sounding,attributes = get_sounding(get_data=False)
@@ -314,7 +314,7 @@ hPa2pa=1.e2
 # 
 # keep only the height, thetae and rt columns of the 0 entrainment run
 
-# In[8]:
+# In[7]:
 
 
 np.warnings.filterwarnings('ignore')
@@ -332,7 +332,7 @@ df_output.head()
 
 # ## now loop over 4 entrainmnt rates and add the results as new columns
 
-# In[9]:
+# In[8]:
 
 
 entrain_rate = [2.e-4,5.e-4,8.e-4,1.e-3]
@@ -351,7 +351,7 @@ df_output.tail()
 
 # ## plot the thetae for all runs to check -- generate the column name from the entrainment rate
 
-# In[11]:
+# In[9]:
 
 
 ax=df_output.plot('th_e0','cloud_height',label='the_e0',legend=False);
@@ -366,7 +366,7 @@ ax.grid(True);
 # 
 # First generate the plot
 
-# In[14]:
+# In[10]:
 
 
 from a405.thermo.thermlib import convertSkewToTemp, convertTempToSkew
@@ -388,7 +388,7 @@ def label_fun():
     return tempLabels,rsLabels, thetaLabels, thetaeLabels
 
 
-# In[15]:
+# In[11]:
 
 
 skew=35.
@@ -400,7 +400,7 @@ for a_temp,a_dew,a_pres in triplets:
     xcoord_Td.append(convertTempToSkew(a_dew,a_pres,skew))
 
 
-# In[16]:
+# In[12]:
 
 
 fig,ax =plt.subplots(1,1,figsize=(8,8))
@@ -416,7 +416,7 @@ l2,=ax.plot(xcoord_Td,df_sounding['pres'],color='g',label='dew')
 
 # ## define a function that calculates the skewT, press coords for a rate
 
-# In[49]:
+# In[13]:
 
 
 from a405.thermo.rootfinder import BracketError
@@ -445,7 +445,7 @@ def calc_xcoord_thetae(dataframe,rate,skew):
 
 # ## Now add each of these lines to the plot with skew=35
 
-# In[50]:
+# In[14]:
 
 
 for rate in [2,5,8,10]:
@@ -453,7 +453,7 @@ for rate in [2,5,8,10]:
     l1,=ax.plot(xcoord_T,the_press,label=rate)
 
 
-# In[46]:
+# In[15]:
 
 
 display(fig)
