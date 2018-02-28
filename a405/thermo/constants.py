@@ -13,6 +13,8 @@ class constants:
    Emanuel appendix 2
    
    """
+    pa2hPa=1.e-2
+    hPa2pa=1.e2
     Tp = 273.16
     #triple point in kelvin
     Tc = 273.15
