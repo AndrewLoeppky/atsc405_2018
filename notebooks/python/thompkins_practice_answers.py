@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # <h1>Table of Contents<span class="tocSkip"></span></h1>
-# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Tompkins-practice-quesitons" data-toc-modified-id="Tompkins-practice-quesitons-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Tompkins practice quesitons</a></span></li></ul></div>
+# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Tompkins-practice-quesitons" data-toc-modified-id="Tompkins-practice-quesitons-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Tompkins practice quesitons</a></span><ul class="toc-item"><li><span><a href="#use-the-rootfinder-to-find-the-wet-bub-temperature" data-toc-modified-id="use-the-rootfinder-to-find-the-wet-bub-temperature-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>use the rootfinder to find the wet bub temperature</a></span></li></ul></li></ul></div>
 
 # # Tompkins practice quesitons
 
@@ -116,8 +116,59 @@ print("dewpoint is: {:5.3f} deg C".format(Tdew - c.Tc))
 # ii (4pt) The parcel is cooled and moistened isobarically by the evaporation of precipitation to reach a final temperature 
 # of $T_1$ and a final mixing ratio of $r_{v1}$.  Use a rootfinder to solve for $T_1$ if the relative humidity is RH=0.6.
 
-# In[5]:
+# In[6]:
 
 
-#your code here
+from a405.thermo.thermlib import find_rsat
+from a405.thermo.constants import constants as c
+press=1.e5 # Pa
+rs25 = find_rsat(25 + c.Tc,press)
+rv = 0.1*rs25
+print(f'mixing ratio rv = {rv*1.e3:5.2f} g/kg')
+
+
+# ## use the rootfinder to find the wet bub temperature
+# 
+# For the root finder, guess the temperature, keeping the moist static energy constant and the air saturated.
+# 
+# Adapt code from the [Week 4 constant mixing ratio notebook](https://clouds.eos.ubc.ca/~phil/courses/atsc405/html/constant_mixing_ratio_solution.html)
+
+# In[16]:
+
+
+from a405.thermo import rootfinder as rf
+
+def zero_hm(temp,hm0,press):
+    """
+      find the temperature that matches the  energy hm0 for 
+      a given rsat,press, by rootfinding this zero
+      
+      input: temp (guess) (K)
+             hm0: moist static energy (J/kg)
+             press (Pa)
+      output: residual
+      
+     
+    """
+    rsat=find_rsat(temp,press)
+    hmguess=c.cpd*temp + c.lv0*rsat
+    residual= hm0 - hmguess
+    return residual
+
+RH0 = 0.6
+press=1.e5 #Pa
+T0 = 25 + c.Tc
+rv0 = RH0*find_rsat(T0,press)
+hm0 = c.cpd*T0 + c.lv0*rv0  #ignore height since it's not changing
+
+brackets=rf.find_interval(zero_hm,T0,hm0,press)
+wet_bulb_temp = rf.fzero(zero_hm,brackets,hm0,press)
+
+
+
+# In[23]:
+
+
+print((f'the wet bulb temperature for \nRH=60% and T= = {T0 - c.Tc:5.2f} '
+       f'deg C is: {wet_bulb_temp - c.Tc:5.2f} deg C'))
 
