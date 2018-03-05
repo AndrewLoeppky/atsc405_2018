@@ -4,7 +4,7 @@
 # <h1>Table of Contents<span class="tocSkip"></span></h1>
 # <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#plot-a-sounding" data-toc-modified-id="plot-a-sounding-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>plot a sounding</a></span></li></ul></div>
 
-# In[1]:
+# In[4]:
 
 
 import numpy as np
@@ -14,7 +14,7 @@ from matplotlib import pyplot as plt
 
 # # plot a sounding
 
-# In[2]:
+# In[13]:
 
 
 from a405.soundings.wyominglib import read_soundings
@@ -23,18 +23,18 @@ from a405.thermo.thermlib import convertTempToSkew
 import datetime
 import pytz
 
-soundings= read_soundings('soundingdir')
+soundings= read_soundings('delrio')
 print(soundings.keys())
 print(soundings['sounding_dict'].keys())
 
 
-# In[16]:
+# In[14]:
 
 
-the_sounding=soundings['sounding_dict'][(2017,7,14,0)]
+the_sounding=soundings['sounding_dict'][(2017,5,10,0)]
 
 
-# In[20]:
+# In[21]:
 
 
 from a405.skewT.fullskew import makeSkewWet,find_corners,make_default_labels
@@ -62,12 +62,13 @@ tdew = the_sounding['dwpt']
 temp_skew = convertTempToSkew(temp,press,skew)
 tdew_skew = convertTempToSkew(tdew,press,skew)
 
-fig,ax =plt.subplots(1,1,figsize=(10,8))
-corners = [10, 35]
+fig,ax =plt.subplots(1,1,figsize=(11,11))
+corners = [-5, 35]
 ax, skew = makeSkewWet(ax, corners=corners, skew=skew,label_fun=label_fun)
-ax.set_title('Dodge City Kansas sounding')
+ax.set_title('Del Rio Texas sounding')
 xcorners=find_corners(corners,skew=skew)
-ax.set(xlim=xcorners,ylim=[1000,400])
+ax.set(xlim=xcorners,ylim=[1000,200])
 ax.plot(temp_skew,press,linewidth=5)
 ax.plot(tdew_skew,press,linewidth=5);
+fig.savefig('delrio.pdf')
 

@@ -12,7 +12,7 @@
 #     derive the an equation that could be used to find the vapor mixing
 #     ratio $r_v$ using a wet bulb thermometer, stating any assumptions.
 #     Explain briefly in a couple of sentences how the wetbulb thermometer
-#     works ‚Äì i.e. what it measures, and how you would use those
+#     works, i.e. what it measures, and how you would use those
 #     measurements and your equation to find $r_v$.
 # 
 

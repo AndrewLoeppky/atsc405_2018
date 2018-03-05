@@ -16,23 +16,23 @@ from matplotlib import pyplot as plt
 # Ask for north american soundings between July 1, 2017 00Z and July 18, 2017 00Z for
 # Dodge City, Kansas  from http://weather.uwyo.edu/upperair/sounding.html
 
-# In[4]:
+# In[8]:
 
 
-values=dict(region='naconf',year='2012',month='3',start='0100',stop='1800',station='72340')
+values=dict(region='naconf',year='2017',month='5',start='0100',stop='1800',station='72261')
 
 
 # Write the soundings into a folder called soundingdir
 
-# In[10]:
+# In[9]:
 
 
-write_soundings(values, 'littlerock')
+write_soundings(values, 'delrio')
 
 
 # # Read the soundings back into python
 
-# In[6]:
+# In[4]:
 
 
 soundings= read_soundings('soundingdir')
@@ -40,7 +40,7 @@ soundings= read_soundings('soundingdir')
 
 # # Examine the nested dictionaries inside soundings
 
-# In[7]:
+# In[5]:
 
 
 print((f'soundings keys: {list(soundings.keys())}\n'),
@@ -50,7 +50,7 @@ print((f'soundings keys: {list(soundings.keys())}\n'),
 
 # # Get the first sounding
 
-# In[8]:
+# In[6]:
 
 
 target_date=list(soundings['sounding_dict'].keys())[0]
@@ -60,7 +60,7 @@ print(the_sounding.columns)
 
 # # Plot it
 
-# In[9]:
+# In[7]:
 
 
 get_ipython().run_line_magic('matplotlib', 'inline')

@@ -23,7 +23,7 @@ from a405.thermo.thermlib import convertTempToSkew
 import datetime
 import pytz
 
-soundings= read_soundings('soundingdir')
+soundings= read_soundings('quillayute')
 print(soundings.keys())
 print(soundings['sounding_dict'].keys())
 
