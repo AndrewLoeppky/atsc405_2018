@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # <h1>Table of Contents<span class="tocSkip"></span></h1>
-# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Del-Rio-CAPE-and-CIN-(15-points)" data-toc-modified-id="Del-Rio-CAPE-and-CIN-(15-points)-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Del Rio CAPE and CIN (15 points)</a></span><ul class="toc-item"><li><span><a href="#answer" data-toc-modified-id="answer-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>answer</a></span></li></ul></li><li><span><a href="#Cooling-problem-(12-points)" data-toc-modified-id="Cooling-problem-(12-points)-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Cooling problem (12 points)</a></span><ul class="toc-item"><li><span><a href="#answer" data-toc-modified-id="answer-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>answer</a></span></li></ul></li><li><span><a href="#Mixing-problem" data-toc-modified-id="Mixing-problem-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Mixing problem</a></span><ul class="toc-item"><li><span><a href="#Answer" data-toc-modified-id="Answer-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Answer</a></span></li></ul></li></ul></div>
+# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Del-Rio-CAPE-and-CIN-(15-points)" data-toc-modified-id="Del-Rio-CAPE-and-CIN-(15-points)-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Del Rio CAPE and CIN (15 points)</a></span><ul class="toc-item"><li><span><a href="#$r_l$-liquid-answer" data-toc-modified-id="$r_l$-liquid-answer-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>$r_l$ liquid answer</a></span></li><li><span><a href="#LCL-answer" data-toc-modified-id="LCL-answer-1.2"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>LCL answer</a></span></li></ul></li><li><span><a href="#Cooling-problem-(12-points)" data-toc-modified-id="Cooling-problem-(12-points)-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Cooling problem (12 points)</a></span><ul class="toc-item"><li><span><a href="#answer" data-toc-modified-id="answer-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>answer</a></span></li></ul></li><li><span><a href="#Mixing-problem" data-toc-modified-id="Mixing-problem-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Mixing problem</a></span><ul class="toc-item"><li><span><a href="#Answer" data-toc-modified-id="Answer-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>Answer</a></span></li></ul></li></ul></div>
 
 # In[1]:
 
@@ -17,7 +17,7 @@ from matplotlib import pyplot as plt
 
 from a405.soundings.wyominglib import read_soundings
 from a405.skewT.skewlib import makeSkewDry
-from a405.thermo.thermlib import convertTempToSkew
+from a405.thermo.thermlib import convertTempToSkew, findLCL
 import datetime
 import pytz
 
@@ -26,7 +26,7 @@ print(soundings.keys())
 print(soundings['sounding_dict'].keys())
 
 
-# In[3]:
+# In[ ]:
 
 
 the_sounding=soundings['sounding_dict'][(2017,5,10,0)]
@@ -62,13 +62,21 @@ the_sounding=soundings['sounding_dict'][(2017,5,10,0)]
 # 
 # 
 
-# ## answer
+# ## $r_l$ liquid answer
 # 
 # Condensed liquid water = 14 g/kg - approx 0.1 so about 14 g/kg
 # 
 # 
 
-# In[4]:
+# ## LCL answer
+
+# In[ ]:
+
+
+Tlcl, plcl=find_lcl(sfc_td, sfc_temp,sfc_press)
+
+
+# In[ ]:
 
 
 from a405.skewT.fullskew import makeSkewWet,find_corners,make_default_labels
@@ -141,13 +149,13 @@ fig.savefig('delrio.pdf')
 # 
 # $\Delta q = \Delta h_m = c_p \Delta T + l_v \Delta r_v$ = 1004.*10 + 2.5e6 *3.5e-3 =about 19,000 J/kg
 
-# In[1]:
+# In[ ]:
 
 
 1004*10 + 2.5e6*3.5e-3
 
 
-# In[5]:
+# In[ ]:
 
 
 def label_fun():
