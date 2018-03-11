@@ -6,9 +6,9 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticks
 import numpy as np
-from a405.thermo.thermlib import convertTempToSkew, convertSkewToTemp, find_theta, find_thetaet
-from a405.thermo.constants import constants as c
-from a405.thermo.thermlib import find_rsat
+from ..thermo.thermlib import convertTempToSkew, convertSkewToTemp, find_theta, find_thetaet
+from ..thermo.constants import constants as c
+from ..thermo.thermlib import find_rsat
 
 def make_default_labels():
     """

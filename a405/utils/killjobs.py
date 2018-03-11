@@ -15,7 +15,7 @@
 
 """
 import psutil~
-from a405.helper_funs import make_tuple
+from .helper_funs import make_tuple
 
 import argparse
 import textwrap

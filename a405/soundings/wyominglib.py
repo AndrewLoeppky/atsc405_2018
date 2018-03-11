@@ -9,8 +9,8 @@ import datetime
 from  datetime import timezone as tz
 import pandas as pd
 from collections import OrderedDict
-from a405.thermo.thermlib import find_esat
-from a405.thermo.constants import constants as con
+from ..thermo.thermlib import find_esat
+from ..thermo.constants import constants as con
 import numpy as np
 import sys
 from pathlib import Path
