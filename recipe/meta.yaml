@@ -1,0 +1,52 @@
+{% set version = "0.0.1" %}
+
+package:
+  name: a405
+  version: {{ version }}
+
+source:
+  path: ../
+
+build:
+  number: 2
+  
+  entry_points:
+    - killjobs = a405.utils.killjobs:main
+    - pyncdump = a405.utils.ncdump:main
+    
+  script: ${PYTHON} -m pip install --no-deps --ignore-installed .
+
+requirements:
+
+  build:
+
+    - python
+    - pip
+  
+  host:
+    - python
+    - pip
+
+  run:
+    - psutil
+    - python
+    - pandas
+    - numpy
+    - scipy
+    - matplotlib
+    - jupyter
+    
+test:
+  requires:
+    - psutil
+  commands:
+    - killjobs -h
+
+about:
+  home: https://clouds.eos.ubc.ca/~phil/courses/atsc405
+  license: MIT
+  summary: 'a405 courseware'
+
+extra:
+  recipe-maintainers:
+    - phaustin
