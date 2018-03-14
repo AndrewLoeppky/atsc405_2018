@@ -24,7 +24,7 @@
 
 # ## specify the aerosol properties
 
-# In[73]:
+# In[1]:
 
 
 aero_amonium_sulphate=dict([   ('Ms', 132),
@@ -61,7 +61,7 @@ pp.pprint(aero_amonium_sulphate)
 # 
 # The utility function [a405.utils.helper_funs.make_tuple](https://github.com/phaustin/atsc405_2018/blob/master/a405/utils/helper_funs.py#L26-L47) turns a dictionary into a [namedtuple](https://docs.python.org/3/library/collections.html#namedtuple-factory-function-for-tuples-with-named-fields)
 
-# In[75]:
+# In[2]:
 
 
 from a405.utils.helper_funs import make_tuple
@@ -73,7 +73,7 @@ print(aero)
 # 
 # Follow the hint and copy it from [day24](https://clouds.eos.ubc.ca/~phil/courses/atsc405/html/kohler.html)
 
-# In[76]:
+# In[3]:
 
 
 from a405.thermo.constants import constants as c
@@ -87,7 +87,7 @@ def calc_kohler_coeffs(aero, Temp):
 
 # ## Call it on this aerosol and calculate SScrit
 
-# In[77]:
+# In[4]:
 
 
 a, b = calc_kohler_coeffs(aero,280.)
@@ -103,7 +103,7 @@ print(f'The coefficient is {coeff:6.2e} kg**(0.5)')
 # [pathlib module](https://docs.python.org/3/library/pathlib.html) to construct the path to the individual json files
 # starting from the location of the a405.data folder.
 
-# In[87]:
+# In[5]:
 
 
 import a405.data
@@ -138,7 +138,7 @@ for the_path,the_dict in zip(file_paths,dicts):
 #           
 # As long as you know that the data folder is in the a405 package you can get its location on your computer like this:
 
-# In[97]:
+# In[6]:
 
 
 import importlib_resources as ir 
@@ -152,7 +152,7 @@ print('here is the sulfate aerosol info:')
 pp.pprint(aero_dict)
 
 
-# In[96]:
+# In[7]:
 
 
 list(ir.contents('a405.data'))
