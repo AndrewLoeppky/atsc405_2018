@@ -1,23 +1,19 @@
 """
 calculate the grow history of droplet categories in a constant velocity updraft
 """
-import ruamel.yaml as ry
-import a405dropgrow.aerolib
-from importlib import reload
-reload(a405dropgrow.aerolib)
-from a405dropgrow.aerolib import lognormal,create_koehler
+from .aerolib import lognormal,create_koehler
 import numpy as np
-import a405utils.helper_funs
-reload(a405utils.helper_funs)
-from a405utils.helper_funs import make_tuple, find_centers
-from a405thermo.rootfinder import find_interval, fzero
-from a405thermo.constants import constants as c
-from a405thermo.thermlib import find_lv,find_esat
+from ..utils.helper_funs import make_tuple, find_centers
+from ..thermo.rootfinder import find_interval, fzero
+from ..thermo.constants import constants as c
+from ..thermo.thermlib import find_lv,find_esat
 from collections import OrderedDict as od
 from scipy.integrate import odeint
 import pandas as pd
 from matplotlib import pyplot as plt
-import ruamel.yaml, h5py, datetime
+import datetime
+import json
+
 
 def find_diff(logr,S_target,m, koehler_fun):
     """
@@ -46,7 +42,7 @@ def find_diff(logr,S_target,m, koehler_fun):
     return S_target - koehler_fun(r,m)
 
 
-def wlcalc(var_vec,cloud_tup):
+def rlcalc(var_vec,cloud_tup):
     """
     calculate the liquid water by integrating n(r)r**3
 
@@ -58,16 +54,16 @@ def wlcalc(var_vec,cloud_tup):
     cloud_top: namedtuple
            tuple of necessary coefficients
     """
-    wl=cloud_tup.ndist*(var_vec[:-3]**3.)
-    wl=np.sum(wl)
-    wl=wl*4./3.*np.pi*c.rhol
-    return wl
+    rl=cloud_tup.ndist*(var_vec[:-3]**3.)
+    rl=np.sum(rl)
+    rl=rl*4./3.*np.pi*c.rhol
+    return rl
 
 def Scalc(var_vec,cloud_tup):
     """
     calculate the environmental saturation using conservation
-    of total water mixing ratio cloud_top.wt and the current
-    value of the liquid water mixing ratio wl
+    of total water mixing ratio cloud_top.rt and the current
+    value of the liquid water mixing ratio rl
 
     Parameters
     ----------
@@ -86,9 +82,9 @@ def Scalc(var_vec,cloud_tup):
 
     """
     temp,press,height = var_vec[-3:]
-    wl=wlcalc(var_vec,cloud_tup)
-    wv=cloud_tup.wt - wl
-    e=wv*press/(c.eps + wv)
+    rl=rlcalc(var_vec,cloud_tup)
+    rv=cloud_tup.rt - rl
+    e=rv*press/(c.eps + rv)
     Sout=e/find_esat(temp)
     return Sout
 
@@ -139,7 +135,7 @@ def find_derivs(var_vec,the_time,cloud_tup):
     #
     # moist adiabat day 25 equation 21a
     #
-    deriv_vec[-3]=find_lv(temp)/c.cpd*wlderiv(var_vec,deriv_vec,cloud_tup) - c.g0/c.cpd*cloud_tup.wvel
+    deriv_vec[-3]=find_lv(temp)/c.cpd*rlderiv(var_vec,deriv_vec,cloud_tup) - c.g0/c.cpd*cloud_tup.wvel
     #
     # hydrostatic balance  dp/dt = -rho g dz/dt
     #
@@ -150,7 +146,7 @@ def find_derivs(var_vec,the_time,cloud_tup):
     deriv_vec[-1] = cloud_tup.wvel
     return deriv_vec
 
-def wlderiv(var_vec,deriv_vec,cloud_tup):
+def rlderiv(var_vec,deriv_vec,cloud_tup):
     """
     calculate the time derivative of the liquid water content
     using drop_grow.pdf eqn 21b
@@ -170,24 +166,25 @@ def wlderiv(var_vec,deriv_vec,cloud_tup):
     Returns
     -------
 
-    dwldt: float
-         rate of change of wl
+    drldt: float
+         rate of change of rl
     """
-    wlderiv=(var_vec[:-3])**2.
-    wlderiv=cloud_tup.ndist*wlderiv
-    wlderiv=wlderiv*deriv_vec[:-3]
-    dwldt = np.sum(wlderiv)*4.*np.pi*c.rhol
-    return dwldt
+    rlderiv=(var_vec[:-3])**2.
+    rlderiv=cloud_tup.ndist*rlderiv
+    rlderiv=rlderiv*deriv_vec[:-3]
+    drldt = np.sum(rlderiv)*4.*np.pi*c.rhol
+    return drldt
 
 
 if __name__ == "__main__":
 
     from pathlib import Path
-    util_dir, = a405utils.__path__._path
-    data_dir = Path(util_dir).joinpath('../data')
-    yaml_file = data_dir.joinpath('dropgrow.yaml')
-    with yaml_file.open('r') as f:
-        input_dict=ry.load(f,Loader=ry.RoundTripLoader)
+    import importlib_resources as ir
+    import pprint
+    pp = pprint.PrettyPrinter(indent=4)
+    with ir.open_text('a405.data','dropgrow.json') as f:
+        input_dict=json.load(f)
+    pp.pprint(input_dict)
     #
     #set the edges of the mass bins
     #31 edges means we have 30 droplet bins
@@ -245,11 +242,11 @@ if __name__ == "__main__":
 
     cloud_tup = make_tuple(cloud_vars)
     #calculate the total water (kg/kg)
-    wl=wlcalc(var_vec,cloud_tup);
+    rl=rlcalc(var_vec,cloud_tup);
     e=parcel.Sinit*find_esat(parcel.Tinit);
-    wv=c.eps*e/(parcel.Pinit - e)
+    rv=c.eps*e/(parcel.Pinit - e)
     #save total water
-    cloud_vars['wt'] = wv + wl
+    cloud_vars['rt'] = rv + rl
     cloud_vars['wvel'] = parcel.wvel
     
     cloud_tup= make_tuple(cloud_vars)
@@ -275,15 +272,14 @@ if __name__ == "__main__":
     plt.show()
     
     if input_dict['dump_output']:
-        with pd.HDFStore(input_dict['output_file'],'w') as store:
-            store.put(input_dict['frame_name'],output,format='table')
-            
-        yaml_string = ruamel.yaml.dump(input_dict,None,Dumper=ruamel.yaml.RoundTripDumper,
-                               default_flow_style=False)
+        outfile_name = f'{input_dict["output_file"]}.csv'
+        with open(outfile_name,'w') as store:
+           output.to_csv(store)
 
-        with h5py.File(input_dict['output_file'],'a') as f:
-            f.attrs['yaml_string']=yaml_string
-            date=datetime.datetime.now().strftime('%Y-%M-%d')
+        metadata_name = f'{input_dict["output_file"]}.json'
+        date=datetime.datetime.now().strftime('%Y-%M-%d')
+        with open(metadata_name,'w') as meta:
             history ="file produced by drop_grow.py on {}".format(date)
             print('history: ',history)
-            f.attrs['history']=history
+            input_dict['history']=history
+            json.dump(input_dict,meta,indent=4)
