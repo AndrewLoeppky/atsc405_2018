@@ -1,5 +1,5 @@
 {
-    "output_file": "outfile.csv",
+    "output_file": "outfile",
     "dir_name": "dump_run",
     "dump_output": true,
     "initial_conditions": {

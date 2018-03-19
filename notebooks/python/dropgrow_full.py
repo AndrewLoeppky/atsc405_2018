@@ -2,11 +2,11 @@
 # coding: utf-8
 
 # <h1>Table of Contents<span class="tocSkip"></span></h1>
-# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Parcel-model-with-30-aerosol-masses,-lognormal-distribution" data-toc-modified-id="Parcel-model-with-30-aerosol-masses,-lognormal-distribution-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Parcel model with 30 aerosol masses, lognormal distribution</a></span><ul class="toc-item"><li><span><a href="#Read-in-the-json-file-and-set-the-koehler-function-for-this-aerosol" data-toc-modified-id="Read-in-the-json-file-and-set-the-koehler-function-for-this-aerosol-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>Read in the json file and set the koehler function for this aerosol</a></span></li><li><span><a href="#initialize-the-lognormal-mass-and-number-distributions-for-30-bins" data-toc-modified-id="initialize-the-lognormal-mass-and-number-distributions-for-30-bins-1.2"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>initialize the lognormal mass and number distributions for 30 bins</a></span><ul class="toc-item"><li><span><a href="#find-the-equilibrium-radius-for-each-bin-at-saturation-Sinit" data-toc-modified-id="find-the-equilibrium-radius-for-each-bin-at-saturation-Sinit-1.2.1"><span class="toc-item-num">1.2.1&nbsp;&nbsp;</span>find the equilibrium radius for each bin at saturation Sinit</a></span></li><li><span><a href="#now-add-the-intial-conditions-to-the-cloud_vars-dictionary-and-make-it-a-namedtuple" data-toc-modified-id="now-add-the-intial-conditions-to-the-cloud_vars-dictionary-and-make-it-a-namedtuple-1.2.2"><span class="toc-item-num">1.2.2&nbsp;&nbsp;</span>now add the intial conditions to the cloud_vars dictionary and make it a namedtuple</a></span></li><li><span><a href="#use-odeint-to-integrate-the-variable-in-var_vec-from-tinit-to-tfin-with-outputs-every-dt-seconds" data-toc-modified-id="use-odeint-to-integrate-the-variable-in-var_vec-from-tinit-to-tfin-with-outputs-every-dt-seconds-1.2.3"><span class="toc-item-num">1.2.3&nbsp;&nbsp;</span>use odeint to integrate the variable in var_vec from tinit to tfin with outputs every dt seconds</a></span></li><li><span><a href="#create-a-dataframe-with-33-columns-to-hold-the-data" data-toc-modified-id="create-a-dataframe-with-33-columns-to-hold-the-data-1.2.4"><span class="toc-item-num">1.2.4&nbsp;&nbsp;</span>create a dataframe with 33 columns to hold the data</a></span></li><li><span><a href="#store-the-dataframe-in-an-hdf-file,-including-a-copy-of-dropgrow.yaml-for-reference" data-toc-modified-id="store-the-dataframe-in-an-hdf-file,-including-a-copy-of-dropgrow.yaml-for-reference-1.2.5"><span class="toc-item-num">1.2.5&nbsp;&nbsp;</span>store the dataframe in an hdf file, including a copy of dropgrow.yaml for reference</a></span></li></ul></li></ul></li></ul></div>
+# <div class="toc"><ul class="toc-item"><li><span><a href="#Parcel-model-with-30-aerosol-masses,-lognormal-distribution" data-toc-modified-id="Parcel-model-with-30-aerosol-masses,-lognormal-distribution-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Parcel model with 30 aerosol masses, lognormal distribution</a></span><ul class="toc-item"><li><span><a href="#Read-in-the-json-file-and-set-the-koehler-function-for-this-aerosol" data-toc-modified-id="Read-in-the-json-file-and-set-the-koehler-function-for-this-aerosol-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>Read in the json file and set the koehler function for this aerosol</a></span></li><li><span><a href="#initialize-the-lognormal-mass-and-number-distributions-for-30-bins" data-toc-modified-id="initialize-the-lognormal-mass-and-number-distributions-for-30-bins-1.2"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>initialize the lognormal mass and number distributions for 30 bins</a></span></li><li><span><a href="#find-the-equilibrium-radius-for-each-bin-at-saturation-Sinit" data-toc-modified-id="find-the-equilibrium-radius-for-each-bin-at-saturation-Sinit-1.3"><span class="toc-item-num">1.3&nbsp;&nbsp;</span>find the equilibrium radius for each bin at saturation Sinit</a></span></li><li><span><a href="#now-add-the-intial-conditions-to-the-cloud_vars-dictionary-and-make-it-a-namedtuple" data-toc-modified-id="now-add-the-intial-conditions-to-the-cloud_vars-dictionary-and-make-it-a-namedtuple-1.4"><span class="toc-item-num">1.4&nbsp;&nbsp;</span>now add the intial conditions to the cloud_vars dictionary and make it a namedtuple</a></span></li><li><span><a href="#use-odeint-to-integrate-the-variable-in-var_vec-from-tinit-to-tfin-with-outputs-every-dt-seconds" data-toc-modified-id="use-odeint-to-integrate-the-variable-in-var_vec-from-tinit-to-tfin-with-outputs-every-dt-seconds-1.5"><span class="toc-item-num">1.5&nbsp;&nbsp;</span>use odeint to integrate the variable in var_vec from tinit to tfin with outputs every dt seconds</a></span></li><li><span><a href="#create-a-dataframe-with-33-columns-to-hold-the-data" data-toc-modified-id="create-a-dataframe-with-33-columns-to-hold-the-data-1.6"><span class="toc-item-num">1.6&nbsp;&nbsp;</span>create a dataframe with 33 columns to hold the data</a></span></li><li><span><a href="#store-the-dataframe-in-an-csv-file,-including-a-copy-of-the-input-dictionary-for-future-reference" data-toc-modified-id="store-the-dataframe-in-an-csv-file,-including-a-copy-of-the-input-dictionary-for-future-reference-1.7"><span class="toc-item-num">1.7&nbsp;&nbsp;</span>store the dataframe in an csv file, including a copy of the input dictionary for future reference</a></span></li></ul></li></ul></div>
 
 # # Parcel model with 30 aerosol masses, lognormal distribution
 
-# In[4]:
+# In[1]:
 
 
 import json
@@ -31,7 +31,13 @@ pp = pprint.PrettyPrinter(indent=4)
 
 # ## Read in the json file and set the koehler function for this aerosol
 
-# In[5]:
+# In[11]:
+
+
+help(odeint)
+
+
+# In[2]:
 
 
 with ir.open_text('a405.data','dropgrow.json') as f:
@@ -47,7 +53,7 @@ koehler_fun = create_koehler(aero,parcel)
 
 # ## initialize the lognormal mass and number distributions for 30 bins
 
-# In[6]:
+# In[3]:
 
 
 #
@@ -74,7 +80,7 @@ cloud_vars['koehler_fun'] = koehler_fun
 
 # ## find the equilibrium radius for each bin at saturation Sinit
 
-# In[7]:
+# In[4]:
 
 
 S_target = parcel.Sinit
@@ -100,7 +106,7 @@ for mass in center_mass:
 # the vector var_vec holds 30 droplet radii plus three extra variables at the
 # end of the vector: the temperature, pressure and height.
 
-# In[9]:
+# In[5]:
 
 
 cloud_vars['initial_radiius'] = initial_radius
@@ -136,7 +142,7 @@ cloud_tup= make_tuple(cloud_vars)
 
 # ## use odeint to integrate the variable in var_vec from tinit to tfin with outputs every dt seconds
 
-# In[10]:
+# In[6]:
 
 
 var_out = []
@@ -152,7 +158,7 @@ sol = odeint(find_derivs,var_vec, t, args=(cloud_tup,))
 
 # ## create a dataframe with 33 columns to hold the data
 
-# In[11]:
+# In[7]:
 
 
 colnames = ["r{}".format(item) for item in range(30)]
@@ -162,7 +168,7 @@ df_output = pd.DataFrame.from_records(sol,columns = colnames)
 
 # ## store the dataframe in an csv file, including a copy of the input dictionary for future reference
 
-# In[13]:
+# In[8]:
 
 
 if input_dict['dump_output']:
@@ -179,7 +185,7 @@ if input_dict['dump_output']:
         json.dump(input_dict,meta,indent=4)
 
 
-# In[15]:
+# In[9]:
 
 
 fig, ax = plt.subplots(1,1,figsize=[10,8])
@@ -190,7 +196,7 @@ out=ax.set(ylim=[1000,1040],xlim=[0,6],
               title='radii vs. height in a {} m/s updraft'.format(cloud_tup.wvel))
 
 
-# In[16]:
+# In[10]:
 
 
 Svals = []
