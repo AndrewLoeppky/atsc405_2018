@@ -31,12 +31,6 @@ pp = pprint.PrettyPrinter(indent=4)
 
 # ## Read in the json file and set the koehler function for this aerosol
 
-# In[11]:
-
-
-help(odeint)
-
-
 # In[2]:
 
 

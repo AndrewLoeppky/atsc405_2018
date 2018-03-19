@@ -69,8 +69,8 @@ out=ax.legend(loc='best')
 # ## Rain rate
 # 
 # 
-# - Calculate the precipitation flux (mm/hr) using  the Marshall Palmer size distribution and
-# the fall speed of  `Villermaux and Bossa (2009)`_: `w = - \sqrt{\rho_l/\rho_{air} * g *D}` where
-# D is the drop diameter and `\rho_l,\rho_{air}` are the liquid and air densities.  Show
-# that you get about R=15 mm/hour back if you put in R=15 mm/hour into
-# the size distribution.   
+# - Calculate the precipitation flux (mm/hr) by integrating the total volumen in the Marshall Palmer size distribution and with the fall speed of Villermaux and Bossa (2009): $w = - \sqrt{\rho_l/\rho_{air} * g *D}$ where
+# D is the drop diameter and $\rho_l,\rho_{air}$ are the liquid and air densities.  Show
+# that you get about R=15 mm/hour back from this calculation if you use the $\Lambda$ that's appropriate for  R=15 mm/hour 
+# 
+# 

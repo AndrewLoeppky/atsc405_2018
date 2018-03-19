@@ -2,7 +2,9 @@
 # coding: utf-8
 
 # <h1>Table of Contents<span class="tocSkip"></span></h1>
-# <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#The-normal-distribution" data-toc-modified-id="The-normal-distribution-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>The normal distribution</a></span></li><li><span><a href="#The-lognormal-distribution" data-toc-modified-id="The-lognormal-distribution-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>The lognormal distribution</a></span></li><li><span><a href="#lognormal-aerosol-mass-distribution" data-toc-modified-id="lognormal-aerosol-mass-distribution-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>lognormal aerosol mass distribution</a></span></li><li><span><a href="#Number-distribution-n(r)--($\#-\,m^{-3}\;m^{-1}$)" data-toc-modified-id="Number-distribution-n(r)--($\#-\,m^{-3}\;m^{-1}$)-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Number distribution n(r)  ($\# \,m^{-3}\;m^{-1}$)</a></span></li><li><span><a href="#problem-for-Wednesday" data-toc-modified-id="problem-for-Wednesday-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>problem for Wednesday</a></span></li></ul></div>
+# <div class="toc"><ul class="toc-item"><li><span><a href="#Update----added-Bjørn's--missing-factor-of-$\pi$--(search-for--#pha-2018/3/19)" data-toc-modified-id="Update----added-Bjørn's--missing-factor-of-$\pi$--(search-for--#pha-2018/3/19)-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Update -- added Bjørn's  missing factor of $\pi$  (search for  #pha 2018/3/19)</a></span></li><li><span><a href="#Introduction" data-toc-modified-id="Introduction-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#The-normal-distribution" data-toc-modified-id="The-normal-distribution-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>The normal distribution</a></span></li><li><span><a href="#The-lognormal-distribution" data-toc-modified-id="The-lognormal-distribution-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>The lognormal distribution</a></span></li><li><span><a href="#lognormal-aerosol-mass-distribution" data-toc-modified-id="lognormal-aerosol-mass-distribution-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>lognormal aerosol mass distribution</a></span></li><li><span><a href="#Number-distribution-n(r)--($\#-\,m^{-3}\;m^{-1}$)" data-toc-modified-id="Number-distribution-n(r)--($\#-\,m^{-3}\;m^{-1}$)-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Number distribution n(r)  ($\# \,m^{-3}\;m^{-1}$)</a></span></li><li><span><a href="#problem-for-Wednesday" data-toc-modified-id="problem-for-Wednesday-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>problem for Wednesday</a></span></li></ul></div>
+
+# # Update -- added Bjørn's  missing factor of $\pi$  (search for  #pha 2018/3/19)
 
 # # Introduction
 # 
@@ -262,7 +264,7 @@ print("area in micrograms/m^3 = {}".format(area))
 # In[8]:
 
 
-rad_vals = (mass_vals/(rho_aer*4./3.))**(1./3.)
+rad_vals = (mass_vals/(np.pi*rho_aer*4./3.))**(1./3.)  #pha 2018/3/19
 ndist = 3.*out/rad_vals  #units of number/m^3 per m bin width
 fig,ax = plt.subplots(1,1)
 ncenter = (ndist[1:] + ndist[:-1])/2.
@@ -282,7 +284,7 @@ print("total number concentration is {:5.2f} #/cc".format(total_num))
 # 
 # $N(r) = \int_r^\infty n(r) dr$ is the number of aerosols with dry radii larger than $r$ and $S_{crit}$ is the critical supersaturation at radius r for these ammonium sulphate aerosols.  Explain briefly why this is the output you would expect to see from an aerosol size counter based on a cloud chamber with a laser scattering sensor.
 
-# In[10]:
+# In[9]:
 
 
 #
