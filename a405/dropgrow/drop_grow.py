@@ -42,7 +42,7 @@ def find_diff(logr,S_target,m, koehler_fun):
     return S_target - koehler_fun(r,m)
 
 
-def rlcalc(var_vec,cloud_tup):
+def rlcalc(var_vec,cloud_tup,nvars=3):
     """
     calculate the liquid water by integrating n(r)r**3
 
@@ -52,9 +52,14 @@ def rlcalc(var_vec,cloud_tup):
     var_vec: vector(float)
            vector of values to be integrated
     cloud_top: namedtuple
-           tuple of necessary coefficients
+        tuple of necessary coefficients
+
+    nvars:  int
+        number of bulk thermodynamic variables (i.e. number of variables
+        that are not droplet radii
+
     """
-    rl=cloud_tup.ndist*(var_vec[:-3]**3.)
+    rl=cloud_tup.ndist*(var_vec[:-nvars]**3.)
     rl=np.sum(rl)
     rl=rl*4./3.*np.pi*c.rhol
     return rl
