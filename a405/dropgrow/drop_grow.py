@@ -146,7 +146,7 @@ def find_derivs(var_vec,the_time,cloud_tup):
     deriv_vec[-1] = cloud_tup.wvel
     return deriv_vec
 
-def rlderiv(var_vec,deriv_vec,cloud_tup):
+def rlderiv(var_vec,deriv_vec,cloud_tup,nvars=3):
     """
     calculate the time derivative of the liquid water content
     using drop_grow.pdf eqn 21b
@@ -163,15 +163,19 @@ def rlderiv(var_vec,deriv_vec,cloud_tup):
     cloud_tup: namedtuple
            tuple of input coefficients
 
+    nvars:  int
+        number of bulk thermodynamic variables (i.e. number of variables
+        that are not droplet radii
+
     Returns
     -------
 
     drldt: float
          rate of change of rl
     """
-    rlderiv=(var_vec[:-3])**2.
+    rlderiv=(var_vec[:-nvars])**2.
     rlderiv=cloud_tup.ndist*rlderiv
-    rlderiv=rlderiv*deriv_vec[:-3]
+    rlderiv=rlderiv*deriv_vec[:-nvars]
     drldt = np.sum(rlderiv)*4.*np.pi*c.rhol
     return drldt
 
