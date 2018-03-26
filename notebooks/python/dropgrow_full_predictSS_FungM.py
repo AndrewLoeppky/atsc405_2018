@@ -16,9 +16,9 @@ import numpy as np
 from a405.dropgrow.aerolib import lognormal,create_koehler
 from a405.utils.helper_funs import make_tuple, find_centers
 from collections import OrderedDict as od
-from a405.thermo.thermlib import find_esat
+from a405.thermo.thermlib import find_esat, find_lv
 from a405.thermo.rootfinder import find_interval, fzero
-from a405.dropgrow.drop_grow import find_diff, rlcalc, find_derivs, Scalc
+from a405.dropgrow.drop_grow import find_diff, rlcalc, find_derivs, Scalc, rlderiv
 from a405.thermo.constants import constants as c
 from scipy.integrate import odeint
 import pandas as pd
@@ -29,9 +29,15 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 
+# In[2]:
+
+
+get_ipython().run_line_magic('matplotlib', 'inline')
+
+
 # ## Read in the json file and set the koehler function for this aerosol
 
-# In[2]:
+# In[3]:
 
 
 with ir.open_text('a405.data','dropgrow.json') as f:
@@ -47,7 +53,7 @@ koehler_fun = create_koehler(aero,parcel)
 
 # ## initialize the lognormal mass and number distributions for 30 bins
 
-# In[3]:
+# In[4]:
 
 
 #
@@ -74,7 +80,7 @@ cloud_vars['koehler_fun'] = koehler_fun
 
 # ## find the equilibrium radius for each bin at saturation Sinit
 
-# In[4]:
+# In[5]:
 
 
 S_target = parcel.Sinit
@@ -100,33 +106,40 @@ for mass in center_mass:
 # the vector var_vec holds 30 droplet radii plus three extra variables at the
 # end of the vector: the temperature, pressure and height.
 
-# In[5]:
+# In[6]:
+
+
+nvars =4
+
+
+# In[7]:
 
 
 cloud_vars['initial_radiius'] = initial_radius
 cloud_vars['dry_radius'] = dry_radius
 cloud_vars['masses'] = center_mass
 numrads = len(initial_radius)
-var_vec = np.empty(numrads + 3)
+var_vec = np.empty(numrads +  nvars)
 for i in range(numrads):
     var_vec[i] = initial_radius[i]
 
 #
 # temp, press and height go at the end of the vector
 #
+var_vec[-4] = parcel.Sinit-1 # initialize SS
 var_vec[-3] = parcel.Tinit
 var_vec[-2] = parcel.Pinit
 var_vec[-1] = parcel.Zinit
 
 cloud_tup = make_tuple(cloud_vars)
 #calculate the total water (kg/kg)
-rl=rlcalc(var_vec,cloud_tup);
+rl=rlcalc(var_vec,cloud_tup,nvars);
 e=parcel.Sinit*find_esat(parcel.Tinit);
 rv=c.eps*e/(parcel.Pinit - e)
 #save total water
 cloud_vars['rt'] = rv + rl
 cloud_vars['wvel'] = parcel.wvel
-cloud_vars['wvel'] = 5.
+cloud_vars['wvel'] = 7.
 #
 # pass this to the find_derivs function
 #
@@ -136,7 +149,84 @@ cloud_tup= make_tuple(cloud_vars)
 
 # ## use odeint to integrate the variable in var_vec from tinit to tfin with outputs every dt seconds
 
-# In[6]:
+# In[8]:
+
+
+def find_derivs_SS(var_vec,the_time,cloud_tup):
+    """
+    calcuate derivatives of var_vec 
+
+    Parameters
+    ----------
+
+    var_vec: vector(float)
+        vector of values to be integrated
+
+    the_time: float
+       timestep 
+
+    cloud_tup: namedtuple
+           tuple of necessary coefficients
+    
+
+    Returns
+    -------
+
+    deriv_vec: vector(float)
+         derivatives of each of var_vec
+    
+    """
+    #print('inside: ',var_vec)
+    SS,temp,press,height = var_vec[-4:]
+    numrads = len(var_vec) - nvars
+    dry_radius = cloud_tup.dry_radius
+    rho=press/(c.Rd*temp)
+    #
+    # find the evironmental S by water balance
+    #
+    ## S=Scalc(var_vec,cloud_tup)
+    S = SS + 1
+    deriv_vec=np.zeros_like(var_vec)
+    #dropgrow notes equaton 18 (W&H p. 170)
+    for i in range(numrads):
+        m=cloud_tup.masses[i]
+        if var_vec[i] < dry_radius[i]:
+            var_vec[i] = dry_radius[i]
+        Seq=cloud_tup.koehler_fun(var_vec[i],m)  
+        rhovr=(Seq*find_esat(temp))/(c.Rv*temp)
+        rhovinf=S*find_esat(temp)/(c.Rv*temp)
+        #day 25 drop_grow.pdf eqn. 18
+        deriv_vec[i]=(c.D/(var_vec[i]*c.rhol))*(rhovinf - rhovr)
+
+    #
+    # moist adiabat day 25 equation 21a
+    #
+    deriv_vec[-3]=find_lv(temp)/c.cpd*rlderiv(var_vec,deriv_vec,cloud_tup,nvars) - c.g0/c.cpd*cloud_tup.wvel
+    #
+    # hydrostatic balance  dp/dt = -rho g dz/dt
+    #
+    deriv_vec[-2]= -1.*rho*c.g0*cloud_tup.wvel
+    #
+    # how far up have we traveled?
+    #
+    deriv_vec[-1] = cloud_tup.wvel
+    
+        #
+    # dSS/dt using equil_super notes
+    #
+    es = find_esat(temp)
+    dp_dt = deriv_vec[-2]
+    dT_dt = deriv_vec[-3]
+    des_dT = c.eps * find_lv(temp) * es / (c.Rd * (temp ** 2))
+    dSS_bracket = (-c.eps * es / (press ** 2)) * dp_dt + (c.eps / press) * des_dT * dT_dt
+    dSS_divide = c.eps * es / press
+    drl_dt = rlderiv(var_vec,deriv_vec,cloud_tup, nvars)
+    deriv_vec[-4]= (drl_dt - (1+SS) * dSS_bracket ) / dSS_divide
+    
+    return deriv_vec
+
+
+# In[9]:
 
 
 var_out = []
@@ -147,22 +237,22 @@ dt = input_dict['integration']['dt']
 tfin = input_dict['integration']['tend']
 
 t = np.arange(0,tfin,dt)
-sol = odeint(find_derivs,var_vec, t, args=(cloud_tup,))
+sol = odeint(find_derivs_SS,var_vec, t, args=(cloud_tup,))
 
 
 # ## create a dataframe with 33 columns to hold the data
 
-# In[7]:
+# In[10]:
 
 
 colnames = ["r{}".format(item) for item in range(30)]
-colnames.extend(['temp','press','z'])
+colnames.extend(['SS','temp','press','z'])
 df_output = pd.DataFrame.from_records(sol,columns = colnames)
 
 
 # ## store the dataframe in an csv file, including a copy of the input dictionary for future reference
 
-# In[8]:
+# In[11]:
 
 
 if input_dict['dump_output']:
@@ -179,127 +269,33 @@ if input_dict['dump_output']:
         json.dump(input_dict,meta,indent=4)
 
 
-# In[9]:
+# In[12]:
+
+
+print(f"{df_output['SS'][0]+1} {parcel.Sinit}")
+
+
+# In[13]:
 
 
 fig, ax = plt.subplots(1,1,figsize=[10,8])
-for i in colnames[:-3]:
+for i in colnames[:-nvars]:
     ax.plot(df_output[i]*1.e6,df_output['z'],label=i)
 out=ax.set(ylim=[1000,1040],xlim=[0,6],
        xlabel='radii (microns)',ylabel='height (m)',
               title='radii vs. height in a {} m/s updraft'.format(cloud_tup.wvel))
 
 
-# In[10]:
-
-
-Svals = []
-for index,row in df_output.iterrows():
-    var_vec = row.values
-    Svals.append(Scalc(var_vec,cloud_tup))
-fig,ax = plt.subplots(1,1,figsize=[10,8])
-ax.plot(Svals,df_output['z'])
-out=ax.set(ylim=[1000,1050],title='Saturation in a {} m/s updraft'.format(cloud_tup.wvel))
-
-
-# $$
-# \frac{d r_v}{dt} = \left (1 + SS \right )  \left [ \frac{-\epsilon e_s}{p^2} 
-# \left ( \frac{-g p V}{R_d T} \right ) + \frac{\epsilon}{p} \left ( 
-# \frac{\epsilon e_s L}{R_d T^2} \right ) \frac{dT}{dt} \right ]
-# + \frac{\epsilon e_s}{p} \frac{dSS}{dt}
-# $$
-
-# ## Matt's solution
-# 
-# Below Matt computes the differential $\Delta SS$, estimating $\Delta r_v$, $\Delta T$ from the
-# output.
-
-# In[11]:
-
-
-df_output.columns
-# get index corresponding to 1010
-
-
-# ### do test at z = 1010 meters
-
-# In[12]:
-
-
-z = 1010
-ind = np.searchsorted(df_output['z'].values,z)
-
-
-# ### find the differentials
-
-# In[13]:
-
-
-# since I need differential, find relevant diff & centered averages
-dT = np.diff(df_output['temp'][ind-1:ind+1].values)
-dSS = np.diff(Svals[ind-1:ind+1])
-
-center_avg = lambda vec: (vec[:-1] + vec[1:]) / 2.
-T_array = df_output['temp'][ind-1:ind+1].values
-p_array = df_output['press'][ind-1:ind+1].values
-es_array = np.array([find_esat(t) for t in T_array])
-rv_array = c.eps * es_array / (p_array - es_array)
-
-d_rv = np.diff(rv_array)
-
-
-# ### write everything out as a tuple
+# cool
 
 # In[14]:
 
 
-from a405.thermo.thermlib import find_lv
-T_1010 = df_output['temp'][ind]
-p_1010 = df_output['press'][ind]
-es_1010 = find_esat(T_1010)
-drv_1010 = d_rv[0]
-dT_1010 = dT[0]
-Lv_1010 = find_lv(T_1010)
-v_1010 = cloud_tup.wvel
-SS_1010 = Svals[ind]
-
-dSS_dict = {}
-dSS_dict['T'] = T_1010
-dSS_dict['p'] = p_1010
-dSS_dict['es'] = es_1010
-dSS_dict['drv'] = drv_1010
-dSS_dict['dT'] = dT_1010
-dSS_dict['Lv'] = Lv_1010
-dSS_dict['v'] = v_1010
-dSS_dict['SS'] = SS_1010
-
-dSS_tup = make_tuple(dSS_dict)
-
-
-# ### return $\Delta SS$ given the tuple t
-
-# In[17]:
-
-
-def find_dSS(t):
-    """
-    Find ΔSS given a tuple of parameter values
-    """
-    dp_dt = -c.g0 * t.p * t.v / (c.Rd * t.T)
-    des_dT = c.eps * t.Lv * t.es / (c.Rd * (t.T ** 2))
-    bracket = (-c.eps * t.es / (t.p ** 2)) * dp_dt + (c.eps / t.p) * des_dT * t.dT
-    divide = c.eps * t.es / t.p
-    dSS = (t.drv - (1+t.SS) * bracket ) / divide
-    return dSS
-
-
-# ### Check against the output $\Delta SS$
-
-# In[16]:
-
-
-dSS = np.diff(Svals)
-dSS_1010 = dSS[ind-1]
-dSS_calc = find_dSS(dSS_tup)
-print(f'Calculated ΔSS: {dSS_calc:.2e} -- ΔSS from figure: {dSS_1010:.2e}')
+#Svals = []
+#for index,row in df_output.iterrows():
+#    var_vec = row.values
+#    Svals.append(Scalc(var_vec,cloud_tup))
+fig,ax = plt.subplots(1,1,figsize=[10,8])
+ax.plot(df_output['SS']+1,df_output['z'])
+out=ax.set(ylim=[1000,1150],title='Saturation in a {} m/s updraft'.format(cloud_tup.wvel))
 
