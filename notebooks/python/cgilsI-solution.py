@@ -244,8 +244,9 @@ ax.hist(vert_cross_sec_rh.flat);
 # 
 # * [xkcd colors from matplotlib](https://seaborn.pydata.org/generated/seaborn.xkcd_palette.html)
 # 
-# 
 # * [wikipedia article on RGB colors](https://en.wikipedia.org/wiki/RGB_color_model)
+# 
+# * use [a masked array](http://www.scipy-lectures.org/intro/numpy/numpy.html#masked-arrays) to eliminate some values
 # 
 
 # In[48]:
