@@ -155,7 +155,7 @@ def tinvert_rsat(Tstart, rsat, press):
     Parameters
     ----------
 
-    temp : float
+    Tstart : float
            temperature (K)
 
     rsat : float

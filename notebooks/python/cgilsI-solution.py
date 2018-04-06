@@ -131,14 +131,14 @@ ax.set_title('zoomed horiz qn cross section at z=1000 m')
 
 # ### Get a vertical cross section along y = 2km
 
-# In[35]:
+# In[7]:
 
 
 row_number_2000 = np.searchsorted(y,2000)  #(y index of 80)
 print(f'y= 2km occurs at index {row_number_2000}')
 
 
-# In[37]:
+# In[8]:
 
 
 vert_cross_sec = qn[:,row_number_2000,:end_col]
@@ -153,12 +153,12 @@ ax.set(xlabel='distance east (m)',ylabel='height (m)');
 
 # ### Find the vapor mixing ratio along this cross section
 
-# In[38]:
+# In[10]:
 
 
 plt.close('all')
 x,y,z,qv = get_var(the_file, 'QV')
-vert_cross_sec = qv[:,row_number,:end_col]
+vert_cross_sec = qv[:,row_number_2000,:end_col]
 fig,ax = plt.subplots(1,1,figsize=(10,10))
 image=ax.pcolormesh(x[:end_col],z,vert_cross_sec[:,:end_col])
 cax = plt.colorbar(image,ax=ax)
@@ -181,14 +181,14 @@ ax.set_title('vertical qv cross section along y=2 km');
 
 # # vertical cross section of temperature
 
-# In[23]:
+# In[11]:
 
 
 from a405.thermo.thermlib import find_rsat, find_esat
 from a405.thermo.constants import constants as c
 x,y,z,temp = get_var(the_file,'TABS')
 x,y,z,press = get_var(the_file,'p')
-vert_cross_sec_temp = temp[:,row_number,:end_col]
+vert_cross_sec_temp = temp[:,row_number_2000,:end_col]
 plt.close('all')
 fig,ax = plt.subplots(1,1,figsize=(10,10))
 image=ax.pcolormesh(x[:end_col],z,vert_cross_sec_temp)
@@ -202,7 +202,7 @@ ax.set_title('vertical temp cross section along y=2 km');
 # use [broadcasting](https://eli.thegreenplace.net/2015/broadcasting-arrays-in-numpy/) 
 # so I don't need to write a loop
 
-# In[24]:
+# In[12]:
 
 
 esat = find_esat(temp)
@@ -216,7 +216,7 @@ rsat = c.eps*esat/(press - esat)*1.e3  #convert to g/kg`
 rh = qv/rsat
 
 fig,ax = plt.subplots(1,1,figsize=(10,10))
-vert_cross_sec_rh = rh[:,row_number,:end_col]
+vert_cross_sec_rh = rh[:,row_number_2000,:end_col]
 image=ax.pcolormesh(x[:end_col],z,vert_cross_sec_rh)
 cax = plt.colorbar(image,ax=ax)
 cax.set_label('relative humidity')
@@ -225,7 +225,7 @@ ax.set_title('relative humidity cross section along y=2 km');
 
 # ## note the bimodal RH distribution -- boundary layer air is different from free atmos
 
-# In[26]:
+# In[13]:
 
 
 fig, ax = plt.subplots(1,1)
@@ -249,7 +249,7 @@ ax.hist(vert_cross_sec_rh.flat);
 # * use [a masked array](http://www.scipy-lectures.org/intro/numpy/numpy.html#masked-arrays) to eliminate some values
 # 
 
-# In[48]:
+# In[14]:
 
 
 from matplotlib.colors import Normalize
@@ -278,12 +278,11 @@ ax.set(ylim=[0,2500]);
     
 
 
-
 # # Vertical profiles of mean and standard deviation for rh
 # 
 # focus on bottom 2500 meters
 
-# In[30]:
+# In[15]:
 
 
 end_z = np.searchsorted(z,2500)
@@ -292,7 +291,7 @@ rh_subset_bottom= rh[:end_z,:end_row,:end_col]
 
 # the shape is (z,y,x) = axes (0,1,2)  so average over axes 1 and 2
 
-# In[42]:
+# In[16]:
 
 
 mean_rh_xy = rh_subset_bottom.mean(axis=(1,2))
@@ -304,17 +303,17 @@ ax1.set(ylabel='height (m)',xlabel='mean rh (percent)')
 ax2.set(xlabel='rh standard deviation (per cent)');
 
 
-# In[15]:
+# In[19]:
 
 
-mask = rh_subset > 1
-ma_rh_subset = ma.array(rh_subset,mask=mask)
+mask = rh_subset_bottom > 1
+ma_rh_subset = ma.array(rh_subset_bottom,mask=mask)
 #help(ma_rh_subset.mean)
 rh_xyavg = ma_rh_subset.mean(axis = (1,2))
 
 
-# In[16]:
+# In[20]:
 
 
-rh_xyavg.shape
+rh_xyavg
 

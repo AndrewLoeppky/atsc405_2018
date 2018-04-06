@@ -59,7 +59,7 @@ with Dataset(the_file,'r') as ncin:
 # 
 # Get a quic look at the cloud liquied water
 
-# In[21]:
+# In[2]:
 
 
 def get_var(the_file,varname):
@@ -95,7 +95,7 @@ print(f'working with file: {the_file}')
 print(f'maximum liquid water content in g/kg: {qn.max()}')
 
 
-# In[13]:
+# In[3]:
 
 
 #
@@ -108,7 +108,7 @@ print('index for the level closest to z=1 km is {level}')
 
 # ## Get the cloud fraction a 1 km by summing all cloudy pixels
 
-# In[14]:
+# In[4]:
 
 
 #
@@ -124,7 +124,7 @@ print(f'cloud fraction: {cloud_frac:5.3f}')
 
 # ## raw image of qn at 1000 m
 
-# In[15]:
+# In[5]:
 
 
 from matplotlib import pyplot as plt
@@ -141,7 +141,7 @@ ax.set_title(title);
 # Switch from [imshow](http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.imshow) to 
 # [pcolormesh](http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.pcolormesh) so we can orient the axes along model x,y, and z coordinates.  Note that if y is north/south (north up), then imshow plots the image upside down.
 
-# In[16]:
+# In[6]:
 
 
 #
@@ -160,19 +160,19 @@ ax.set_title('zoomed horiz qn cross section at z=1000 m');
 
 # ### Get an x-z vertical cross section along y = 2km
 
-# In[17]:
+# In[7]:
 
 
 row_number = np.searchsorted(y,2000)  #(y index of 80)
 
 
-# In[18]:
+# In[8]:
 
 
 print(f'need to pull x-z field along row {row_number}')
 
 
-# In[20]:
+# In[9]:
 
 
 vert_cross_sec = qn[:,row_number,:end_col]
@@ -187,7 +187,7 @@ ax.set(xlabel='distance east (m)',ylabel='height (m)');
 
 # ### Find the vapor mixing ratio along this cross section
 
-# In[11]:
+# In[10]:
 
 
 x,y,z,qv = get_var(the_file, 'QV')
