@@ -1,6 +1,7 @@
 format: jb-book
-root: adiabatic_box
+root: front_page
 chapters:
+- file: adiabatic_box
 - file: adiabatic_box_al
 - file: adiabatic_box_solution
 - file: aero_dist_sol
