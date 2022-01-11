@@ -1,51 +1,57 @@
 format: jb-book
 root: front_page
-chapters:
-- file: adiabatic_box
-- file: adiabatic_box_al
-- file: adiabatic_box_solution
-- file: aero_dist_sol
-- file: aero_sol
-- file: cape_part1
-- file: cape_part1_solution
-- file: cape_part2_solution
-- file: cgilsI
-- file: cgilsI-solution
-- file: clausius_comparison
-- file: column_vapor
-- file: constant_mixing_ratio
-- file: constant_mixing_ratio_solution
-- file: convec_instability
-- file: day25_aerosol_sol
-- file: dropgrow_full
-- file: dropgrow_full_fourvars
-- file: dropgrow_full_predictSS
-- file: dropgrow_full_predictSS_FungM
-- file: dropgrow_sol
-- file: dry_les
-- file: entraining_plume
-- file: entraining_plume_solution_part1
-- file: entraining_plume_solution_part2
-- file: final_2018_takehome
-- file: hydrostatic
-- file: kohler
-- file: kohler_probs
-- file: kohler_sols
-- file: marshallpalmer
-- file: marshallpalmer_sol
-- file: midterm_2016_sols
-- file: midterm_2018_sols
-- file: mixing_line_calc
-- file: moist_sounding
-- file: moist_tephigram
-- file: rootfind
-- file: rootfind_solution
-- file: skew_coords
-- file: skew_coords-sounding_solution
-- file: tephi
-- file: thompkins_practice
-- file: thompkins_practice_answers
-- file: tropical_engine
-- file: two_compartment_solution
-- file: vapor_visualizer
-- file: wyoming
+parts:
+  - caption: Week 1
+    chapters:
+    - file: adiabatic_box
+    - file: adiabatic_box_al
+    - file: adiabatic_box_solution
+  - caption: Week 2
+    chapters:
+    - file: dry_les
+    - file: rootfind
+    - file: rootfind_al
+    - file: rootfind_solution
+
+#- file: aero_dist_sol
+#- file: aero_sol
+#- file: cape_part1
+#- file: cape_part1_solution
+#- file: cape_part2_solution
+#- file: cgilsI
+#- file: cgilsI-solution
+#- file: clausius_comparison
+#- file: column_vapor
+#- file: constant_mixing_ratio
+#- file: constant_mixing_ratio_solution
+#- file: convec_instability
+#- file: day25_aerosol_sol
+#- file: dropgrow_full
+#- file: dropgrow_full_fourvars
+#- file: dropgrow_full_predictSS
+#- file: dropgrow_full_predictSS_FungM
+#- file: dropgrow_sol
+#- file: entraining_plume
+#- file: entraining_plume_solution_part1
+#- file: entraining_plume_solution_part2
+#- file: final_2018_takehome
+#- file: hydrostatic
+#- file: kohler
+#- file: kohler_probs
+#- file: kohler_sols
+#- file: marshallpalmer
+#- file: marshallpalmer_sol
+#- file: midterm_2016_sols
+#- file: midterm_2018_sols
+#- file: mixing_line_calc
+#- file: moist_sounding
+#- file: moist_tephigram
+#- file: skew_coords
+#- file: skew_coords-sounding_solution
+#- file: tephi
+#- file: thompkins_practice
+#- file: thompkins_practice_answers
+#- file: tropical_engine
+#- file: two_compartment_solution
+#- file: vapor_visualizer
+#- file: wyoming
