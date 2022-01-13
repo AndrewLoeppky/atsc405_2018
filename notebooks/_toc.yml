@@ -12,6 +12,11 @@ parts:
     - file: rootfind
     - file: rootfind_al
     - file: rootfind_solution
+  - caption: Week 3
+    chapters:
+    - file: skew_coords
+    - file: skew_coords_al
+    - file: skew_coords-sounding_solution
 
 #- file: aero_dist_sol
 #- file: aero_sol
@@ -46,8 +51,6 @@ parts:
 #- file: mixing_line_calc
 #- file: moist_sounding
 #- file: moist_tephigram
-#- file: skew_coords
-#- file: skew_coords-sounding_solution
 #- file: tephi
 #- file: thompkins_practice
 #- file: thompkins_practice_answers
