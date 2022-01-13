@@ -3,7 +3,7 @@
   thetae, etc.
 """
 
-from collections import Iterable
+from collections.abc import Iterable
 import numpy as np
 import doctest
 
