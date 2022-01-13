@@ -17,6 +17,10 @@ parts:
     - file: skew_coords
     - file: skew_coords_al
     - file: skew_coords-sounding_solution
+    - file: constant_mixing_ratio
+    - file: constant_mixing_ratio_al
+    - file: constant_mixing_ratio_solution
+
 
 #- file: aero_dist_sol
 #- file: aero_sol
