@@ -24,6 +24,46 @@ ATSC 405
 
 Derive equation 7 in my Scale height notes (feel free to use the linked indefinite integral).
 
+---
+
++++
+
+*Expected value of a continuous random variable $x$ on $0 < x < \infty$:*
+
+$$
+\bar{x} = \int_0^\infty xp(x)dx
+$$
+
+*Exponential distribution:*
+
+$$
+p(x) = \lambda exp(-\lambda x)
+$$
+
+*Cheat by looking up the integral [on Wikipedia](https://en.wikipedia.org/wiki/List_of_integrals_of_exponential_functions)*
+
+$$
+\lambda\int xe^{-\lambda x}dx = \lambda e^{-\lambda x}\left(\frac{\lambda x - 1}{\lambda^2}\right)
+$$
+
+$$
+= e^{-\lambda x} \left(\frac{\lambda x - 1}{\lambda}\right)
+$$
+
+$$
+= e^{-\lambda x} \left(1 - \frac{1}{\lambda}\right)
+$$
+
+*Evaluate at the limits $x = 0$ and $x=\infty$:*
+
+$$
+\bar{x} = e^{-\infty}(\infty - 1/\lambda) - e^0(0 - 1/\lambda)
+$$
+
+$$
+\bar{x} = \frac{1}{\lambda}\square
+$$
+
 +++
 
 ### Question 2
