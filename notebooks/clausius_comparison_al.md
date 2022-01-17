@@ -111,7 +111,7 @@ for temp in temps:
 
 ### Compare with Thompkins 2.13 and 2.15
 
-Approximate form of the CC equation:
+*Approximate form of the CC equation:*
 
 $$
 e_s = e_{s0}exp\left[\frac{L_v}{R_v}\left(\frac{1}{T_0} - \frac{1}{T}\right)\right]\tag{AT2.13}
@@ -129,7 +129,7 @@ for temp in temps:
     print(do_T213(temp, **conts))
 ```
 
-Or Bolton's formula:
+*Or Bolton's formula:*
 
 $$
 e_s = 611.2exp\left(\frac{17.67\cdot T}{T + 243.5}\right)\tag{AT2.15}

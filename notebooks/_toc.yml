@@ -9,6 +9,7 @@ parts:
   - caption: Week 2
     chapters:
     - file: dry_les
+    - file: dry_les_al
     - file: rootfind
     - file: rootfind_al
     - file: rootfind_solution
@@ -20,6 +21,11 @@ parts:
     - file: constant_mixing_ratio
     - file: constant_mixing_ratio_al
     - file: constant_mixing_ratio_solution
+  - caption: Week 4
+    chapters:
+    - file: clausius_comparison
+    - file: clausius_comparison_al
+    - file: day_10_problems_al
 
 
 #- file: aero_dist_sol
@@ -29,7 +35,6 @@ parts:
 #- file: cape_part2_solution
 #- file: cgilsI
 #- file: cgilsI-solution
-#- file: clausius_comparison
 #- file: column_vapor
 #- file: constant_mixing_ratio
 #- file: constant_mixing_ratio_solution
