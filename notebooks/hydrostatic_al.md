@@ -348,38 +348,22 @@ Print out the density and pressure scale heights for each of the five soundings
 
 ---
 
-+++
-
-**From the Hydrostatic notes:** *the pressure scale height is an average height weighted by the vertical pressure profile in the atmosphere*.
-
 ```{code-cell} ipython3
-def dens_scale_height(sounding):
-    """
-    calculates pressure scale height of a sounding dataframe containing keys
-
-    "den" - pressure coordinates
-    "z"     - height coordinate (m)
-    """
-    return sum(sounding["z"] * sounding["den"]) / sum(sounding["den"])
-
-
-def press_scale_height(sounding):
-    """
-    calculates pressure scale height of a sounding dataframe containing keys
-
-    "press" - pressure coordinates
-    "z"     - height coordinate (m)
-    """
-    return sum(sounding["z"] * sounding["press"]) / sum(sounding["press"])
+sound_dict["tropics"].keys()
 ```
 
 ```{code-cell} ipython3
-print(" Sounding | Density Scale Ht | Pressure Scale Ht ")
-print("-"*50)
-for sounding in sound_dict.keys():
-    press_scale = round(press_scale_height(sound_dict[sounding]))
-    dens_scale = round(dens_scale_height(sound_dict[sounding]))
-    print(f"{sounding} |  {dens_scale}  m         |  {press_scale} m")
+for name, sounding in zip(sound_dict.keys(), sound_dict.values()):
+    #print(sounding["z"])
+    zL = np.asarray(sounding["z"][hit])
+    pressL = np.asarray(sounding["press"][hit])
+    TempL= np.asarray(sounding["temp"][hit])
+    rhoL=pressL/(Rd*TempL)
+    Hbar= calcScaleHeight(TempL,pressL,zL)
+    Hrho= calcDensHeight(TempL,pressL,zL)
+    print(f"==== {name} ====")
+    print(f"pressure scale height: {Hbar*1.e-3:5.2f} km")
+    print(f"density scale height:  {Hrho*1.e-3:5.2f} km\n")
 ```
 
 ### Question 2
@@ -392,7 +376,36 @@ Do a change of units to convert $kg\,m^{-2}$ to $cm\,m^{-2}$ using the density o
 
 ---
 
+$$
+x \space \frac{kg}{m^2} \cdot \frac{1 \space m^3}{1000 \space kg} \cdot 100 \frac{cm}{m}
+$$
+
 ```{code-cell} ipython3
-test_sounding = sound_dict["midsummer"]
-test_sounding
+def get_tpw(mixrat, dens, z):
+    """
+    total precipitable water
+    """
+    dz = np.diff(z)
+    # get the average mixing ratio and density in the middle of each layer
+    rLayer = (mixrat[1:] + mixrat[:-1]) / 2.
+    denslayer = (dens[1:] + dens[:-1]) / 2.
+    # calculate vapor density 
+    rho_v = denslayer * rLayer
+    # do the integration to get the total MASS of water
+    tpw_m = np.sum(rho_v * dz) 
+    # convert to cm
+    tpw = tpw_m / 10
+    return tpw
+```
+
+```{code-cell} ipython3
+for name, sounding in zip(sound_dict.keys(), sound_dict.values()):
+    #print(sounding["z"])
+    zL = np.asarray(sounding["z"][hit])
+    densL = np.asarray(sounding["den"][hit])
+    mixratL= np.asarray(sounding["rmix"][hit])
+    #rhoL=pressL/(Rd*TempL)
+    W = get_tpw(mixratL, densL, zL)
+    print(f"==== {name} ====")
+    print(f"Total Precipitable WAater: {W:5.2f} cm\n") 
 ```
