@@ -26,7 +26,11 @@ parts:
     - file: clausius_comparison
     - file: clausius_comparison_al
     - file: day_10_problems_al
-
+    - file: hydrostatic
+    - file: hydrostatic_al
+  - caption: Week 5
+    chapters:
+    - file: moist_tephigram
 
 #- file: aero_dist_sol
 #- file: aero_sol
