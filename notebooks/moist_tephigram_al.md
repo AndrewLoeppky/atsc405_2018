@@ -29,8 +29,14 @@ import pytz
 ```
 
 ```{code-cell} ipython3
+# pick a date to plot
+my_month="5"
+day="01"
+```
+
+```{code-cell} ipython3
 # get a sounding (the station code for quilayute, WA is 72797)
-values=dict(region='naconf',year='2021',month='7',start='1000',stop='1000',station='72797')
+values=dict(region='naconf',year='2017',month=my_month,start=day+"00",stop=day+'00',station='72797')
 write_soundings(values, 'quillayute')
 ```
 
@@ -44,20 +50,27 @@ print(soundings['sounding_dict'].keys())
 
 ```{code-cell} ipython3
 # grab selected sounding from the dictionary
-the_sounding = soundings['sounding_dict'][(2021, 7, 10, 0)]
+the_sounding = soundings['sounding_dict'][(2021, int(my_month), int(day), 0)]
 the_sounding
 ```
 
 ```{code-cell} ipython3
 # use find_Tmoist to get the temps along a moist adiabat
-Tsurf = the_sounding.temp[0] + 273.15
-Tdsurf = the_sounding.dwpt[0] + 273.15
-rtsurf = the_sounding.mixr[0]
+Tsurf = the_sounding.temp[0] #+ 273.15
+Tdsurf = the_sounding.dwpt[0] #+ 273.15
+rtsurf = the_sounding.mixr[0] 
 psurf = the_sounding.pres[0] * 100
-thetaet = find_thetaet(Tdsurf, rtsurf, Tsurf, psurf)
-#Tmoist = [find_Tmoist(thetaet, pres) for pres in the_sounding.pres * 100]
-#TmoistC = np.array(Tmoist) - 273.15
-thetaet
+thetaet = find_thetaet(Tdsurf,rtsurf, Tsurf, psurf)
+Tmoist = [find_Tmoist(thetaet, pres, use_theta=True) for pres in the_sounding.pres]
+TmoistC = np.array(Tmoist) - 273.15
+```
+
+```{code-cell} ipython3
+Tmoist
+```
+
+```{code-cell} ipython3
+the_sounding["dwpt"][0] + 273
 ```
 
 ```{code-cell} ipython3
@@ -91,14 +104,18 @@ skewtemp = convertTempToSkew(the_sounding["temp"], the_sounding["pres"], skew)
 skewdwpt = convertTempToSkew(the_sounding["dwpt"], the_sounding["pres"], skew)
 
 # add the other stuff
-#moist_adiabat = convertTempToSkew(TmoistC, the_sounding.pres, skew)
+skewmabt = convertTempToSkew(Tmoist, the_sounding["pres"], skew)
 
 ax.plot(skewtemp, the_sounding["pres"], color="k", linewidth=3)
 ax.plot(skewdwpt, the_sounding["pres"], color="k", linewidth=3)
-#ax.plot(moist_adiabat, the_sounding.pres, color="r", linestyle=":")
+ax.plot(skewmabt -20, the_sounding["pres"], color="k", linewidth=3)
 ax.set_title("override")
 xcorners = find_corners(corners, skew=skew)
 #ax.set(xlim=xcorners, ylim=[1000, 800])
+```
+
+```{code-cell} ipython3
+the_sounding["temp"]
 ```
 
 ```{code-cell} ipython3
