@@ -226,7 +226,6 @@ def find_theta(temp, press, rv=0):
     return thetaOut
 
 
-# +
 def make_dry_adiabat(theta, press, rv=0):
     """
     make_dry_adiabat(theta, press)
@@ -255,10 +254,6 @@ def make_dry_adiabat(theta, press, rv=0):
     tempOut = theta * (press / c.p0) ** power
     return tempOut
 
-make_dry_adiabat(300, c.p0)
-
-
-# -
 
 def convertTempToSkew(Temp, press, skew):
     """
