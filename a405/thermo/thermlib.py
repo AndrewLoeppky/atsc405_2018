@@ -226,6 +226,40 @@ def find_theta(temp, press, rv=0):
     return thetaOut
 
 
+# +
+def make_dry_adiabat(theta, press, rv=0):
+    """
+    make_dry_adiabat(theta, press)
+
+    Calculates the temperature given potential temperatures 
+    along a specified pressure profile.
+    
+    Parameters
+    ----------
+    Theta : float
+        Potential Temperature (K)
+    press : float or array-like
+        Pressure (Pa).
+
+    Returns
+    ----
+    tempOut : float or array-like
+        Converted temperature (degC).
+
+    Examples
+    --------
+    >>> make_dry_adiabat(300., 100000)
+    300.
+    """
+    power = c.Rd / c.cpd * (1. - 0.24 * rv)
+    tempOut = theta * (press / c.p0) ** power
+    return tempOut
+
+make_dry_adiabat(300, c.p0)
+
+
+# -
+
 def convertTempToSkew(Temp, press, skew):
     """
     convertTempToSkew(Temp, press, skew)
