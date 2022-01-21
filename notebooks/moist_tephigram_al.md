@@ -59,7 +59,7 @@ import a405.thermo.thermlib as tl
 CtoK = 273.15  # convert kelvin to celsius and vv
 
 # grab surface values
-Tsurf = the_sounding.temp[1] + CtoK
+Tsurf = the_sounding.temp[0] + CtoK
 rtsurf = the_sounding.mixr[0] / 1000
 Tdsurf = the_sounding.dwpt[0] + CtoK
 psurf = the_sounding.pres[0] * 100
@@ -77,7 +77,7 @@ dabt = tl.make_dry_adiabat(Tsurf, the_sounding.pres * 100)
 dabt -= CtoK
 
 # Draw a line of constant mixing ratio from the surface Td
-T_rs = np.array([tl.tinvert_rsat(Tdsurf + CtoK, rtsurf, pres) for pres in np.asarray(the_sounding.pres)[:10]])
+T_rs = np.array([tl.tinvert_rsat(Tdsurf, rtsurf, pres) for pres in np.asarray(the_sounding.pres)[:13]])
 T_rs -= CtoK
 
 # Draw a moist adiabat from the LCL upwards
@@ -89,7 +89,9 @@ mabt -= CtoK
 T_rs
 ```
 
-mabt
+```{code-cell} ipython3
+Tdsurf
+```
 
 ```{code-cell} ipython3
 from a405.skewT.fullskew import makeSkewWet, find_corners, make_default_labels
@@ -123,20 +125,29 @@ skewdwpt = convertTempToSkew(the_sounding["dwpt"], the_sounding["pres"], skew)
 ax.plot(skewtemp, the_sounding["pres"], color="k", linewidth=3)
 ax.plot(skewdwpt, the_sounding["pres"], color="k", linestyle="--", linewidth=3)
 
-# add the extra stuff
-skewlcl = convertTempToSkew(Tlcl, plcl, skew)  # the LCL
+### Add new stuff to match figure AT 3.18 ###
+below_lcl = the_sounding["pres"] > plcl
+
+# the LCL
+skewlcl = convertTempToSkew(Tlcl, plcl, skew)
 ax.scatter(skewlcl, plcl, color="r", linewidth=10)
-skewmabt = convertTempToSkew(mabt, the_sounding["pres"], skew)  # moist adiabat
-ax.plot(skewmabt, the_sounding["pres"], color="r", linestyle=":", linewidth=4)
-skewdabt = convertTempToSkew(dabt, the_sounding["pres"], skew) # dry adiabat
-ax.plot(skewdabt, the_sounding["pres"], color="r", linestyle=":", linewidth=4)
-skewT_rs = convertTempToSkew(T_rs, np.asarray(the_sounding["pres"])[:10], skew) # constant r
-ax.plot(skewT_rs, np.asarray(the_sounding["pres"])[:10], color="r", linestyle=":", linewidth=4)
+
+# moist adiabat
+skewmabt = convertTempToSkew(mabt[below_lcl==False], the_sounding["pres"][below_lcl==False], skew) 
+ax.plot(skewmabt, the_sounding["pres"][below_lcl==False], color="r", linestyle=":", linewidth=4)
+
+# dry adiabat
+skewdabt = convertTempToSkew(dabt[below_lcl], the_sounding["pres"][below_lcl], skew)
+ax.plot(skewdabt, the_sounding["pres"][below_lcl], color="r", linestyle=":", linewidth=4)
+
+# constant r
+skewT_rs = convertTempToSkew(T_rs, np.asarray(the_sounding["pres"])[:13], skew) 
+ax.plot(skewT_rs, np.asarray(the_sounding["pres"])[:13], color="r", linestyle=":", linewidth=4)
 
 
 ax.set_title("override")
 xcorners = find_corners(corners, skew=skew)
-ax.set(xlim=xcorners, ylim=[1050, 700]);
+ax.set(xlim=xcorners, ylim=[1020, 700]);
 ```
 
 ```{code-cell} ipython3
@@ -144,5 +155,5 @@ skewtemp
 ```
 
 ```{code-cell} ipython3
-np.asarray(the_sounding.pres) * 10
+[print(below_lcl[i]) for i in range(0,100)]
 ```
