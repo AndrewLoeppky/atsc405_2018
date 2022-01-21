@@ -30,8 +30,8 @@ import pytz
 
 ```{code-cell} ipython3
 # pick a date to plot
-my_month="5"
-day="01"
+my_month="7"
+day="12"
 ```
 
 ```{code-cell} ipython3
@@ -50,28 +50,46 @@ print(soundings['sounding_dict'].keys())
 
 ```{code-cell} ipython3
 # grab selected sounding from the dictionary
-the_sounding = soundings['sounding_dict'][(2021, int(my_month), int(day), 0)]
+the_sounding = soundings['sounding_dict'][(2017, int(my_month), int(day), 0)]
 the_sounding
 ```
 
 ```{code-cell} ipython3
-# use find_Tmoist to get the temps along a moist adiabat
-Tsurf = the_sounding.temp[0] #+ 273.15
-Tdsurf = the_sounding.dwpt[0] #+ 273.15
-rtsurf = the_sounding.mixr[0] 
+import a405.thermo.thermlib as tl
+CtoK = 273.15  # convert kelvin to celsius and vv
+
+# grab surface values
+Tsurf = the_sounding.temp[1] + CtoK
+rtsurf = the_sounding.mixr[0] / 1000
+Tdsurf = the_sounding.dwpt[0] + CtoK
 psurf = the_sounding.pres[0] * 100
-thetaet = find_thetaet(Tdsurf,rtsurf, Tsurf, psurf)
-Tmoist = [find_Tmoist(thetaet, pres, use_theta=True) for pres in the_sounding.pres]
-TmoistC = np.array(Tmoist) - 273.15
+
+# Find the lifting condensation level
+Tlcl, plcl = tl.find_lcl(Tdsurf, Tsurf, psurf)
+Tlcl -= CtoK
+plcl /= 100
+
+# Find the equivalent potential temperature at the LCL
+thetaet = tl.find_thetaet(Tdsurf, rtsurf, Tsurf, psurf)
+
+# Draw a dry adiabat from the surface T to the LCL
+dabt = tl.make_dry_adiabat(Tsurf, the_sounding.pres * 100)
+dabt -= CtoK
+
+# Draw a line of constant mixing ratio from the surface Td
+T_rs = np.array([tl.tinvert_rsat(Tdsurf + CtoK, rtsurf, pres) for pres in np.asarray(the_sounding.pres)[:10]])
+T_rs -= CtoK
+
+# Draw a moist adiabat from the LCL upwards
+mabt = np.array([tl.find_Tmoist(thetaet, pres, use_theta=True) for pres in np.asarray(the_sounding.pres) * 100])
+mabt -= CtoK
 ```
 
 ```{code-cell} ipython3
-Tmoist
+T_rs
 ```
 
-```{code-cell} ipython3
-the_sounding["dwpt"][0] + 273
-```
+mabt
 
 ```{code-cell} ipython3
 from a405.skewT.fullskew import makeSkewWet, find_corners, make_default_labels
@@ -102,22 +120,29 @@ ax, skew = makeSkewWet(ax, corners=corners, skew=35, label_fun=label_fun)
 # add temp and dewpoint to the diagram
 skewtemp = convertTempToSkew(the_sounding["temp"], the_sounding["pres"], skew)
 skewdwpt = convertTempToSkew(the_sounding["dwpt"], the_sounding["pres"], skew)
-
-# add the other stuff
-skewmabt = convertTempToSkew(Tmoist, the_sounding["pres"], skew)
-
 ax.plot(skewtemp, the_sounding["pres"], color="k", linewidth=3)
-ax.plot(skewdwpt, the_sounding["pres"], color="k", linewidth=3)
-ax.plot(skewmabt -20, the_sounding["pres"], color="k", linewidth=3)
+ax.plot(skewdwpt, the_sounding["pres"], color="k", linestyle="--", linewidth=3)
+
+# add the extra stuff
+skewlcl = convertTempToSkew(Tlcl, plcl, skew)  # the LCL
+ax.scatter(skewlcl, plcl, color="r", linewidth=10)
+skewmabt = convertTempToSkew(mabt, the_sounding["pres"], skew)  # moist adiabat
+ax.plot(skewmabt, the_sounding["pres"], color="r", linestyle=":", linewidth=4)
+skewdabt = convertTempToSkew(dabt, the_sounding["pres"], skew) # dry adiabat
+ax.plot(skewdabt, the_sounding["pres"], color="r", linestyle=":", linewidth=4)
+skewT_rs = convertTempToSkew(T_rs, np.asarray(the_sounding["pres"])[:10], skew) # constant r
+ax.plot(skewT_rs, np.asarray(the_sounding["pres"])[:10], color="r", linestyle=":", linewidth=4)
+
+
 ax.set_title("override")
 xcorners = find_corners(corners, skew=skew)
-#ax.set(xlim=xcorners, ylim=[1000, 800])
+ax.set(xlim=xcorners, ylim=[1050, 700]);
 ```
 
 ```{code-cell} ipython3
-the_sounding["temp"]
+skewtemp
 ```
 
 ```{code-cell} ipython3
-
+np.asarray(the_sounding.pres) * 10
 ```
