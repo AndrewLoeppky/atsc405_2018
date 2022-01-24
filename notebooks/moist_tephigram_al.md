@@ -63,6 +63,7 @@ Tsurf = the_sounding.temp[0] + CtoK
 rtsurf = the_sounding.mixr[0] / 1000
 Tdsurf = the_sounding.dwpt[0] + CtoK
 psurf = the_sounding.pres[0] * 100
+theta_surf = the_sounding.thta[0]
 
 # Find the lifting condensation level
 Tlcl, plcl = tl.find_lcl(Tdsurf, Tsurf, psurf)
@@ -73,7 +74,7 @@ plcl /= 100
 thetaet = tl.find_thetaet(Tdsurf, rtsurf, Tsurf, psurf)
 
 # Draw a dry adiabat from the surface T to the LCL
-dabt = tl.make_dry_adiabat(Tsurf, the_sounding.pres * 100)
+dabt = tl.make_dry_adiabat(theta_surf, the_sounding.pres * 100)
 dabt -= CtoK
 
 # Draw a line of constant mixing ratio from the surface Td
@@ -83,14 +84,6 @@ T_rs -= CtoK
 # Draw a moist adiabat from the LCL upwards
 mabt = np.array([tl.find_Tmoist(thetaet, pres, use_theta=True) for pres in np.asarray(the_sounding.pres) * 100])
 mabt -= CtoK
-```
-
-```{code-cell} ipython3
-T_rs
-```
-
-```{code-cell} ipython3
-Tdsurf
 ```
 
 ```{code-cell} ipython3
@@ -148,12 +141,4 @@ ax.plot(skewT_rs, np.asarray(the_sounding["pres"])[:13], color="r", linestyle=":
 ax.set_title("override")
 xcorners = find_corners(corners, skew=skew)
 ax.set(xlim=xcorners, ylim=[1020, 700]);
-```
-
-```{code-cell} ipython3
-skewtemp
-```
-
-```{code-cell} ipython3
-[print(below_lcl[i]) for i in range(0,100)]
 ```
