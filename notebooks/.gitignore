@@ -1,0 +1,10 @@
+# git will not see or track the following:
+# ------------------------------------------
+*.ipynb
+a405.egg-info/
+a405/__pycache__/
+a405/skewT/__pycache__/
+a405/soundings/__pycache__/
+a405/thermo/__pycache__/
+a405/utils/__pycache__/
+notebooks/_build/
