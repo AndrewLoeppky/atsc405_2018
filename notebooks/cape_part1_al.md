@@ -262,10 +262,7 @@ def get_buoy(T, Td, pres):
     Tv_env = tl.find_Tv(T, r_env)
     
     # Thompkins 1.61
-   # print(Tv_env)
-    #print(Tv_parcel)
     buoy = c.g0 * (Tv_parcel - Tv_env) / Tv_env
-    print(buoy)
     return T_parcel, buoy
 ```
 
