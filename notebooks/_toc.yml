@@ -31,6 +31,10 @@ parts:
   - caption: Week 5
     chapters:
     - file: moist_tephigram
+    - file: moist_tephigram_al
+    - file: cape_part1
+    - file: cape_part1_al
+    - file: cape_part1_solution
 
 #- file: aero_dist_sol
 #- file: aero_sol
