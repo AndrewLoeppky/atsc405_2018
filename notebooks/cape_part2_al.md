@@ -60,7 +60,7 @@ soundings['sounding_dict'].keys()
 ## Select one sounding
 
 ```{code-cell} ipython3
-the_time=(2012,7, 20,0) # was 17
+the_time=(2012,7, 17,0) # was 17
 sounding=soundings['sounding_dict'][the_time]
 sounding.columns
 ```
