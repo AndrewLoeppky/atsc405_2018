@@ -185,7 +185,7 @@ ax.set_xlim()
 
 # create skewed isotherms
 my_temps = np.arange(3.15,503.15,10)
-alpha = 20 # define my skew parameter
+alpha = 45 # define my skew parameter
 for mt in my_temps:
     temp_vec = np.ones_like(pres) * mt
     skew_temp = T_to_skewT(temp_vec, pres, alpha)
@@ -195,8 +195,10 @@ ax.set_xticks(temps, np.round(temps - c.Tc))
 ax.set_xlim(-40 + c.Tc, 50 + c.Tc)
 
 # plot the sounding in skewed coords
-ax.plot(T_to_skewT(sounding.temp, sounding.pres, alpha), sounding.pres, color="k", linewidth=3)
-ax.plot(T_to_skewT(sounding.dwpt, sounding.pres, alpha), sounding.pres, color="k", linewidth=3);
+skew_Tsound = T_to_skewT(sounding.temp, sounding.pres, alpha)
+skew_Tdsound = T_to_skewT(sounding.dwpt, sounding.pres, alpha)
+ax.plot(skew_Tsound, sounding.pres, color="k", linewidth=3)
+ax.plot(skew_Tdsound, sounding.pres, color="k", linewidth=3);
 ```
 
 ### Task 5
@@ -467,7 +469,7 @@ def get_CIN_CAPE(sounding, pmin, pmax):
     buoy = np.asarray(buoy[pmin < sounding.pres][sounding.pres < pmax])
     ht = np.asarray(sounding.hght[pmin < sounding.pres][sounding.pres < pmax])
     
-    # average buoyancy in each layer
+    # average the buoyancy in each layer so we have the same number ht's as buoy's
     lyr_buoy = [(buoy[i] + buoy[i + 1]) / 2 for i in range(len(buoy) - 1)]
     layer_ht = np.diff(ht)
     
@@ -479,12 +481,85 @@ def get_CIN_CAPE(sounding, pmin, pmax):
 ```
 
 ```{code-cell} ipython3
-get_CIN_CAPE(sounding, LFC, SFC)
+# calculate CIN and CAPE for our sounding
+CIN = get_CIN_CAPE(sounding, LFC, SFC)
+CAPE = get_CIN_CAPE(sounding, LNB, LFC)
+
+print(f"{CIN  = } J/kg")
+print(f"{CAPE = } J/kg")
 ```
 
-## Task xx
+```{code-cell} ipython3
+# shade in CIN and CAPE on the thermodiagram
+is_CIN = sounding.pres >= LFC
+is_CAPE = (sounding.pres <= LFC) & (sounding.pres >= LNB)
+ax.fill_betweenx(sounding.pres[is_CIN], skew_parcel[is_CIN], skew_Tsound[is_CIN], color="blue", alpha=0.3)
+ax.fill_betweenx(sounding.pres[is_CAPE], skew_parcel[is_CAPE], skew_Tsound[is_CAPE], color="red", alpha=0.3)
 
-We can do this entire thing in 50 lines of code with metpy
+display(fig)
+```
+
+### Task 11 - Updraft Speed and Cloud Top
+
+Last task - we want to know the upper limit of how high we can expect convective cells do develop, i.e. how deep into the tropopause the updrafts can penetrate. To do this, lets assume that 100% of CAPE is converted into kinetic energy of the updrafts (This is a bold assumption. In reality entrainment, mixing, and aerodynamic drag all slow the parcel down). The kinetic energy per unit mass of a parcel is:
+
+$$
+E_k = \frac{1}{2}w^2
+$$
+
+Rearrange to get Thompkins 3.4:
+
+$$
+w_{max} = \sqrt{2\cdot CAPE}\tag{AT 3.4}
+$$
+
+Real updrafts in real deep convective cells have velocities something like 30m/s. Calculate the updraft speed given the CAPE of your sounding. How realistic is our zero entrainment assumption?
+
+```{code-cell} ipython3
+wmax = np.sqrt(2 * CAPE)
+print(f"{wmax = } m/s")
+```
+
+Now let's find the highest possible cloud top height. Once an updraft passes the LNB, it begins to decelerate until it's kinetic energy reaches zero and the parcel stops. Use your CAPE function to find the pressure at which the parcel's CAPE is completely dissipated into the tropopause. Mark this point on your plot. 
+
+```{code-cell} ipython3
+from scipy import optimize
+
+def rootfind_CAPE(pres, *args):
+    """
+    finds CAPE, set up for rootfinding function to detect cloud top
+    
+    args = [sounding, LFC]
+    """
+    sounding = args[0]
+    pmax = args[1]
+    return get_CIN_CAPE(sounding, pres, pmax)
+```
+
+```{code-cell} ipython3
+# use scipy rootfinder
+CTOP = optimize.zeros.brentq(rootfind_CAPE, 1000, LNB, args=(sounding, LFC))
+```
+
+```{code-cell} ipython3
+# plot cloud top
+ax.axhline(CTOP, color="r", linestyle=":", linewidth=3)
+display(fig)
+```
+
+## Part 2 - Repeat with MetPy
+
+Now that we know how to derive and plot everything by hand, we can repeat this entire analysis in like 50 lines of code with Metpy. Metpy is a python package for reading, visualizing, and performing calculations with weather data, and has a whole bunch of well-documented, maintained functions that wrap matplotlib's regular plotting package with meteorology applications in mind - like built in methods for handling unit conversions between C and K, Pa and hPa, etc. 
+
+[Metpy Home Page](https://unidata.github.io/MetPy/latest/index.html)
+
+
+Install with:
+```
+$ mamba install metpy
+```
+
+Here's the analysis again, high speed:
 
 ```{code-cell} ipython3
 #### do it with metpy ####
@@ -492,28 +567,25 @@ We can do this entire thing in 50 lines of code with metpy
 # this is all from the tutorial at:
 # https://unidata.github.io/MetPy/latest/examples/Advanced_Sounding.html#sphx-glr-examples-advanced-sounding-py
 
+
+# Task 1/2: initialize figure
+fig3 = plt.figure(figsize=(9, 9))
+add_metpy_logo(fig3, 115, 100)
+skew = SkewT(fig3, rotation=45)
+
+# Task 3: read in sounding vars
 p = sounding['pres'].values * units.Pa
 T = sounding['temp'].values * units.kelvin
 Td = sounding['dwpt'].values * units.kelvin
 
-fig2 = plt.figure(figsize=(9, 9))
-add_metpy_logo(fig2, 115, 100)
-skew = SkewT(fig2, rotation=45)
-
 # Plot the data using normal plotting functions, in this case using
 # log scaling in Y, as dictated by the typical meteorological plot.
-skew.plot(p, T, 'r')
-skew.plot(p, Td, 'g')
-skew.ax.set_ylim(1000, 100)
-skew.ax.set_xlim(-40, 60)
+skew.plot(p, T, 'k', linewidth=3)
+skew.plot(p, Td, 'k', linewidth=3)
+skew.ax.set_ylim(1020, 100)
+skew.ax.set_xlim(-40, 50)
 
-# Calculate LCL height and plot as black dot. Because `p`'s first value is
-# ~1000 mb and its last value is ~250 mb, the `0` index is selected for
-# `p`, `T`, and `Td` to lift the parcel from the surface. If `p` was inverted,
-# i.e. start from low value, 250 mb, to a high value, 1000 mb, the `-1` index
-# should be selected.
-lcl_pressure, lcl_temperature = mpcalc.lcl(p[0], T[0], Td[0])
-skew.plot(lcl_pressure, lcl_temperature, 'ko', markerfacecolor='black')
+
 
 # Calculate full parcel profile and add to plot as black line
 prof = mpcalc.parcel_profile(p, T[0], Td[0]).to('degC')
@@ -524,7 +596,7 @@ skew.shade_cin(p, T, prof, Td)
 skew.shade_cape(p, T, prof)
 
 # Add the relevant special lines
-skew.plot_dry_adiabats(t0=my_temps * units.kelvin)
+skew.plot_dry_adiabats(t0=np.arange(-40, 200, 10) * units.degC)
 skew.plot_moist_adiabats()
 skew.plot_mixing_lines()
 
