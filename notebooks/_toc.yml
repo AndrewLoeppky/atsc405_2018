@@ -35,6 +35,13 @@ parts:
     - file: cape_part1
     - file: cape_part1_al
     - file: cape_part1_solution
+    - file: cape_part2
+    - file: cape_part2_al
+    - file: cape_part2_solution
+  - caption: Week 6
+    chapters:
+    - file: taylor_mix
+    - file: taylor_mix_al
 
 #- file: aero_dist_sol
 #- file: aero_sol
