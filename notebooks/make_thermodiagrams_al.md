@@ -23,7 +23,7 @@ exposition
 
 - Make a sweet thermodiagram from scratch using matplotlib
 
-- Create a severe thunderstorm forecast for the day by calculating CAPE, CIN, cloud top
+- Create a thunderstorm forecast for the day by calculating CAPE, CIN, cloud top
 
 - Learn about wrapper functions (metpy)
 
@@ -34,11 +34,6 @@ import pandas as pd
 
 import warnings
 warnings.filterwarnings("ignore") # turn off warnings. DANGER!
-
-import metpy.calc as mpcalc
-from metpy.cbook import get_test_data
-from metpy.plots import add_metpy_logo, SkewT
-from metpy.units import units
 ```
 
 ## Part 1 - Building a Thermodiagram from Scratch in Python
@@ -160,7 +155,7 @@ $$
 T_{skew} = T + \left(\alpha \cdot log\frac{p_0}{p}\right)
 $$
 
-Write a function that implements this equation on input arrays for $T$ and $p$, and returns the skewed temperature $T_{skew}$. Re-initialize your plot and re-do parts 2 and 3 (isotherms and the sounding), using a skew parameter $\alpha= 20$. The pressure values/plot positions should remain unchanged.
+Write a function that implements this equation on input arrays for $T$ and $p$, and returns the skewed temperature $T_{skew}$. Re-initialize your plot and re-do parts 2 and 3 (isotherms and the sounding), using a skew parameter $\alpha= 30$. The pressure values/plot positions should remain unchanged.
 
 ```{code-cell} ipython3
 def T_to_skewT(T, p, alpha):
@@ -185,7 +180,7 @@ ax.set_xlim()
 
 # create skewed isotherms
 my_temps = np.arange(3.15,503.15,10)
-alpha = 45 # define my skew parameter
+alpha = 30 # define my skew parameter
 for mt in my_temps:
     temp_vec = np.ones_like(pres) * mt
     skew_temp = T_to_skewT(temp_vec, pres, alpha)
@@ -201,20 +196,7 @@ ax.plot(skew_Tsound, sounding.pres, color="k", linewidth=3)
 ax.plot(skew_Tdsound, sounding.pres, color="k", linewidth=3);
 ```
 
-### Task 5
-
-Do it again with MetPy! See if you can get the same plot using `metpy.plots.SkewT`. The default plot should look very similar to what we just created in task 4
-
-```{code-cell} ipython3
-#### do it with metpy ####
-plt.rcParams['figure.figsize'] = (9, 9)
-skew = SkewT()
-skew.plot(sounding.pres.values * units.Pa, sounding.temp.values * units.kelvin, color="k", linewidth=3)
-skew.plot(sounding.pres.values * units.Pa, sounding.dwpt.values * units.kelvin, color="k", linewidth=3)
-# note, this took 4 lines to create instead of 100+. go metpy
-```
-
-### Task 6 - Dry Adiabats
+### Task 5 - Dry Adiabats
 
 Plot dry adiabats at 10K horizontal spacing that cover the whole plot. To convert from temperature to potential temperature, use Thompkins 1.38:
 
@@ -245,7 +227,7 @@ for mt in my_temps:
 display(fig)
 ```
 
-### Task 7 - Saturated Adiabats
+### Task 6 - Saturated Adiabats
 
 Add saturated adiabats to your plot with surface temperatures of -30$^o$C to +40$^o$C in 5$^o$C increments. The calculation for $\theta_e$ is less straightforward than $\theta$, feel free to use functions from `thermlib.py` to implement them in python. Plot these in *blue* with the same alpha=0.4.
 
@@ -263,7 +245,7 @@ for mt in my_temps:
 display(fig)
 ```
 
-### Task 8 - Mixing Lines
+### Task 7 - Mixing Lines
 
 Write a function to calculate lines of constant mixing ratio, or use one from thermlib. Make 20 contours, log spaced between $10^{-5}$ and $10^{-1}$ kg/kg. Plot them in *green* on your thermodiagram.
 
@@ -281,7 +263,7 @@ display(fig)
 
 We now have a pretty respectable looking thermodiagram. Let's use it to make some predictions about how clouds and possibly thunderstorms might develop on the day of our sounding. 
 
-### Task 9 - Buoyancy 
+### Task 8 - Buoyancy 
 
 To predict vertical motion in our sounding, we need to know the force/mass supplied by the difference in density, which we express as the *density temperature* $T_\rho$, or equivalently, *virtual temperature* $T_v$:
 
@@ -295,7 +277,7 @@ $$
 B = g\left(\frac{T_{v,a}-T_{v,env}}{T_{v,env}}\right)\tag{AT 1.61*}
 $$
 
-Calculate the buoyant force as a function of pressure on an ascending parcel which originates at the surface with initial state $T_{surf} T_{d,surf}, p_0$. Assume *pseudo-adiabatic ascent*, where all liquid and ice phase water immediately fall out of the parcel as precipitation. Add the parcel trajectory to your sounding, then calculate the buoyancy profile and plot it in a separate figure.
+Calculate the buoyant force as a function of pressure on an ascending parcel which originates at the surface with initial state $T_{surf}, T_{d,surf}, p_0$. Assume *pseudo-adiabatic ascent*, where all liquid and ice phase water immediately fall out of the parcel as precipitation. Add the parcel trajectory to your sounding, then calculate the buoyancy profile and plot it in a separate figure.
 
 *HINT: See Thompkins figure 3.18 for more on parcel trajectories. The ascending air will either follow a dry adiabat or a moist adiabat depending on saturation.*
 
@@ -384,7 +366,7 @@ display(fig)
 
 +++
 
-### Task 10 - Calculate CAPE and CIN
+### Task 9 - Key Pressure Levels
 
 From the bouyancy profile, we can obtain a more useful variables often used for forecasting convection: *Convective available potential energy (CAPE)* and *convective inhibition (CIN)*. First, we need to identify key pressure levels:
 
@@ -396,7 +378,6 @@ From the bouyancy profile, we can obtain a more useful variables often used for 
 
 - The level of neutral bouoyancy (LNB): *The pressure level near the tropopause where your buoyancy curve crosses zero and the parcel begins to decelerate. Note this is sometimes also called the equilibrium level (EL)*
 
-#### Task 10 A
 
 Write a function to identify each of these layers and mark them on your thermodiagram. It's super hard to automate this so that it works well for any general sounding, my approach is to look for buoyancy zero crossings within a pressure range that you prescribe, then pick out each variable by hand.
 
@@ -439,7 +420,7 @@ ax.axhline(LFC, color="r", linestyle=":", linewidth=3)
 display(fig)
 ```
 
-#### Task 10 B
+### Task 10 - CAPE and CIN
 
 CIN is defined as the energy that a parcel must be supplied to rise through the negative buoyancy zone and reach the level of free concection (paraphrased from Thompkins, see p48). We can calculate this energy by integrating buoyancy (force) over the distance separating the surface from the LFC (work = force x distance).
 
@@ -455,12 +436,13 @@ $$
 
 **Source:** Mish-mash of Thompkins 3.2 and Hobbs 1977 as referenced in the [MetPy docs](https://unidata.github.io/MetPy/latest/api/generated/metpy.calc.cape_cin.html)
 
-Calculate the CIN and CAPE for your sounding by numerically integrating. Note the $dh$ term is the *height difference between levels,* so you will have to find a way to interpolate either $h$ or $B$
+Calculate the CIN and CAPE for your sounding by numerically integrating. Note the $dh$ term is the *height difference between levels,* so you will have to find a way to interpolate either $h$ or $B$ so that you have the same number of $B$'s and $dh$'s to multiply together.
 
 ```{code-cell} ipython3
 def get_CIN_CAPE(sounding, pmin, pmax):
     """
     calculates CAPE or CIN between two pressure levels
+    by integrating the buoyancy profile
     """
     # get the buoyancy profile
     _, buoy = get_buoy(sounding.temp, sounding.dwpt, sounding.pres)
@@ -520,7 +502,7 @@ wmax = np.sqrt(2 * CAPE)
 print(f"{wmax = } m/s")
 ```
 
-Now let's find the highest possible cloud top height. Once an updraft passes the LNB, it begins to decelerate until it's kinetic energy reaches zero and the parcel stops. Use your CAPE function to find the pressure at which the parcel's CAPE is completely dissipated into the tropopause. Mark this point on your plot. 
+Now let's find the highest possible cloud top height. Once an updraft passes the LNB, it begins to decelerate until it's kinetic energy reaches zero and the parcel stops. Use your CAPE function to find the pressure at which the parcel's CAPE is completely dissipated into the tropopause. Mark this point on your plot.
 
 ```{code-cell} ipython3
 from scipy import optimize
@@ -549,12 +531,12 @@ display(fig)
 
 ## Part 2 - Repeat with MetPy
 
-Now that we know how to derive and plot everything by hand, we can repeat this entire analysis in like 50 lines of code with Metpy. Metpy is a python package for reading, visualizing, and performing calculations with weather data, and has a whole bunch of well-documented, maintained functions that wrap matplotlib's regular plotting package with meteorology applications in mind - like built in methods for handling unit conversions between C and K, Pa and hPa, etc. 
+Now that we know how to painstakingly derive and plot everything by hand, we can repeat this entire analysis in like 50 lines of code with Metpy. Metpy is a python package for reading, visualizing, and performing calculations with weather data, and has a whole bunch of well-documented, maintained functions that wrap matplotlib's regular plotting package with meteorology applications in mind - like built in methods for handling unit conversions between C and K, Pa and hPa, etc. So handy!
 
 [Metpy Home Page](https://unidata.github.io/MetPy/latest/index.html)
 
 
-Install with:
+Install from the command line with:
 ```
 $ mamba install metpy
 ```
@@ -563,42 +545,61 @@ Here's the analysis again, high speed:
 
 ```{code-cell} ipython3
 #### do it with metpy ####
+import metpy.calc as mpcalc
+from metpy.cbook import get_test_data
+from metpy.plots import add_metpy_logo, SkewT
+from metpy.units import units
 
-# this is all from the tutorial at:
+# this is all lightly modified from the tutorial at:
 # https://unidata.github.io/MetPy/latest/examples/Advanced_Sounding.html#sphx-glr-examples-advanced-sounding-py
-
 
 # Task 1/2: initialize figure
 fig3 = plt.figure(figsize=(9, 9))
-add_metpy_logo(fig3, 115, 100)
+#add_metpy_logo(fig3, 115, 100)
 skew = SkewT(fig3, rotation=45)
 
 # Task 3: read in sounding vars
-p = sounding['pres'].values * units.Pa
-T = sounding['temp'].values * units.kelvin
-Td = sounding['dwpt'].values * units.kelvin
+p = sounding["pres"].values * units.Pa
+T = sounding["temp"].values * units.kelvin
+Td = sounding["dwpt"].values * units.kelvin
 
 # Plot the data using normal plotting functions, in this case using
 # log scaling in Y, as dictated by the typical meteorological plot.
-skew.plot(p, T, 'k', linewidth=3)
-skew.plot(p, Td, 'k', linewidth=3)
+skew.plot(p, T, "k", linewidth=3)
+skew.plot(p, Td, "k", linewidth=3)
 skew.ax.set_ylim(1020, 100)
 skew.ax.set_xlim(-40, 50)
 
-
-
-# Calculate full parcel profile and add to plot as black line
-prof = mpcalc.parcel_profile(p, T[0], Td[0]).to('degC')
-skew.plot(p, prof, 'k', linewidth=2)
-
-# Shade areas of CAPE and CIN
-skew.shade_cin(p, T, prof, Td)
-skew.shade_cape(p, T, prof)
-
-# Add the relevant special lines
+# Task 5: dry adiabats
 skew.plot_dry_adiabats(t0=np.arange(-40, 200, 10) * units.degC)
+
+# Task 6: moist adiabats
 skew.plot_moist_adiabats()
+
+# Task 7: mixing lines (this one doesnt work as well as I'd hoped)
 skew.plot_mixing_lines()
+
+# Task 8/9: find key levels
+# Calculate full parcel profile and add to plot as black line
+prof = mpcalc.parcel_profile(p, T[0], Td[0]).to("degC")
+skew.plot(p, prof, "k", linewidth=2)
+
+# level of free convection
+LFC = mpcalc.lfc(p, T, Td, prof)
+skew.ax.axhline(LFC[0], color="r", linestyle=":", linewidth=3)
+
+# LNB (metpy calls it EL, equilibrium level)
+EL = mpcalc.el(p, T, Td, parcel_temperature_profile=prof, which='top')
+skew.ax.axhline(EL[0], color="r", linestyle=":", linewidth=3)
+
+# Task 10: CAPE and CIN
+CAPE, CIN = mpcalc.cape_cin(p, T, Td, prof, which_lfc='bottom', which_el='top')
+print(f"{CAPE = }\n{CIN = }")
+skew.shade_cin(p[p > LFC[0]], T[p > LFC[0]], prof[p > LFC[0]]) # shade CIN below lfc
+skew.shade_cape(p, T, prof) # shade all CAPE
+
+# Task 11: cloud top
+# (Metpy has no feature for wmax or cloud top)
 
 # Show the plot
 plt.show()
