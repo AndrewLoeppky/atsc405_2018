@@ -271,7 +271,7 @@ def get_sounding(get_data=True,soundingdir='littlerock',soundingfile='littlerock
         if values is None:
             values=dict(region='naconf',year='2012',month='7',start='0100',
                         stop='3000',station='72340')
-            the_time=(2012,7,17,0)
+            the_time=(2012,7,6,0)
         write_soundings(values, soundingdir)
         soundings= read_soundings(soundingdir)
         sounding=soundings['sounding_dict'][the_time]
@@ -302,21 +302,56 @@ def get_sounding(get_data=True,soundingdir='littlerock',soundingfile='littlerock
 
 ```{code-cell} ipython3
 df_sounding,attributes = get_sounding(get_data=False)
-df_sounding
-```
-
-```{code-cell} ipython3
-entrain_rate = 2.e-4
-df_result, interpPress=integ_entrain(df_sounding,entrain_rate)
 ```
 
 ```{code-cell} ipython3
 import a405.thermo.thermlib as tl
-[tl.tinvert_thetae(thte, rT, pres) for thte, rT, pres in zip(df_result["thetae_cloud"], df_result["rT_cloud"], df_sounding["pres"])]
+minpres = 220  # cant invert thetae above here, so truncate the plots
+
+# no dilution
+entrain_rate = 0.0
+df_none, interpPress = integ_entrain(df_sounding, entrain_rate)
+df_none["pres"] = interpPress(df_none["cloud_height"].values)
+df_none = df_none[df_none["pres"] > minpres]  # truncate
+df_none["temp"] = [
+    tl.tinvert_thetae(
+        df_none["thetae_cloud"][i], df_none["rT_cloud"][i], df_none["pres"][i] * 100
+    )[0]
+    for i in range(len(df_none))
+]
+
+
+# moderate dilution
+entrain_rate = 2.0e-4
+df_mod, interpPress = integ_entrain(df_sounding, entrain_rate)
+df_mod["pres"] = interpPress(df_mod["cloud_height"].values)
+df_mod = df_mod[df_mod["pres"] > minpres]
+df_mod["temp"] = [
+    tl.tinvert_thetae(
+        df_mod["thetae_cloud"][i], df_mod["rT_cloud"][i], df_mod["pres"][i] * 100
+    )[0]
+    for i in range(len(df_mod))
+]
+
+
+# heavy dilution
+entrain_rate = 8.0e-4
+df_heavy, interpPress = integ_entrain(df_sounding, entrain_rate)
+df_heavy["pres"] = interpPress(df_heavy["cloud_height"].values)
+df_heavy = df_heavy[df_heavy["pres"] > minpres]
+df_heavy["temp"] = [
+    tl.tinvert_thetae(
+        df_heavy["thetae_cloud"][i], df_heavy["rT_cloud"][i], df_heavy["pres"][i] * 100
+    )[0]
+    for i in range(len(df_heavy))
+]
 ```
 
 ```{code-cell} ipython3
-df_result
+[tl.tinvert_thetae(df_mod["thetae_cloud"][i], df_mod["rT_cloud"][i], df_mod["pres"][i] * 100) for i in range(len(df_mod))]
+tl.tinvert_thetae(351, 0.015, 7.93e4)
+tl.tinvert_thetae(349, 0.011, 2.20e4)
+# ^ experiment: the invert thetae function is good until about 220hPa and breaks above that. restrict our plot.
 ```
 
 ```{code-cell} ipython3
@@ -348,6 +383,21 @@ skew.plot(p, Td, "k", linewidth=3)
 
 # plot profiles to match AT 3.33
 prof = mpcalc.parcel_profile(p, T[0], Td[0]).to("degC")
-skew.plot(p, prof, "r", linewidth=3, linestyle=":")
 
+# no entrainment
+T_none = df_none["temp"].values * units.kelvin
+p_none = df_none["pres"].values * units.hPa
+skew.plot(p_none, T_none, "r", linewidth=3, linestyle=":", label="No Dilution")
+
+# moderate dilution
+p_mod = df_mod["pres"].values * units.hPa
+T_mod = df_mod["temp"].values * units.kelvin
+skew.plot(p_mod, T_mod, "k", linewidth=3, linestyle=":", label="Moderate Dilution")
+
+# heavy dilition
+p_heavy = df_heavy["pres"].values * units.hPa
+T_heavy = df_heavy["temp"].values * units.kelvin
+skew.plot(p_heavy,T_heavy, "b", linewidth=3, linestyle=":", label="Heavy Dilution")
+
+skew.ax.legend()
 ```
