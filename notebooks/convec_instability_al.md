@@ -303,65 +303,78 @@ sounding
 def lift_layer(sounding_slice, delp):
     """
     lift a layer by a pressure differenital delp (Pa)
-    
+
     parameters
     ----------
         sounding_slice: (Pandas Dataframe) including columns:
                              "pres" - pressure (Pa)
                              "temp" - temperature (K)
                              "dwpt" - dewpoint (K)
-        
+
         delp:  (float) pressure interval to lift sounding slice (Pa)
-    
+
     returns
     -------
-    
+        layer_out: (Pandas Dataframe)
+                             "pres" - pressure profile of lifted layer (Pa)
+                             "temp" - temperature profile of lifted layer (K)
+
     """
-    pres = sounding_slice.pres.values #* units.Pa
-    new_pres = (sounding_slice.pres.values - delp)# * units.Pa
-    temp = sounding_slice.temp.values# * units.kelvin
-    tdew = sounding_slice.dwpt.values# * units.kelvin
-    
-    
+    # convert to arrays
+    pres = sounding_slice.pres.values   
+    temp = sounding_slice.temp.values 
+    tdew = sounding_slice.dwpt.values  
+
+    # raise the output layer by delp Pa
     layer_out = pd.DataFrame()
-    layer_out["pres"] = sounding_slice["pres"] - delp
+    new_pres = sounding_slice.pres.values - delp
+    layer_out["pres"] = new_pres
     i = 0
+    
+    # calculate temperature values of new layer with metpy parcel profile
     temp_out = np.zeros(len(temp))
     for p, newp, T, Td in zip(pres, new_pres, temp, tdew):
         pprof = np.array([p, newp])
-        temp_out[i] = np.asarray(mpcalc.parcel_profile(pprof * units.Pa, T * units.kelvin, Td * units.kelvin)[1])
+        temp_out[i] = np.asarray(
+            mpcalc.parcel_profile(
+                pprof * units.Pa, T * units.kelvin, Td * units.kelvin
+            )[1]
+        )
         i += 1
     layer_out["temp"] = temp_out
-   
+
     return layer_out
-    
 ```
 
 ```{code-cell} ipython3
 lifted_sounding = lift_layer(sounding, 10000)
-```
-
-```{code-cell} ipython3
 lifted_sounding
 ```
 
 ```{code-cell} ipython3
+# plot the result -- should look like AT 3.47
 fig = plt.figure(figsize=(9, 9))
 skew = SkewT(fig, rotation=45)
 skew.ax.set_ylim(800, 500)
 skew.ax.set_xlim(-20, 10)
+skew.plot_dry_adiabats(t0=np.arange(-40, 200, 5) * units.degC)
+skew.plot_moist_adiabats(t0=np.arange(-40, 200, 2) * units.degC)
 
 # original sounding
 p = sounding.pres.values * units.Pa
 T = sounding.temp.values * units.kelvin
 Td = sounding.dwpt.values * units.kelvin
+skew.plot(p, T, "k")
+skew.plot(p[0], T[0], "b", marker="o")
+skew.plot(p[-1], T[-1], "b", marker="o")
+skew.plot(p[0], Td[0], "r", marker="o")
+skew.plot(p[-1], Td[-1], "r", marker="o")
+
 
 # lifted sounding
 plift = lifted_sounding.pres.values * units.Pa
 Tlift = lifted_sounding.temp.values * units.kelvin
-
-
-skew.plot(p, T)
-skew.plot(p, Td)
-skew.plot(plift, Tlift)
+skew.plot(plift, Tlift, "k")
+skew.plot(plift[0], Tlift[0], "b", marker="o")
+skew.plot(plift[-1], Tlift[-1], "b", marker="o");
 ```
