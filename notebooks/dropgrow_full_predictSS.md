@@ -5,19 +5,12 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.5
+    jupytext_version: 1.10.2
 kernelspec:
   display_name: Python 3
   language: python
   name: python3
 ---
-
-+++ {"toc": true}
-
-<h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Parcel-model-with-30-aerosol-masses,-lognormal-distribution" data-toc-modified-id="Parcel-model-with-30-aerosol-masses,-lognormal-distribution-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Parcel model with 30 aerosol masses, lognormal distribution</a></span><ul class="toc-item"><li><span><a href="#Read-in-the-json-file-and-set-the-koehler-function-for-this-aerosol" data-toc-modified-id="Read-in-the-json-file-and-set-the-koehler-function-for-this-aerosol-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>Read in the json file and set the koehler function for this aerosol</a></span></li><li><span><a href="#initialize-the-lognormal-mass-and-number-distributions-for-30-bins" data-toc-modified-id="initialize-the-lognormal-mass-and-number-distributions-for-30-bins-1.2"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>initialize the lognormal mass and number distributions for 30 bins</a></span></li><li><span><a href="#find-the-equilibrium-radius-for-each-bin-at-saturation-Sinit" data-toc-modified-id="find-the-equilibrium-radius-for-each-bin-at-saturation-Sinit-1.3"><span class="toc-item-num">1.3&nbsp;&nbsp;</span>find the equilibrium radius for each bin at saturation Sinit</a></span></li><li><span><a href="#now-add-the-intial-conditions-to-the-cloud_vars-dictionary-and-make-it-a-namedtuple" data-toc-modified-id="now-add-the-intial-conditions-to-the-cloud_vars-dictionary-and-make-it-a-namedtuple-1.4"><span class="toc-item-num">1.4&nbsp;&nbsp;</span>now add the intial conditions to the cloud_vars dictionary and make it a namedtuple</a></span></li><li><span><a href="#use-odeint-to-integrate-the-variable-in-var_vec-from-tinit-to-tfin-with-outputs-every-dt-seconds" data-toc-modified-id="use-odeint-to-integrate-the-variable-in-var_vec-from-tinit-to-tfin-with-outputs-every-dt-seconds-1.5"><span class="toc-item-num">1.5&nbsp;&nbsp;</span>use odeint to integrate the variable in var_vec from tinit to tfin with outputs every dt seconds</a></span></li><li><span><a href="#create-a-dataframe-with-33-columns-to-hold-the-data" data-toc-modified-id="create-a-dataframe-with-33-columns-to-hold-the-data-1.6"><span class="toc-item-num">1.6&nbsp;&nbsp;</span>create a dataframe with 33 columns to hold the data</a></span></li><li><span><a href="#store-the-dataframe-in-an-csv-file,-including-a-copy-of-the-input-dictionary-for-future-reference" data-toc-modified-id="store-the-dataframe-in-an-csv-file,-including-a-copy-of-the-input-dictionary-for-future-reference-1.7"><span class="toc-item-num">1.7&nbsp;&nbsp;</span>store the dataframe in an csv file, including a copy of the input dictionary for future reference</a></span></li><li><span><a href="#Matt's-solution" data-toc-modified-id="Matt's-solution-1.8"><span class="toc-item-num">1.8&nbsp;&nbsp;</span>Matt's solution</a></span><ul class="toc-item"><li><span><a href="#do-test-at-z-=-1010-meters" data-toc-modified-id="do-test-at-z-=-1010-meters-1.8.1"><span class="toc-item-num">1.8.1&nbsp;&nbsp;</span>do test at z = 1010 meters</a></span></li><li><span><a href="#find-the-differentials" data-toc-modified-id="find-the-differentials-1.8.2"><span class="toc-item-num">1.8.2&nbsp;&nbsp;</span>find the differentials</a></span></li><li><span><a href="#write-everything-out-as-a-tuple" data-toc-modified-id="write-everything-out-as-a-tuple-1.8.3"><span class="toc-item-num">1.8.3&nbsp;&nbsp;</span>write everything out as a tuple</a></span></li><li><span><a href="#return-$\Delta-SS$-given-the-tuple-t" data-toc-modified-id="return-$\Delta-SS$-given-the-tuple-t-1.8.4"><span class="toc-item-num">1.8.4&nbsp;&nbsp;</span>return $\Delta SS$ given the tuple t</a></span></li><li><span><a href="#Check-against-the-output-$\Delta-SS$" data-toc-modified-id="Check-against-the-output-$\Delta-SS$-1.8.5"><span class="toc-item-num">1.8.5&nbsp;&nbsp;</span>Check against the output $\Delta SS$</a></span></li></ul></li></ul></li></ul></div>
-
-+++
 
 # Parcel model with 30 aerosol masses, lognormal distribution
 
@@ -45,8 +38,11 @@ pp = pprint.PrettyPrinter(indent=4)
 ## Read in the json file and set the koehler function for this aerosol
 
 ```{code-cell} ipython3
-with ir.open_text('a405.data','dropgrow.json') as f:
-    input_dict=json.load(f)
+with ir.files('a405.data') as data_dir:
+    json_file = data_dir / 'dropgrow.json'
+    with open(json_file) as f:
+        input_dict=json.load(f)
+    
 pp.pprint(input_dict)
 
 aero=make_tuple(input_dict['aerosol'])
@@ -136,7 +132,6 @@ cloud_vars['wvel'] = 5.
 # pass this to the find_derivs function
 #
 cloud_tup= make_tuple(cloud_vars)
-
 ```
 
 ## use odeint to integrate the variable in var_vec from tinit to tfin with outputs every dt seconds

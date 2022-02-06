@@ -5,17 +5,12 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.5
+    jupytext_version: 1.11.5
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
-
-+++ {"toc": true}
-
-<h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Reproduce-the-convective-instability-plot-of-Thompkins-p.-64" data-toc-modified-id="Reproduce-the-convective-instability-plot-of-Thompkins-p.-64-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Reproduce the convective instability plot of Thompkins p. 64</a></span></li></ul></div>
 
 ```{code-cell} ipython3
 #calculate thermodynamic variables

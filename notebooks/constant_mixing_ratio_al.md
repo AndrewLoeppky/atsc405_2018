@@ -5,17 +5,12 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.5
+    jupytext_version: 1.10.2
 kernelspec:
   display_name: Python 3
   language: python
   name: python3
 ---
-
-+++ {"toc": true}
-
-<h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#plot-your-sounding" data-toc-modified-id="plot-your-sounding-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>plot your sounding</a></span><ul class="toc-item"><li><span><a href="#set-sounding_folder-to-the-name-of-your-downloaded-sounding-folder" data-toc-modified-id="set-sounding_folder-to-the-name-of-your-downloaded-sounding-folder-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>set sounding_folder to the name of your downloaded sounding folder</a></span></li></ul></li><li><span><a href="#For-Monday-9am" data-toc-modified-id="For-Monday-9am-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>For Monday 9am</a></span></li></ul></div>
 
 ```{code-cell} ipython3
 import numpy as np
@@ -33,10 +28,11 @@ from matplotlib import pyplot as plt
 from a405.soundings.wyominglib import read_soundings
 from a405.skewT.skewlib import makeSkewDry
 from a405.thermo.thermlib import convertTempToSkew
+import importlib_resources as ir
 import datetime
 import pytz
 
-sounding_folder = 'delrio'
+sounding_folder = ir.files('a405.data') / 'delrio'
 soundings= read_soundings(sounding_folder)
 print(soundings.keys())
 print(soundings['sounding_dict'].keys())
