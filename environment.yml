@@ -1,0 +1,27 @@
+name: e211_students
+channels:
+  - eoas_ubc
+  - conda-forge
+  - defaults
+dependencies:
+  - git
+  - python=3.8
+  - pip
+  - pillow
+  - bokeh
+  - conda-lock
+  - ghp-import
+  - jupytext
+  - jupyter-book
+  - conda-lock
+  - jupyterlab
+  - jupyterhub=1.4
+  - mamba
+  - setuptools_scm
+  - scipy
+  - matplotlib
+  - numpy
+  - importlib_resources
+  - pandas
+  - arrow
+# conda-lock --file environment.yml -p linux-64

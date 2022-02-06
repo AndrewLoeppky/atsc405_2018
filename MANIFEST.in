@@ -1,0 +1,11 @@
+recursive-include src/a405/data *
+include LICENSE.txt
+include Readme.md
+include src/a405/VERSION.txt
+
+# Patterns to exclude from any directory
+global-exclude *~
+global-exclude *.py[cod]
+global-exclude .git
+global-exclude .ipynb_checkpoints
+global-exclude .DS_Store
