@@ -12,14 +12,17 @@ kernelspec:
   name: python3
 ---
 
+# Skew Coordinates
+
 +++ {"toc": true}
 
-<h1>Table of Contents<span class="tocSkip"></span></h1>
+## Table of Contents
+
 <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Skew-T---ln-P-plot" data-toc-modified-id="Skew-T---ln-P-plot-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Skew-T - ln P plot</a></span><ul class="toc-item"><li><span><a href="#setting-labels-and-ticks" data-toc-modified-id="setting-labels-and-ticks-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>setting labels and ticks</a></span></li><li><span><a href="#Skewed-temperature-coordinates" data-toc-modified-id="Skewed-temperature-coordinates-1.2"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>Skewed temperature coordinates</a></span></li><li><span><a href="#Determining-the-skew" data-toc-modified-id="Determining-the-skew-1.3"><span class="toc-item-num">1.3&nbsp;&nbsp;</span>Determining the skew</a></span></li></ul></li><li><span><a href="#Add-a-datapoint-to-the-skewT-diagram" data-toc-modified-id="Add-a-datapoint-to-the-skewT-diagram-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Add a datapoint to the skewT diagram</a></span></li><li><span><a href="#change-the-axes" data-toc-modified-id="change-the-axes-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>change the axes</a></span></li></ul></div>
 
 +++
 
-# Skew-T - ln P plot
+## Skew-T - ln P plot
 
 Demonstrate how to construct dry adiabats and isotherms for
 a thermodynamic diagram using the functions in
@@ -188,7 +191,7 @@ ax.set(title='new title')
 display(fig)
 ```
 
-# Add a datapoint to the skewT diagram
+## Add a datapoint to the skewT diagram
 
 ```{code-cell} ipython3
 temp=-10
@@ -198,7 +201,7 @@ ax.plot(skewtemp,press,'ro',markersize=30)
 display(fig)
 ```
 
-# change the axes
+## change the axes
 
 Here's how to change the xaxis so that the left corner at 1000 hPa goes down to -35 deg C
 and the upper boundary stops at 600 hPa

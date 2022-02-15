@@ -12,14 +12,17 @@ kernelspec:
   name: python3
 ---
 
+# Adiabatic Box - Solution
+
 +++ {"toc": true}
 
-<h1>Table of Contents<span class="tocSkip"></span></h1>
+## Table of Contents
+
 <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Notebook-practice" data-toc-modified-id="Notebook-practice-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Notebook practice</a></span></li><li><span><a href="#Adiabatic-box" data-toc-modified-id="Adiabatic-box-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Adiabatic box</a></span><ul class="toc-item"><li><span><a href="#Solution" data-toc-modified-id="Solution-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Solution</a></span></li><li><span><a href="#The-final-temperature-$T_B$-(K)-in-box-B" data-toc-modified-id="The-final-temperature-$T_B$-(K)-in-box-B-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>The final temperature $T_B$ (K) in box B</a></span></li><li><span><a href="#work-done-by-A-on-B" data-toc-modified-id="work-done-by-A-on-B-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>work done by A on B</a></span></li><li><span><a href="#Final-temperature-of-A" data-toc-modified-id="Final-temperature-of-A-2.4"><span class="toc-item-num">2.4&nbsp;&nbsp;</span>Final temperature of A</a></span></li><li><span><a href="#Get-temperature-equation-of-state" data-toc-modified-id="Get-temperature-equation-of-state-2.5"><span class="toc-item-num">2.5&nbsp;&nbsp;</span>Get temperature equation of state</a></span></li><li><span><a href="#Total-heating-of-A" data-toc-modified-id="Total-heating-of-A-2.6"><span class="toc-item-num">2.6&nbsp;&nbsp;</span>Total heating of A</a></span></li></ul></li></ul></div>
 
 +++
 
-# Notebook practice
+## Notebook practice
 
     
 Write a function called "eqstate" that calculates the density of dry air.  Use it to find the dry air density
@@ -73,7 +76,7 @@ for temp in temps:
     print(output.format_map(locals()))
 ```
 
-# Adiabatic box
+# Assignment Solution
 
 +++
 
@@ -101,8 +104,6 @@ that the total volume of the combined compartments A and B has to stay constant 
 from IPython.display import Image
 Image(filename="images/insulated_box.png")
 ```
-
-## Solution
 
 ```{code-cell} ipython3
 def theta_from_temp(temp,press):
@@ -135,7 +136,7 @@ Tinitial = temp_from_theta(theta,100.)
 print(f'test roundtrip for theta: theta={theta} K, Tinitial={Tinitial} K')
 ```
 
-## The final temperature $T_B$ (K) in box B
+### The final temperature $T_B$ (K) in box B
 
 Use the fact that $\theta$ is constant in box B
 
@@ -144,7 +145,7 @@ Tfinal = temp_from_theta(theta,300.)
 print(f"at press=300 kPa, the temperature in B is {Tfinal:8.3f} K")
 ```
 
-## work done by A on B
+### Work done by A on B
 
 +++
 
@@ -184,7 +185,7 @@ print(f"work done on B by A= {work_done_on_B:8.3e} J/kg")
 print(f"work done on A by B= {-work_done_on_B:8.3e} J/kg")
 ```
 
-## Final temperature of A
+### Final temperature of A
 
 * We can get this from the equation of state (Thompkins 1.7) if we can figure out the density of A.  From the equation of state:
 
@@ -202,7 +203,7 @@ V_A = 2 - V_B  #total volume of 2 m^3 is conserved
 print(f"final volume of A = {V_A:7.3f} m^3")
 ```
 
-## Get temperature equation of state
+### Get temperature equation of state
 
 ```{code-cell} ipython3
 p_A = 3.e5   #Pa
@@ -210,7 +211,7 @@ T_A = V_A*p_A/C
 print("final Temperature of A= {:7.3f} K".format(T_A))
 ```
 
-## Total heating of A
+### Total heating of A
 
 +++
 

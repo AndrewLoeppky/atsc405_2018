@@ -12,7 +12,9 @@ kernelspec:
   name: python3
 ---
 
-## The cell below shows how to use a rootfinder to solve cos(x) = 0.75
+# Rootfinding
+
+The cell below shows how to use a rootfinder to solve $cos(x) = 0.75$
 
 ```{code-cell} ipython3
 %matplotlib inline
