@@ -12,9 +12,12 @@ kernelspec:
   name: python3
 ---
 
+# Constant Mixing Ratio - Solution
+
 +++ {"toc": true}
 
-<h1>Table of Contents<span class="tocSkip"></span></h1>
+## Table of Contents
+
 <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#plot-your-sounding" data-toc-modified-id="plot-your-sounding-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>plot your sounding</a></span><ul class="toc-item"><li><span><a href="#set-sounding_folder-to-the-name-of-your-downloaded-sounding-folder" data-toc-modified-id="set-sounding_folder-to-the-name-of-your-downloaded-sounding-folder-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>set sounding_folder to the name of your downloaded sounding folder</a></span></li></ul></li><li><span><a href="#For-Monday-9am" data-toc-modified-id="For-Monday-9am-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>For Monday 9am</a></span><ul class="toc-item"><li><span><a href="#Test-the-rootfinder" data-toc-modified-id="Test-the-rootfinder-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Test the rootfinder</a></span></li><li><span><a href="#get-the-dewpoint-for-10-g/kg-for-30-pressures" data-toc-modified-id="get-the-dewpoint-for-10-g/kg-for-30-pressures-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>get the dewpoint for 10 g/kg for 30 pressures</a></span></li><li><span><a href="#plot-on-a-skewT-curve" data-toc-modified-id="plot-on-a-skewT-curve-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>plot on a skewT curve</a></span></li></ul></li></ul></div>
 
 ```{code-cell} ipython3
@@ -23,11 +26,11 @@ from matplotlib import pyplot as plt
 #!conda install -y pytz
 ```
 
-# plot your sounding
+## Plot your sounding
 
 +++
 
-## set sounding_folder to the name of your downloaded sounding folder
+Set sounding_folder to the name of your downloaded sounding folder
 
 ```{code-cell} ipython3
 from a405.soundings.wyominglib import read_soundings
@@ -64,7 +67,7 @@ ax.set_title(title);
 #help(convertTempToSkew)
 ```
 
-# For Monday 9am
+## For Monday 9am
 
 Check in a notebook that puts your sounding on the tephigram and draws a line of constant saturation mixing ratio 
 $r_s$ = 10 g/kg between 1000 and  400 hPa.  
@@ -165,7 +168,7 @@ print((f'rsat for temp={the_temp:6.3f} K, '),
       (f'press={press:6.3f} hPa is: {check_rsat*1.e3:5.2f} g/kg'))
 ```
 
-## get the dewpoint for 10 g/kg for 30 pressures
+## Get the dewpoint for 10 g/kg for 30 pressures
 
 ```{code-cell} ipython3
 pressvals=np.linspace(200,1000.,30)  #hPa
@@ -175,7 +178,7 @@ temps=[zero_find_rs(tstart,rsat,the_press) for the_press in pressvals]
 temps_tc=np.array(temps) - c.Tc
 ```
 
-## plot on a skewT curve
+## Plot on a skewT curve
 
 ```{code-cell} ipython3
 xcoord_rs=[]

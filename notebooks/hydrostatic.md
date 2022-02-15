@@ -12,18 +12,21 @@ kernelspec:
   name: python3
 ---
 
+# The Hydrostatic Atmosphere
+
 +++ {"toc": true}
 
-<h1>Table of Contents<span class="tocSkip"></span></h1>
+## Table of Contents
+
 <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Scale-heights-for-typical-atmospheric-soundings" data-toc-modified-id="Scale-heights-for-typical-atmospheric-soundings-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Scale heights for typical atmospheric soundings</a></span><ul class="toc-item"><li><span><a href="#Plot-McClatchey's-US-Standard-Atmospheres" data-toc-modified-id="Plot-McClatchey's-US-Standard-Atmospheres-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>Plot McClatchey's US Standard Atmospheres</a></span></li></ul></li><li><span><a href="#McClatchey-US-standard-atmospheres" data-toc-modified-id="McClatchey-US-standard-atmospheres-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>McClatchey US standard atmospheres</a></span><ul class="toc-item"><li><span><a href="#Data-layout" data-toc-modified-id="Data-layout-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Data layout</a></span></li><li><span><a href="#Plot--temp-and-vapor-mixing-ratio-rmix-($\rho_{H2O}/\rho_{air}$)" data-toc-modified-id="Plot--temp-and-vapor-mixing-ratio-rmix-($\rho_{H2O}/\rho_{air}$)-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Plot  temp and vapor mixing ratio rmix ($\rho_{H2O}/\rho_{air}$)</a></span></li></ul></li><li><span><a href="#Calculating-scale-heights-for-temperature-and-air-density" data-toc-modified-id="Calculating-scale-heights-for-temperature-and-air-density-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Calculating scale heights for temperature and air density</a></span><ul class="toc-item"><li><span><a href="#How-do-$\overline{H_p}$-and-$\overline{H_\rho}$-compare-for-the-tropical-sounding?" data-toc-modified-id="How-do-$\overline{H_p}$-and-$\overline{H_\rho}$-compare-for-the-tropical-sounding?-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>How do $\overline{H_p}$ and $\overline{H_\rho}$ compare for the tropical sounding?</a></span></li><li><span><a href="#How-well-do-these-average-values-represent-the-pressure-and-density-profiles?" data-toc-modified-id="How-well-do-these-average-values-represent-the-pressure-and-density-profiles?-3.2"><span class="toc-item-num">3.2&nbsp;&nbsp;</span>How well do these average values represent the pressure and density profiles?</a></span></li><li><span><a href="#Assignment-for-Monday-----give-this-3-hours-and-show-me-where-you're-stuck-if-you-run-out-of-time" data-toc-modified-id="Assignment-for-Monday-----give-this-3-hours-and-show-me-where-you're-stuck-if-you-run-out-of-time-3.3"><span class="toc-item-num">3.3&nbsp;&nbsp;</span>Assignment for Monday  -- give this 3 hours and show me where you're stuck if you run out of time</a></span></li></ul></li></ul></div>
 
 +++
 
-# Scale heights for typical atmospheric soundings
+## Scale heights for typical atmospheric soundings
 
 +++
 
-## Plot McClatchey's US Standard Atmospheres
+### Plot McClatchey's US Standard Atmospheres
 
 There are five different average profiles for the tropics, subtropical summer, subtropical winder, midlatitude summer, midlatitude winter.  These are called the US Standard Atmospheres.  This notebook shows how to read and plot the soundings, and calculate the pressure and density scale heights.
 
@@ -38,7 +41,7 @@ import pandas as pd
 from zipfile import ZipFile
 ```
 
-# McClatchey US standard atmospheres
+## McClatchey US standard atmospheres
 
 +++
 
@@ -86,7 +89,6 @@ The soundings have six columns and 33 rows (i.e. 33 height levels).  The variabl
  m, pa, K, kg/kg, kg/m^3, kg/m^3
  
  I will read the 6 column soundings into a [pandas (panel data) DataFrame](http://pandas.pydata.org/pandas-docs/stable/dsintro.html), which is like a matrix except the columns can be accessed by column name in addition to column number.  The main advantage for us is that it's easier to keep track of which variables we're plotting
- 
 
 ```{code-cell} ipython3
 list(sound_dict.keys())
@@ -125,7 +127,7 @@ midsummer.columns
 type(midsummer['temp'].values)
 ```
 
-# Calculating scale heights for temperature and air density
+## Calculating scale heights for temperature and air density
 
 +++
 

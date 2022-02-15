@@ -14,8 +14,7 @@ kernelspec:
 
 +++ {"toc": true}
 
-<h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#plot-a-sounding" data-toc-modified-id="plot-a-sounding-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>plot a sounding</a></span></li></ul></div>
+# Moist Tephigram
 
 ```{code-cell} ipython3
 import numpy as np
@@ -23,7 +22,7 @@ from matplotlib import pyplot as plt
 #!conda install -y pytz
 ```
 
-# plot a sounding
+## Plot a sounding
 
 ```{code-cell} ipython3
 from a405.soundings.wyominglib import read_soundings

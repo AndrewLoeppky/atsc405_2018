@@ -12,7 +12,7 @@ kernelspec:
   name: python3
 ---
 
-# Clausius-Clapeyron Solver
+# Clausius-Clapeyron Solver - Andrew's Solution
 
 This is a notebook that adapts the rootfind notebook to solve equation (8) of the Clausius-Clapeyron equation notes:
 
@@ -55,7 +55,7 @@ $l_v = 2.5e6 \text{ J/kg}$ is the latent heat of vaporization
 
 $c_l = 4187 \text{ J/kgK}$ is the heat capacity of liquid water
 
-*and $e_{sat}$ is the quantity we want to excavate.* 
+*and $e_{sat}$ is the quantity we want to excavate.*
 
 ```{code-cell} ipython3
 # constants

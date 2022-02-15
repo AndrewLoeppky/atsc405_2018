@@ -12,14 +12,16 @@ kernelspec:
   name: python3
 ---
 
+# The Clausius-Clapeyron Equation
+
 +++ {"toc": true}
 
-<h1>Table of Contents<span class="tocSkip"></span></h1>
+## Table of Contents
 <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Test-different-versions-of-the-Clausius-Clapyron-equation" data-toc-modified-id="Test-different-versions-of-the-Clausius-Clapyron-equation-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Test different versions of the Clausius-Clapyron equation</a></span></li><li><span><a href="#Define-the-four-different-ways-to-get-es" data-toc-modified-id="Define-the-four-different-ways-to-get-es-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Define the four different ways to get es</a></span></li></ul></div>
 
 +++
 
-# Test different versions of the Clausius-Clapyron equation
+## Test different versions of the CC equation
 
 Bottom line -- rootfinding, the full explicit equation, and the curve fit
 all give almost identical results compared to the approximate standard_es
@@ -80,7 +82,7 @@ def find_esat(temp):
     return es
 ```
 
-# Define the four different ways to get es
+## Define the four different ways to get $e_s$
 
 ```{code-cell} ipython3
 def lv_fun(temp):

@@ -12,9 +12,12 @@ kernelspec:
   name: python3
 ---
 
+# Skew Coords - Solution
+
 +++ {"toc": true}
 
-<h1>Table of Contents<span class="tocSkip"></span></h1>
+## Table of Contents
+
 <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#plot-a-sounding" data-toc-modified-id="plot-a-sounding-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>plot a sounding</a></span></li></ul></div>
 
 ```{code-cell} ipython3
