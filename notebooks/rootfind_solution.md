@@ -12,14 +12,17 @@ kernelspec:
   name: python3
 ---
 
+# Rootfinding - Solution
+
 +++ {"toc": true}
 
-<h1>Table of Contents<span class="tocSkip"></span></h1>
+## Table of Contents
+
 <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#The-cell-below-shows-how-to-use-a-rootfinder-to-solve-cos(x)-=-0.75" data-toc-modified-id="The-cell-below-shows-how-to-use-a-rootfinder-to-solve-cos(x)-=-0.75-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>The cell below shows how to use a rootfinder to solve cos(x) = 0.75</a></span></li><li><span><a href="#Problem-for-Friday:--9am" data-toc-modified-id="Problem-for-Friday:--9am-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Problem for Friday:  9am</a></span><ul class="toc-item"><li><span><a href="#Solution" data-toc-modified-id="Solution-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Solution</a></span></li></ul></li><li><span><a href="#Bracket-finding" data-toc-modified-id="Bracket-finding-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Bracket finding</a></span><ul class="toc-item"><li><span><a href="#example----find-a-bracket-for-sin(x)=0-near-x=12-radians-~-700-degrees" data-toc-modified-id="example----find-a-bracket-for-sin(x)=0-near-x=12-radians-~-700-degrees-3.1"><span class="toc-item-num">3.1&nbsp;&nbsp;</span>example -- find a bracket for sin(x)=0 near x=12 radians ~ 700 degrees</a></span></li></ul></li><li><span><a href="#now-use-the-fzero-wrapper-to-find-the-root-of-sin(x)=0--(720-degrees)" data-toc-modified-id="now-use-the-fzero-wrapper-to-find-the-root-of-sin(x)=0--(720-degrees)-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>now use the fzero wrapper to find the root of sin(x)=0  (720 degrees)</a></span></li><li><span><a href="#Redo-theta-example-with-find_interval" data-toc-modified-id="Redo-theta-example-with-find_interval-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Redo theta example with find_interval</a></span></li></ul></div>
 
 +++
 
-## The cell below shows how to use a rootfinder to solve cos(x) = 0.75
+The cell below shows how to use a rootfinder to solve cos(x) = 0.75
 
 ```{code-cell} ipython3
 %matplotlib inline
@@ -94,7 +97,7 @@ for press in [1.e5,7.e4,4.e4]:
     print('Temp {:5.2f} (K) at pressure of {:5.2f} kPa'.format(temp_from_theta(280.,press),press*1e-2))
 ```
 
-## Bracket finding
+### Bracket finding
 
 I've written a couple of convenience functions called rootfinder.find_interval and
 rootfinder.fzero to make rootfinding a little easier.   The new module is 
@@ -119,13 +122,13 @@ brackets=rf.find_interval(np.sin,12)
 brackets
 ```
 
-## now use the fzero wrapper to find the root of sin(x)=0  (720 degrees)
+### now use the fzero wrapper to find the root of sin(x)=0  (720 degrees)
 
 ```{code-cell} ipython3
 print(rf.fzero(np.sin,brackets)*180/np.pi)
 ```
 
-## Redo theta example with find_interval
+### Redo theta example with find_interval
 
 ```{code-cell} ipython3
 import a405.thermo.rootfinder as rf

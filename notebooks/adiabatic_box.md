@@ -12,14 +12,17 @@ kernelspec:
   name: python3
 ---
 
+# Adiabatic Box
+
 +++ {"toc": true}
 
-<h1>Table of Contents<span class="tocSkip"></span></h1>
+## Table of Contents
+
 <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Notebook-practice" data-toc-modified-id="Notebook-practice-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Notebook practice</a></span></li><li><span><a href="#Adiabatic-box" data-toc-modified-id="Adiabatic-box-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Adiabatic box</a></span></li></ul></div>
 
 +++
 
-# Notebook practice
+## Notebook practice
 
     
 Write a function called "eqstate" that calculates the density of dry air.  Use it to find the dry air density
@@ -31,9 +34,7 @@ def eqstate(Temp,Press):
     return dens
 ```
 
-# Adiabatic box
-
-+++
+## Assignment
 
 The figure below represents an insulated box with two
 compartments A and B, each containing dry air. They are separated by
