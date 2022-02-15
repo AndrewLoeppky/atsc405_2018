@@ -370,7 +370,6 @@ skew.plot(p[-1], T[-1], "b", marker="o")
 skew.plot(p[0], Td[0], "r", marker="o")
 skew.plot(p[-1], Td[-1], "r", marker="o")
 
-
 # lifted sounding
 plift = lifted_sounding.pres.values * units.Pa
 Tlift = lifted_sounding.temp.values * units.kelvin

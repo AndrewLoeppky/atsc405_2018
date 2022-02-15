@@ -41,9 +41,6 @@ kernelspec:
   4\. Find the percentage of the total heat change that is due to addition and remove of water
      during the cycle.
 
-
-
-
 ```{code-cell} ipython3
 from matplotlib import pyplot as plt
 import numpy as np
@@ -211,7 +208,6 @@ print("deltaQin due to vapor= {:6.4g} J/kg = {:6.2f}%".format(deltaQinVap,deltaQ
 print("deltaQout due to vapor= {:6.4g} J/kg = {:6.2f}%".format(deltaQoutVap,deltaQoutVap/deltaQout*100.))
 efficiency = (deltaQin - deltaQout)/deltaQin
 print('heat engine efficiency is {:6.3g} %'.format(efficiency*100.))
-
 ```
 
 ```{code-cell} ipython3
