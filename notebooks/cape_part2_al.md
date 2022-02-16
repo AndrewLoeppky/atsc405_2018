@@ -12,14 +12,17 @@ kernelspec:
   name: python3
 ---
 
+# Cape Part 2 - Andrew's Solution
+
 +++ {"toc": true}
 
-<h1>Table of Contents<span class="tocSkip"></span></h1>
+## Table of Contents
+
 <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Supress-autoscrolling" data-toc-modified-id="Supress-autoscrolling-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Supress autoscrolling</a></span></li><li><span><a href="#Draw-a-moist-adiabat-through-the-LFC" data-toc-modified-id="Draw-a-moist-adiabat-through-the-LFC-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Draw a moist adiabat through the LFC</a></span><ul class="toc-item"><li><span><a href="#Grab-a-Little-Rock-sounding" data-toc-modified-id="Grab-a-Little-Rock-sounding-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Grab a Little Rock sounding</a></span></li><li><span><a href="#Select-one-sounding" data-toc-modified-id="Select-one-sounding-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Select one sounding</a></span></li><li><span><a href="#Save-the-metadata-for-plotting" data-toc-modified-id="Save-the-metadata-for-plotting-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Save the metadata for plotting</a></span></li><li><span><a href="#Convert-temperature-and-dewpoint-to-skew-coords" data-toc-modified-id="Convert-temperature-and-dewpoint-to-skew-coords-2.4"><span class="toc-item-num">2.4&nbsp;&nbsp;</span>Convert temperature and dewpoint to skew coords</a></span></li><li><span><a href="#Plot-the-sounding,-making-the-sounding-lines-thicker" data-toc-modified-id="Plot-the-sounding,-making-the-sounding-lines-thicker-2.5"><span class="toc-item-num">2.5&nbsp;&nbsp;</span>Plot the sounding, making the sounding lines thicker</a></span></li><li><span><a href="#turn-off-log(0)-warning" data-toc-modified-id="turn-off-log(0)-warning-2.6"><span class="toc-item-num">2.6&nbsp;&nbsp;</span>turn off log(0) warning</a></span></li><li><span><a href="#find-the-$\theta_{es}$-of-the-surface-air,-draw-the-adiabat-through-point" data-toc-modified-id="find-the-$\theta_{es}$-of-the-surface-air,-draw-the-adiabat-through-point-2.7"><span class="toc-item-num">2.7&nbsp;&nbsp;</span>find the $\theta_{es}$ of the surface air, draw the adiabat through point</a></span></li></ul></li></ul></div>
 
 +++
 
-# Supress autoscrolling
+## Supress autoscrolling
 
 ```{code-cell} ipython3
 %%javascript
@@ -28,7 +31,7 @@ IPython.OutputArea.prototype._should_scroll = function(lines) {
 }
 ```
 
-# Draw a moist adiabat through the LFC
+## Draw a moist adiabat through the LFC
 
 ```{code-cell} ipython3
 import numpy as np
@@ -135,7 +138,7 @@ l2,=ax.plot(xcoord_Td,sounding['pres'],color='g',label='dew')
 np.seterr(all='ignore');
 ```
 
-## find the $\theta_{es}$ of the surface air, draw the adiabat through point
+## Find the $\theta_{es}$ of the surface air, draw the adiabat through point
 
 ```{code-cell} ipython3
 print(skew)
@@ -191,7 +194,7 @@ for a_temp,a_press in zip(adia_temps - c.Tc,press_hPa):
 display(fig)
 ```
 
-### Andrew's Code
+## Andrew's Code
 
 For Friday, calculate the buoyancy defined by Thompkins eq. 1.61 as a function of height, where Tv,a is the virtual temperature of the pseudoadiabat and Tv,env is the virtual temperature of your particular environmental sounding as a function of height using the lowest level to calculate the thetae for the moist adiabat. Check in a notebook that extends cape_part1_html by defining the function (ok to copy code from my library), running it and plotting it vs. height.
 
@@ -296,7 +299,7 @@ display(fig)
 
 ### Part 2: Calculate CAPE
 
-We already did the hard work to calculate the buoyancy (force), all we have to do is integrate it over the distance travelled to get the potential energy (i.e. work = force x dist). 
+We already did the hard work to calculate the buoyancy (force), all we have to do is integrate it over the distance travelled to get the potential energy (i.e. work = force x dist).
 
 ```{code-cell} ipython3
 # get the distance bw each point

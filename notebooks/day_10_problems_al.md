@@ -12,7 +12,7 @@ kernelspec:
   name: python3
 ---
 
-# Day 10 Problem Set
+# Day 10 Problem Set - Andrew's Solution
 
 Andrew Loeppky
 

@@ -12,13 +12,20 @@ kernelspec:
   name: python3
 ---
 
+<<<<<<< HEAD
+=======
++++ {"toc": true}
+
+# Moist Tephigram
+
+>>>>>>> finish fixing headers for jb
 ```{code-cell} ipython3
 import numpy as np
 from matplotlib import pyplot as plt
 #!conda install -y pytz
 ```
 
-# plot a sounding
+## Plot a sounding
 
 ```{code-cell} ipython3
 from a405.soundings.wyominglib import read_soundings

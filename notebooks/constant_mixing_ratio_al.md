@@ -12,17 +12,28 @@ kernelspec:
   name: python3
 ---
 
+<<<<<<< HEAD
+=======
+# Constant Mixing Ratio - Andrew's Solution
+
++++ {"toc": true}
+
+## Table of Contents
+
+<div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#plot-your-sounding" data-toc-modified-id="plot-your-sounding-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>plot your sounding</a></span><ul class="toc-item"><li><span><a href="#set-sounding_folder-to-the-name-of-your-downloaded-sounding-folder" data-toc-modified-id="set-sounding_folder-to-the-name-of-your-downloaded-sounding-folder-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>set sounding_folder to the name of your downloaded sounding folder</a></span></li></ul></li><li><span><a href="#For-Monday-9am" data-toc-modified-id="For-Monday-9am-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>For Monday 9am</a></span></li></ul></div>
+
+>>>>>>> finish fixing headers for jb
 ```{code-cell} ipython3
 import numpy as np
 from matplotlib import pyplot as plt
 #!conda install -y pytz
 ```
 
-# plot your sounding
+## Plot your sounding
 
 +++
 
-## set sounding_folder to the name of your downloaded sounding folder
+Set sounding_folder to the name of your downloaded sounding folder
 
 ```{code-cell} ipython3
 from a405.soundings.wyominglib import read_soundings
@@ -64,7 +75,7 @@ ax.set_title(title);
 
 ```
 
-# For Monday 9am
+## For Monday 9am
 
 Check in a notebook that puts your sounding on the tephigram and draws a line of constant saturation mixing ratio 
 $r_s$ = 10 g/kg between 1000 and  400 hPa.  

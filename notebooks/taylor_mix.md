@@ -12,8 +12,7 @@ kernelspec:
   name: python3
 ---
 
-# Approximate Solution for Parcel Mixing
-
+# Air Parcel Mixing Approximation
 
 +++
 
