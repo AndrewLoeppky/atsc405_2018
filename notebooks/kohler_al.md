@@ -20,7 +20,7 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import optimize
-from src.a405.thermo.constants import constants as c
+from a405.thermo.constants import constants as c
 ```
 
 ## Part 1
@@ -81,7 +81,6 @@ plt.ylabel("Saturation");
 ## Part 2
 
 Use our rootfinder to find the equilibrium radius for a haze particle at a relative humidity of 90% and a temperature of 15 deg C
-
 
 ```{code-cell} ipython3
 def rootfind_r(r, *args):
