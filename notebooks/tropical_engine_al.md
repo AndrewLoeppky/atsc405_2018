@@ -14,7 +14,7 @@ kernelspec:
 
 +++ {"toc": true}
 
-# Tropical Heat Engine
+# Tropical Heat Engine - Andrew's Solution
 
 ## Table of Contents
 <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Carnot-cycle-problem:" data-toc-modified-id="Carnot-cycle-problem:-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Carnot cycle problem:</a></span><ul class="toc-item"><li><span><a href="#A.-get-the-surface-enthalpy-in-the-tropics-(point-A)" data-toc-modified-id="A.-get-the-surface-enthalpy-in-the-tropics-(point-A)-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>A. get the surface enthalpy in the tropics (point A)</a></span></li><li><span><a href="#B.-Lift-to-400-hPa-and-remove-80%-of-the-liquied-water" data-toc-modified-id="B.-Lift-to-400-hPa-and-remove-80%-of-the-liquied-water-1.2"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>B. Lift to 400 hPa and remove 80% of the liquied water</a></span></li><li><span><a href="#D.-descend-adiabatically-to-surface" data-toc-modified-id="D.-descend-adiabatically-to-surface-1.3"><span class="toc-item-num">1.3&nbsp;&nbsp;</span>D. descend adiabatically to surface</a></span></li></ul></li></ul></div>
@@ -247,8 +247,6 @@ and the efficiency is the useful work over the total heat added to the system:
 $$
 \eta = \frac{\Delta w}{\Delta q_{in}}
 $$
-
-
 
 ```{code-cell} ipython3
 work = enth_surf - enth_400

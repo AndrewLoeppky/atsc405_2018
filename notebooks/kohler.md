@@ -14,12 +14,12 @@ kernelspec:
 
 +++ {"toc": true}
 
-<h1>Table of Contents<span class="tocSkip"></span></h1>
+# Kohler problem - Solution
+
+## Table of Contents
 <div class="toc" style="margin-top: 1em;"><ul class="toc-item"><li><span><a href="#Kohler-problem" data-toc-modified-id="Kohler-problem-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Kohler problem</a></span></li><li><span><a href="#Find-haze-particle-equilibrium-radius-at-S=0.9" data-toc-modified-id="Find-haze-particle-equilibrium-radius-at-S=0.9-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Find haze particle equilibrium radius at S=0.9</a></span></li></ul></div>
 
 +++
-
-# Kohler problem
 
 1) Plot the Kohler curve for the aerosol on page 2 of the Kohler notes
 

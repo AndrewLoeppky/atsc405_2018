@@ -19,7 +19,7 @@ kernelspec:
 
 +++
 
-# Carnot cycle problem:
+# Tropical Heat Engine - Solution
 
   Consider the following heat engine:
 
