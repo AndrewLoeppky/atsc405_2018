@@ -9,3 +9,5 @@ soundingdir
 std_soundings
 /notebooks/temp.md
 /notebooks/temp.py
+/notebooks/_build
+*.ipynb
