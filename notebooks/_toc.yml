@@ -42,6 +42,10 @@ parts:
     chapters:
     - file: taylor_mix
     - file: taylor_mix_al
+  - caption: Week 8
+    chapters:
+      - file: tropical_engine
+      - file: tropical_engine_al
 
 #- file: aero_dist_sol
 #- file: aero_sol
