@@ -62,15 +62,15 @@ pp.pprint(input_dict)
 ## Find the number of aerosols in each bin
 
 ```{code-cell} ipython3
-mass_vals = np.linspace(-20,-16,30)
-mass_vals = 10**mass_vals
-mu=input_dict['aerosol']['themean']
-sigma = input_dict['aerosol']['sd']
-totmass = input_dict['aerosol']['totmass']
-mdist = totmass*lognormal(mass_vals,np.log(mu),np.log(sigma))
-mdist = find_centers(mdist)*np.diff(mass_vals)
+mass_vals = np.linspace(-20, -16, 30)
+mass_vals = 10 ** mass_vals
+mu = input_dict["aerosol"]["themean"]
+sigma = input_dict["aerosol"]["sd"]
+totmass = input_dict["aerosol"]["totmass"]
+mdist = totmass * lognormal(mass_vals, np.log(mu), np.log(sigma))
+mdist = find_centers(mdist) * np.diff(mass_vals)
 center_mass = find_centers(mass_vals)
-ndist = mdist/center_mass
+ndist = mdist / center_mass
 ```
 
 ## Find the equilibrium radius for each of the 30 aerosol masses
@@ -150,6 +150,42 @@ for mass in center_mass:
    
 ```
 
-```{code-cell} ipython3
+## Part 1
 
+Create a plot of the ratio $n_s/n_w$ as a function of equilibrium radius for the 30 aerosols in the mass distribution. Do this twice, **A** once assuming that:
+
+$$
+n_w = \frac{4}{3}\pi r^3 \rho_l/M_w
+$$
+
+and **B**, using an exact calculation for $n_w$ – i.e. find the part of the volume that is due to the aerosol (just its mass/(aerosol density)) and subtract that off from the drop volume before calculating nw (assuming that the aerosol density is $1775 kg/m^3$).
+
+```{code-cell} ipython3
+from a405.thermo.constants import constants as c
+from matplotlib import pyplot as plt
 ```
+
+```{code-cell} ipython3
+rad = np.array(initial_radius)
+aer = input_dict["aerosol"]
+
+ns = center_mass / aer["Ms"]
+
+# Simplified version for A
+nw = 4 / 3 * np.pi * rad ** 3 * c.rhol / aer["Mw"]
+A_solution = ns / nw
+
+# Exact solution B
+aero_vol = center_mass / aer["rhoaero"]
+nw_ext = (4 / 3 * np.pi * rad ** 3 - aero_vol) * c.rhol / aer["Mw"]
+B_solution = ns / (nw_ext)
+
+fig, ax = plt.subplots()
+ax.plot(np.array(initial_radius) * 1e6, A_solution, label="Small Aerosol Appx")
+ax.plot(np.array(initial_radius) * 1e6, B_solution, label="Exact Solution")
+ax.set_xlim(0.02,0.2)
+ax.set_xlabel("Droplet Radius ($\mu m$)")
+ax.legend();
+```
+
+*Unsurprisingly, when there is relatively little water compared to aerosol, neglecting the volume occupied by the aerosol introduces a larger bias. This approximation is fine for large droplets or tiny aerosol particles*
