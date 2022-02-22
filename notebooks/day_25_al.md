@@ -60,9 +60,6 @@ print(ammonium_sulphate)
 ```
 
 ```{code-cell} ipython3
-T = 300  # K
-
-
 def get_SS(T, aerosol):
     """
     finds supersturation given T (int/float), aerosol species (dict), aerosol mass (float)
@@ -78,7 +75,8 @@ def get_SS(T, aerosol):
 ```
 
 ```{code-cell} ipython3
-SS = get_SS(300, ammonium_sulphate)
+SS = get_SS(280, ammonium_sulphate)
+## my answer differs from Phil in b term. I used rho_s, he used rho_l
 SS / ammonium_sulphate["mass"] ** -0.5
 ```
 
