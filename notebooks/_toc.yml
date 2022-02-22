@@ -48,6 +48,15 @@ parts:
     - file: tropical_engine_al
     - file: kohler
     - file: kohler_al
+  - caption: Week 9
+    chapters:
+    - file: day_25_al
+    # missing - phils day 25 solutions markdown (have the html somewhere in the notes pkg)
+  - caption: Week 10
+    chapters:
+    - file: aero_dist
+    - file: aero_dist_sol
+    - file: aero_dist_al
 
 #- file: aero_dist_sol
 #- file: aero_sol
