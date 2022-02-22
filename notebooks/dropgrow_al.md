@@ -151,38 +151,5 @@ for mass in center_mass:
 ```
 
 ```{code-cell} ipython3
-from a405.thermo.constants import constants as c
-import matplotlib.pyplot as plt
 
-def find_vols(aerosol_mass,drop_radius):
-    aero_vol = aerosol_mass/aero.rhoaero
-    drop_vol = 4./3.*np.pi*drop_radius**3.
-    water_vol = drop_vol - aero_vol
-    return (aero_vol,water_vol)
-
-def find_ratios(aerosol_mass,aero_vol,water_vol):
-    total_vol = water_vol + aero_vol
-    ns = aerosol_mass/aero.Ms   #pha 2018/03/19
-    nw_exact = water_vol*c.rhol/aero.Mw
-    nw_approx = total_vol*c.rhol/aero.Mw
-    return (ns/nw_approx, ns/nw_exact)
-    
-paired_vals = zip(center_mass,initial_radius) 
-ratios = []
-for mass,radius in paired_vals:
-    aero_vol, water_vol = find_vols(mass,radius)
-    approx_ratio,exact_ratio = find_ratios(mass,aero_vol,water_vol)
-    ratios.append((approx_ratio,exact_ratio))
-df_out = pd.DataFrame.from_records(ratios,columns=['approx','exact'])
-```
-
-```{code-cell} ipython3
-fig, (ax0, ax1) = plt.subplots(1,2,figsize=(13,8))
-ax0.plot('exact',label='exact',data=df_out)
-ax0.plot('approx',label='approx',data=df_out)
-ax0.legend()
-ax1.plot((df_out['exact'] - df_out['approx'])/df_out['exact'],label='fractional error')
-ax1.legend()
-ax1.set(xlabel='bin number',ylabel='$n_s/n_w$')
-out=ax1.set(xlabel='bin number',ylabel='(exact - approx)/exact')
 ```

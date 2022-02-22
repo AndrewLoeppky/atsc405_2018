@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.5
+    jupytext_version: 1.11.5
 kernelspec:
   display_name: Python 3
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 
 +++ {"toc": true}
 
-# Aerosol Size Distributions
+# Aerosol Size Distributions - Andrew's Solution
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
 <div class="toc"><ul class="toc-item"><li><span><a href="#Update----added-Bjørn's--missing-factor-of-$\pi$--(search-for--#pha-2018/3/19)" data-toc-modified-id="Update----added-Bjørn's--missing-factor-of-$\pi$--(search-for--#pha-2018/3/19)-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Update -- added Bjørn's  missing factor of $\pi$  (search for  #pha 2018/3/19)</a></span></li><li><span><a href="#Introduction" data-toc-modified-id="Introduction-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#The-normal-distribution" data-toc-modified-id="The-normal-distribution-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>The normal distribution</a></span></li><li><span><a href="#The-lognormal-distribution" data-toc-modified-id="The-lognormal-distribution-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>The lognormal distribution</a></span></li><li><span><a href="#lognormal-aerosol-mass-distribution" data-toc-modified-id="lognormal-aerosol-mass-distribution-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>lognormal aerosol mass distribution</a></span></li><li><span><a href="#Number-distribution-n(r)--($\#-\,m^{-3}\;m^{-1}$)" data-toc-modified-id="Number-distribution-n(r)--($\#-\,m^{-3}\;m^{-1}$)-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Number distribution n(r)  ($\# \,m^{-3}\;m^{-1}$)</a></span></li><li><span><a href="#problem-for-Wednesday" data-toc-modified-id="problem-for-Wednesday-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>problem for Wednesday</a></span></li></ul></div>

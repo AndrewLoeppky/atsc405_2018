@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.5
+    jupytext_version: 1.11.5
 kernelspec:
   display_name: Python 3
   language: python
@@ -290,7 +290,3 @@ print("total number concentration is {:5.2f} #/cc".format(total_num))
 Add a cell to this notebook that makes a plot of $N(r)$ vs. $S_{crit}$ for the $n(r)$ in the previous cell,  where:
 
 $N(r) = \int_r^\infty n(r) dr$ is the number of aerosols with dry radii larger than $r$ and $S_{crit}$ is the critical supersaturation at radius r for these ammonium sulphate aerosols.  Explain briefly why this is the output you would expect to see from an aerosol size counter based on a cloud chamber with a laser scattering sensor.
-
-```{code-cell} ipython3
-
-```

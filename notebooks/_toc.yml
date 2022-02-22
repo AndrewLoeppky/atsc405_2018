@@ -57,6 +57,9 @@ parts:
     - file: aero_dist
     - file: aero_dist_sol
     - file: aero_dist_al
+    - file: dropgrow
+    - file: dropgrow_al
+    - file: dropgrow_sol
 
 #- file: aero_dist_sol
 #- file: aero_sol
