@@ -60,6 +60,12 @@ parts:
     - file: dropgrow
     - file: dropgrow_al
     - file: dropgrow_sol
+    - file: collision_coalescence_al
+  - caption: Week 11
+    chapters:
+    - file: marshallpalmer
+    - file: marshallpalmer_al
+    - file: marshallpalmer_sol
 
 #- file: aero_dist_sol
 #- file: aero_sol
