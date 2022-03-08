@@ -14,6 +14,8 @@ kernelspec:
 
 +++ {"toc": true}
 
+# Marshall-Palmer Distribution
+
 <h1>Table of Contents<span class="tocSkip"></span></h1>
 <div class="toc"><ul class="toc-item"><li><span><a href="#Marshall-Palmer" data-toc-modified-id="Marshall-Palmer-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Marshall Palmer</a></span></li><li><span><a href="#Rain-rate" data-toc-modified-id="Rain-rate-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Rain rate</a></span></li></ul></div>
 
@@ -82,8 +84,7 @@ out=ax.legend(loc='best')
 
 - Calculate the precipitation flux (mm/hr) by integrating the total volumen in the Marshall Palmer size distribution and with the fall speed of Villermaux and Bossa (2009): $w = - \sqrt{\rho_l/\rho_{air} * g *D}$ where
 D is the drop diameter and $\rho_l,\rho_{air}$ are the liquid and air densities.  Show
-that you get about R=15 mm/hour back from this calculation if you use the $\Lambda$ that's appropriate for  R=15 mm/hour 
-
+that you get about R=15 mm/hour back from this calculation if you use the $\Lambda$ that's appropriate for  R=15 mm/hour
 
 ```{code-cell} ipython3
 

@@ -14,6 +14,8 @@ kernelspec:
 
 +++ {"toc": true}
 
+# Marshall-Palmer Distribution - Solution
+
 <h1>Table of Contents<span class="tocSkip"></span></h1>
 <div class="toc"><ul class="toc-item"><li><span><a href="#Get-the-integrated-precipitation-flux-for-R=15-mm/hour" data-toc-modified-id="Get-the-integrated-precipitation-flux-for-R=15-mm/hour-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Get the integrated precipitation flux for R=15 mm/hour</a></span></li><li><span><a href="#Find-the-mean-diameter-and-show-that-it-is-close-to-1/Lambda,-as-expected" data-toc-modified-id="Find-the-mean-diameter-and-show-that-it-is-close-to-1/Lambda,-as-expected-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Find the mean diameter and show that it is close to 1/Lambda, as expected</a></span></li></ul></div>
 

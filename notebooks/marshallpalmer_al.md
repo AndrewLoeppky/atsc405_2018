@@ -14,7 +14,7 @@ kernelspec:
 
 +++ {"toc": true}
 
-# Marshall-Palmer Distribution
+# Marshall-Palmer Distribution - Andrew's Solution
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
 <div class="toc"><ul class="toc-item"><li><span><a href="#Marshall-Palmer" data-toc-modified-id="Marshall-Palmer-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Marshall Palmer</a></span></li><li><span><a href="#Rain-rate" data-toc-modified-id="Rain-rate-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Rain rate</a></span></li></ul></div>
