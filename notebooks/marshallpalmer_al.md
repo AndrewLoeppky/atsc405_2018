@@ -73,9 +73,10 @@ ax.set_title('Marshall Palmer distribution for three rain rates')
 out=ax.legend(loc='best')
 ```
 
-**Confirm that the mean diameter of the Marshall Palmer distribution is $1/\Lambda$**
+## Mean Drop Diameter
 
-Number of droplets between diameter $D$ and $D + dD$
+Confirm that the mean diameter of the Marshall Palmer distribution is $1/\Lambda$. Number of droplets between diameter $D$ and $D + dD$
+
 $$
 N(D) = N_0e^{-\Lambda D}\tag{AT 4.31}
 $$
@@ -119,39 +120,22 @@ import numpy as np
 ```
 
 ```{code-cell} ipython3
-def Lambda_from_R(R):
-    """
-    calculates Marshall palmer parameter Lambda using Thompkins 4.32
-    
-    inputs
-    -------
-    R: (float) rainfall rate (mm/hour)
-    
-    returns
-    -------
-    Lambda: (float) marshall-palmer parameter
-    """
-    return 41 * R ** -0.21
+# calculate number of droplets in each diameter bin
+dcm, n = marshallpalmer(15)
+dm = dcm / 100 # convert to m
 
-def N_from_Lambda(lam, D):
-    """
-    calculates the number of droplets per 
-    """
-```
-
-```{code-cell} ipython3
-RR = Lambda_from_R(15)
-RR
-```
-
-```{code-cell} ipython3
-N0 = 0.08 # cm^-4
+# velocity of each diameter bin with Villermaux and Bossa
 rhoa = 1. # density of air
-w = - np.sqrt(c.rhol/rhoa * c.g0 * D)
-```
+w = - np.sqrt(c.rhol / rhoa * c.g0 * dm)
 
-```{code-cell} ipython3
-diam = np.linspace(0,1e-2,100) # droplet diameter (m)
-vol = 4 / 3 * np.pi * (diam / 2) ** 3 # volume of each droplet (m3)
-vol
+# get volume of droplet in each diameter bin (m3)
+vols = 4 / 3 * np.pi * (dm / 2) ** 3
+
+# volume of liquid water (m3) per cubic meter of air, in each bin
+vliq = vols * n
+
+# rainfall rate (mm/h) 
+RR_out = - vliq * w
+int_RR_out = np.sum(RR_out) * 0.01 * 1000 * 3600 # binwidth, convert from m/s to mm/h
+print(f"{int_RR_out = } mm/h")
 ```
