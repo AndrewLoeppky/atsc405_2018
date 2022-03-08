@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.11.5
+    jupytext_version: 1.13.5
 kernelspec:
   display_name: Python 3
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 
 +++ {"toc": true}
 
-# Droplet Growth
+# Droplet Growth - Andrew's Solution
 
 <h1>Table of Contents<span class="tocSkip"></span></h1>
 <div class="toc"><ul class="toc-item"><li><span><a href="#Update:---Bjørn's-reported-aero.Mw-error-fixed-(see-#pha-2018/3/19)" data-toc-modified-id="Update:---Bjørn's-reported-aero.Mw-error-fixed-(see-#pha-2018/3/19)-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Update:   Bjørn's reported aero.Mw error fixed (see #pha 2018/3/19)</a></span></li><li><span><a href="#Use-a405.dropgrow.aerolib-to-find-equilibrium-drop-radii" data-toc-modified-id="Use-a405.dropgrow.aerolib-to-find-equilibrium-drop-radii-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Use a405.dropgrow.aerolib to find equilibrium drop radii</a></span></li><li><span><a href="#Read-in-the-inital-conditions-from-a-json-file" data-toc-modified-id="Read-in-the-inital-conditions-from-a-json-file-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Read in the inital conditions from a json file</a></span></li><li><span><a href="#Calculate-the-lognormal-aerosol-mass-distribution-and-get-the-number-concentration-in-each-of-30-bins" data-toc-modified-id="Calculate-the-lognormal-aerosol-mass-distribution-and-get-the-number-concentration-in-each-of-30-bins-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Calculate the lognormal aerosol mass distribution and get the number concentration in each of 30 bins</a></span><ul class="toc-item"><li><span><a href="#Find-the-number-of-aerosols-in-each-bin" data-toc-modified-id="Find-the-number-of-aerosols-in-each-bin-4.1"><span class="toc-item-num">4.1&nbsp;&nbsp;</span>Find the number of aerosols in each bin</a></span></li><li><span><a href="#Find-the-equilibrium-radius-for-each-of-the-30-aerosol-masses" data-toc-modified-id="Find-the-equilibrium-radius-for-each-of-the-30-aerosol-masses-4.2"><span class="toc-item-num">4.2&nbsp;&nbsp;</span>Find the equilibrium radius for each of the 30 aerosol masses</a></span><ul class="toc-item"><li><span><a href="#Calculating-the-equilibrium-size-distribution-for-unactivated-aerosols" data-toc-modified-id="Calculating-the-equilibrium-size-distribution-for-unactivated-aerosols-4.2.1"><span class="toc-item-num">4.2.1&nbsp;&nbsp;</span>Calculating the equilibrium size distribution for unactivated aerosols</a></span></li></ul></li></ul></li></ul></div>
