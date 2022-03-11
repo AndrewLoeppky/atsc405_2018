@@ -12,7 +12,7 @@ kernelspec:
   name: python3
 ---
 
-# Equalibrium Saturation Derivation - Andrew's Solution
+# Equilibrium Saturation Derivation - Andrew's Solution
 
 Derivation of (6) from Phil's Equilibrium Saturation notes, starting from:
 

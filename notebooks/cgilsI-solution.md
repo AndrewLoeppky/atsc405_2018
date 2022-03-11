@@ -14,6 +14,8 @@ kernelspec:
 
 +++ {"toc": true}
 
+# CGILS - Solution
+
 <h1>Table of Contents<span class="tocSkip"></span></h1>
 <div class="toc"><ul class="toc-item"><li><ul class="toc-item"><li><span><a href="#Working-with-a-3D-large-eddy-simulation-of-shallow-convection" data-toc-modified-id="Working-with-a-3D-large-eddy-simulation-of-shallow-convection-0.1"><span class="toc-item-num">0.1&nbsp;&nbsp;</span>Working with a 3D large eddy simulation of shallow convection</a></span><ul class="toc-item"><li><span><a href="#The-simulation" data-toc-modified-id="The-simulation-0.1.1"><span class="toc-item-num">0.1.1&nbsp;&nbsp;</span>The simulation</a></span></li><li><span><a href="#The-dataset-----netccdf" data-toc-modified-id="The-dataset-----netccdf-0.1.2"><span class="toc-item-num">0.1.2&nbsp;&nbsp;</span>The dataset  -- netccdf</a></span></li><li><span><a href="#liquid-water-cross-section-at-1-km" data-toc-modified-id="liquid-water-cross-section-at-1-km-0.1.3"><span class="toc-item-num">0.1.3&nbsp;&nbsp;</span>liquid water cross section at 1 km</a></span></li><li><span><a href="#zoom-in-on--the-top-left-corner" data-toc-modified-id="zoom-in-on--the-top-left-corner-0.1.4"><span class="toc-item-num">0.1.4&nbsp;&nbsp;</span>zoom in on  the top left corner</a></span></li><li><span><a href="#Get-a-vertical-cross-section-along-y-=-2km" data-toc-modified-id="Get-a-vertical-cross-section-along-y-=-2km-0.1.5"><span class="toc-item-num">0.1.5&nbsp;&nbsp;</span>Get a vertical cross section along y = 2km</a></span></li><li><span><a href="#Find-the-vapor-mixing-ratio-along-this-cross-section" data-toc-modified-id="Find-the-vapor-mixing-ratio-along-this-cross-section-0.1.6"><span class="toc-item-num">0.1.6&nbsp;&nbsp;</span>Find the vapor mixing ratio along this cross section</a></span></li><li><span><a href="#For-Wednesday" data-toc-modified-id="For-Wednesday-0.1.7"><span class="toc-item-num">0.1.7&nbsp;&nbsp;</span>For Wednesday</a></span></li></ul></li></ul></li><li><span><a href="#vertical-cross-section-of-temperature" data-toc-modified-id="vertical-cross-section-of-temperature-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>vertical cross section of temperature</a></span></li><li><span><a href="#Vertical-cross-section-of-relative-humidity" data-toc-modified-id="Vertical-cross-section-of-relative-humidity-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Vertical cross section of relative humidity</a></span><ul class="toc-item"><li><span><a href="#note-the-bimodal-RH-distribution----boundary-layer-air-is-different-from-free-atmos" data-toc-modified-id="note-the-bimodal-RH-distribution----boundary-layer-air-is-different-from-free-atmos-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>note the bimodal RH distribution -- boundary layer air is different from free atmos</a></span></li></ul></li><li><span><a href="#make-a-palette-that-limits-the-range-of-colors" data-toc-modified-id="make-a-palette-that-limits-the-range-of-colors-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>make a palette that limits the range of colors</a></span></li><li><span><a href="#Vertical-profiles-of-mean-and-standard-deviation-for-rh" data-toc-modified-id="Vertical-profiles-of-mean-and-standard-deviation-for-rh-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Vertical profiles of mean and standard deviation for rh</a></span></li></ul></div>
 
@@ -66,7 +68,6 @@ with Dataset(the_file,'r') as ncin:
 ```
 
 ### liquid water cross section at 1 km
-
 
 ```{code-cell} ipython3
 def get_var(the_file,varname):
@@ -268,7 +269,6 @@ ax.set(ylim=[0,2500]);
 
 
     
-
 ```
 
 # Vertical profiles of mean and standard deviation for rh

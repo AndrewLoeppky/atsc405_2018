@@ -66,6 +66,12 @@ parts:
     - file: marshallpalmer
     - file: marshallpalmer_al
     - file: marshallpalmer_sol
+    - file: equil_sat_al
+  - caption: Week 12
+    chapters:
+    - file: cgilsI
+    - file: cgilsI-solution
+    - file: cgilsI_al
 
 #- file: aero_dist_sol
 #- file: aero_sol

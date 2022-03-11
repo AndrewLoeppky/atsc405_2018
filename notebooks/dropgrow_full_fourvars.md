@@ -137,7 +137,6 @@ cloud_vars['wvel'] = wvel_init
 # pass this to the find_derivs function
 #
 cloud_tup= make_tuple(cloud_vars)
-
 ```
 
 ## use odeint to integrate the variable in var_vec from tinit to tfin with outputs every dt seconds
@@ -323,11 +322,9 @@ cloud_vars['wvel'] = wvel_init
 # pass this to the find_derivs function
 #
 cloud_tup= make_tuple(cloud_vars)
-
 ```
 
 ```{code-cell} ipython3
-
 def find_dSSdt(t):
     """
     Find dSS/dt given a tuple of parameter values
