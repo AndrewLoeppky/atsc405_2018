@@ -51,18 +51,21 @@ http://clouds.eos.ubc.ca/~phil/courses/atsc405/docs/cgils_sst_301K_synthetic_alb
 
 ```{code-cell} ipython3
 import glob
+from pathlib import Path
 from netCDF4 import Dataset
 import numpy as np
 from a405.utils.ncdump import ncdump
 from a405.utils.data_read import download
 
-do_download = True
+do_download = False
 if do_download:
     root = 'https://clouds.eos.ubc.ca/phaustin/a405'
     the_file = 'ENT_CGILS_CTL_S6_3D_384x384x194_25m_1s_96_0000014160.nc'
     out = download(the_file, root=root)
     
-the_file = glob.glob("*CTL*")[0]
+# import the file locally (Andew's patch)
+the_file = Path("C:/Users/Owner/UBC_S2022/atsc405_data/ENT_CGILS_CTL_S6_3D_384x384x194_25m_1s_96_0000014160.nc")
+    
 with Dataset(the_file,'r') as ncin:
     ncdump(ncin)
 ```
@@ -210,6 +213,7 @@ print(f'esat shape: {esat.shape}')
 # that it can be used in the denominator 
 #
 press = press[:,np.newaxis,np.newaxis]*100.  #convert to Pa
+print(press)
 rsat = c.eps*esat/(press - esat)*1.e3  #convert to g/kg`
 rh = qv/rsat
 

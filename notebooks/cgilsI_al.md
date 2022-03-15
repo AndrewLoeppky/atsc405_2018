@@ -58,18 +58,24 @@ shallow cumulus clouds
 
 ```{code-cell} ipython3
 import glob
+from pathlib import Path
 from netCDF4 import Dataset
 import numpy as np
 from a405.utils.ncdump import ncdump
 from a405.utils.data_read import download
 
-do_download = True
+do_download = False
 if do_download:
-    root = 'https://clouds.eos.ubc.ca/phaustin/a405'
-    the_file = 'ENT_CGILS_CTL_S6_3D_384x384x194_25m_1s_96_0000014160.nc'
+    #root = 'https://clouds.eos.ubc.ca/phaustin/a405'
+    root = 'https://clouds.eos.ubc.ca/~phil/docs/cgils/cgils_2009_12_ubc'
+    #the_file = 'https://clouds.eos.ubc.ca/phaustin/a405/ENT_CGILS_CTL_S6_3D_384x384x194_25m_1s_96_0000014160.nc'
+    the_file = 's6c_gcss.nc'
     out = download(the_file, root=root)
     
-the_file = glob.glob("*CTL*")[0]
+# import the file locally (Andew's patch)
+the_file = Path("C:/Users/Owner/UBC_S2022/atsc405_data/ENT_CGILS_CTL_S6_3D_384x384x194_25m_1s_96_0000014160.nc")
+    
+#the_file = glob.glob("*CTL*")#[0]
 with Dataset(the_file,'r') as ncin:
     ncdump(ncin)
 ```
@@ -118,7 +124,7 @@ print(f'maximum liquid water content in g/kg: {qn.max()}')
 #
 
 level = np.searchsorted(z, 1000)
-print('index for the level closest to z=1 km is {level}')
+print(f'index for the level closest to z=1 km is {level}')
 ```
 
 ## Get the cloud fraction a 1 km by summing all cloudy pixels
@@ -212,3 +218,53 @@ ax.set_title('vertical qv cross section along y=2 km');
      * use plot to plot a vertical profile of the horizontal mean RH in for this cross section as a function of height
      
      * use plot to plot a vertical profile of the horizontal standard deviation of RH as a function of height
+
+```{code-cell} ipython3
+import a405.thermo.thermlib as tl
+from a405.thermo.constants import constants as c
+import matplotlib.pyplot as plt
+```
+
+## Plot a vertical cross section of the relative humidity for along y=2 km, x= 0-5 km
+
+to convert from $q_v$ to vapor pressure, use:
+
+$$
+e = \frac{r}{\epsilon + r}\cdot P\tag{Stull 4.25}
+$$
+
+```{code-cell} ipython3
+# extract pressure and temperature variables, calculate saturation vapor pressure
+x, y, z, TABS = get_var(the_file, "TABS")
+press1d = get_var(the_file, "p")[3]
+press3d = press1d[:,np.newaxis, np.newaxis] # neat trick
+
+# get RH field using approximation q ~= r
+e = qv / (c.eps + qv / 1000) * press3d
+esat = tl.find_esat(TABS)
+RH = e / esat * 10
+```
+
+```{code-cell} ipython3
+vert_cross_sec = RH[:,row_number,:end_col]
+fig,ax = plt.subplots(1,1,figsize=(10,10))
+image=ax.pcolormesh(x[:end_col],z,vert_cross_sec[:,:end_col])
+cax = plt.colorbar(image,ax=ax)
+cax.set_label('RH (%)')
+ax.set_title('vertical RH cross section along y=2 km')
+ax.set_xlabel("x (m)")
+ax.set_ylabel("z (m)");
+```
+
+## plot a vertical profile of the horizontal mean and standard deviation of RH 
+
+```{code-cell} ipython3
+mean_RH = np.mean(RH, axis=(1,2))
+std_RH = np.std(RH, axis=(1,2))
+
+fig, ax = plt.subplots()
+ax.plot(mean_RH, z, linestyle=":", color="k")
+ax.fill_betweenx(z, mean_RH - std_RH, mean_RH + std_RH, alpha=0.5)
+ax.set_xlabel("mean RH")
+ax.set_ylabel("height (m)")
+```
